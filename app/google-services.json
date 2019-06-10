@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "445034062122",
+    "firebase_url": "https://edu-software.firebaseio.com",
+    "project_id": "edu-software",
+    "storage_bucket": "edu-software.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:445034062122:android:3e600fbbc49394a4",
+        "android_client_info": {
+          "package_name": "com.unipi.lykourgoss.edusoftware"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "445034062122-39i24s7be52otnuei9sr0298gs2mfv93.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.unipi.lykourgoss.edusoftware",
+            "certificate_hash": "e045504b9ac88c9ab30654906e022b656b31b5db"
+          }
+        },
+        {
+          "client_id": "445034062122-g9pfji72kdt9ft5bfk560fva997dntm0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwPcQNgEtkNrLiU-WUGvwwpH1uPS8KNZ4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "445034062122-g9pfji72kdt9ft5bfk560fva997dntm0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
