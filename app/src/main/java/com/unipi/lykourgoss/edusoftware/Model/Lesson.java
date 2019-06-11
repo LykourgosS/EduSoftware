@@ -3,15 +3,25 @@ package com.unipi.lykourgoss.edusoftware.Model;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.Html;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.unipi.lykourgoss.edusoftware.Dialog;
 
 import java.util.HashMap;
@@ -21,17 +31,40 @@ import java.util.Map;
 public class Lesson extends EduEntity {
 
     //constant, Database child reference for Lessons
-    private static final String LESSONS_REF = "Lessons";
-    public static int lessonsCount;
+    public static final String LESSONS_REF = "Lessons";
+    //todo undo initialization
+    private static int childrenCount = 10;
 //    public static final int LESSONS_FIELDS_LAYOUT = R.layout.fields_lesson;
 
     public Lesson() {
+    }
+
+    private Lesson(Builder builder) {
+        this.id = builder.id;
+        this.title = builder.title;
+        this.index = builder.index;
+        this.lastModifiedBy = builder.lastModifiedBy;
     }
 
 //    @Override
 //    public int fieldsLayout() {
 //        return LESSONS_FIELDS_LAYOUT;
 //    }
+
+    public static int childrenCount() {
+        dbRef.child(LESSONS_REF).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                childrenCount = (int) dataSnapshot.getChildrenCount();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        return childrenCount;
+    }
 
     @Override
     public void create(final Context context) {
@@ -41,56 +74,17 @@ public class Lesson extends EduEntity {
         //stores this lesson object to firebase (/LESSONS_REF/id)
         childUpdates.put("/" + LESSONS_REF + "/" + id, this);
         dbRef.updateChildren(childUpdates)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
-                    public void onSuccess(Void aVoid) {
+                    public void onComplete(@NonNull Task<Void> task) {
                         Dialog.dismiss();
-                        Toast.makeText(context, "Lesson created", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Dialog.dismiss();
-                        Toast.makeText(context, "Error creating Lesson", Toast.LENGTH_SHORT).show();
+                        if (task.isSuccessful()){
+                            Toast.makeText(context, "Lesson created", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(context, task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                        }
                     }
                 });
-    }
-
-    private static void attachLessonsCountListener(){
-        dbRef.child(LESSONS_REF).addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                lessonsCount = (int) dataSnapshot.getChildrenCount();
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-                lessonsCount = (int) dataSnapshot.getChildrenCount();
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    public Lesson(Builder builder) {
-        this.id = builder.id;
-        this.title = builder.title;
-        this.index = builder.index;
-        this.lastModifiedBy = builder.lastModifiedBy;
     }
 
     public static class Builder{

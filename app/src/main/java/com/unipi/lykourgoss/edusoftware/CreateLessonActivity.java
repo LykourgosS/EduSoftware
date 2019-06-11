@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 
@@ -30,18 +31,26 @@ public class CreateLessonActivity extends AppCompatActivity {
         editTextTitle = findViewById(R.id.editText_lesson_title);
         editTextDescription = findViewById(R.id.editText_lesson_description);
         spinnerLessonIndex = findViewById(R.id.spinner_lesson_index);
-        setUpSpinnerChoicesWithLessonIndexes();
+        setUpSpinnerChoicesWithIndexes();
     }
 
-    private void setUpSpinnerChoicesWithLessonIndexes() {
+    private void setUpSpinnerChoicesWithIndexes() {
         List<String> spinnerChoices = new ArrayList<>();
-        spinnerChoices.add("Auto");
-
+        for (int index = 1; index <= Lesson.childrenCount(); index++){
+            spinnerChoices.add(String.valueOf(index));
+        }
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                CreateLessonActivity.this,
+                android.R.layout.simple_spinner_item,
+                spinnerChoices
+        );
+        spinnerChoices.add("auto");
+        spinnerLessonIndex.setAdapter(adapter);
     }
 
     private void createNewLesson(){
-        String title = editTextTitle.getText().toString();
-        String description = editTextDescription.getText().toString();
+        String title = editTextTitle.getText().toString().trim();
+        String description = editTextDescription.getText().toString().trim();
 
         if(title.trim().isEmpty()){
             editTextTitle.setError("Title is required");
@@ -52,7 +61,8 @@ public class CreateLessonActivity extends AppCompatActivity {
         //create lesson object that will be stored in firebase
         Lesson lesson = new Lesson.Builder(title)
                 .description(description)
-                .index();
+                .index(spinnerLessonIndex.getSelectedItemPosition() + 1)
+                .build();
         //todo lastModifiedBy user.getEmail()
         lesson.create(CreateLessonActivity.this);
         finish();
