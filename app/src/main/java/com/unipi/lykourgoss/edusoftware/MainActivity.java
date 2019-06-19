@@ -2,11 +2,12 @@ package com.unipi.lykourgoss.edusoftware;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
+import com.unipi.lykourgoss.edusoftware.CodingFlowExample.Main2Activity;
 
 import java.util.Arrays;
 
@@ -20,11 +21,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        startActivity(new Intent(getApplicationContext(), Main2Activity.class));
+
         findViewById(R.id.textView).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //                Dialog.progressbarAction(MainActivity.this, Dialog.LOADING);
-                startActivity(new Intent(getApplicationContext(), LessonsActivity.class));
+                startActivity(new Intent(getApplicationContext(), Main2Activity.class));
             }
         });
 

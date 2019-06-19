@@ -1,33 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginStart="8sp"
+    android:layout_marginTop="8sp"
+    android:layout_marginEnd="8sp"
+    app:cardBackgroundColor="@android:color/holo_purple"
     app:cardCornerRadius="5sp"
-    android:layout_margin="8sp"
     app:cardElevation="6sp">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="8sp">
 
-        <android.support.design.widget.TextInputLayout
+        <!--Title-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="8sp">
+            android:layout_alignParentStart="true">
 
-            <android.support.design.widget.TextInputEditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editText_lesson_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                style="@style/TextAppearance.AppCompat.Large"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:ellipsize="end"
                 android:hint="Title"
                 android:inputType="none"
                 android:maxLines="1"
-                android:singleLine="true"/>
+                android:singleLine="true" />
 
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
+        <!--Index-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout_index"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_toEndOf="@+id/textInputLayout_title" >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editText_lesson_index"
+                style="@style/TextAppearance.AppCompat.Large"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:hint="Index"
+                tools:text="Index"
+                android:inputType="none"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!--Description-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textInputLayout_title">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editText_lesson_description"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:ellipsize="end"
+                android:hint="Description"
+                android:inputType="none"
+                android:maxLines="3" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!--LastModifiedBy-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout_lastModifiedBy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textInputLayout_description">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editText_lesson_lastModifiedBy"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:ellipsize="end"
+                android:hint="Last modified by"
+                android:inputType="none"
+                android:maxLines="1" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!--todo implement progress in lesson class-->
         <ProgressBar
             android:id="@+id/progressBar_lesson_progress"
             style="?android:attr/progressBarStyleHorizontal"
@@ -35,8 +103,8 @@
             android:layout_height="wrap_content"
             android:max="100"
             android:progress="0"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
-    </LinearLayout>
+    </RelativeLayout>
 
-</android.support.v7.widget.CardView>
+</androidx.cardview.widget.CardView>

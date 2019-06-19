@@ -3,27 +3,24 @@ package com.unipi.lykourgoss.edusoftware;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.text.Html;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.unipi.lykourgoss.edusoftware.Model.Lesson;
-import com.unipi.lykourgoss.edusoftware.ViewHolder.LessonViewHolder;
+import com.unipi.lykourgoss.edusoftware.models.Lesson;
+import com.unipi.lykourgoss.edusoftware.viewholders.LessonViewHolder;
 
 public class LessonsActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -46,7 +43,7 @@ public class LessonsActivity extends AppCompatActivity implements View.OnClickLi
 
         findViewById(R.id.fab_create_lesson).setOnClickListener(this);
 
-        getSupportActionBar().setTitle("Lessons");
+        setTitle("Lessons");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //TODO make all lesson items
@@ -71,7 +68,7 @@ public class LessonsActivity extends AppCompatActivity implements View.OnClickLi
     }
 
 
-    private void loadListFromFirebase() {
+    /*private void loadListFromFirebase() {
 
         Query keyQuery = dbRef.child(Lesson.LESSONS_REF).orderByChild(Lesson.PROP_ID);
 
@@ -152,7 +149,7 @@ public class LessonsActivity extends AppCompatActivity implements View.OnClickLi
                 Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         };
-    }
+    }*/
 
 
     private void createLessonDialog() {
@@ -211,7 +208,7 @@ public class LessonsActivity extends AppCompatActivity implements View.OnClickLi
 //            @NonNull
 //            @Override
 //            public LessonViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-//                // Create a new instance of the ViewHolder, in this case we are using a custom
+//                // Create a new instance of the viewholder, in this case we are using a custom
 //                // layout called R.layout.message for each item
 //                View view = LayoutInflater.from(viewGroup.getContext())
 //                        .inflate(R.layout.item_lesson, viewGroup, false);

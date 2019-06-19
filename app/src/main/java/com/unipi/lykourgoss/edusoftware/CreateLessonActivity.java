@@ -1,6 +1,6 @@
 package com.unipi.lykourgoss.edusoftware;
 
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -9,7 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import com.unipi.lykourgoss.edusoftware.Model.Lesson;
+import com.unipi.lykourgoss.edusoftware.models.Lesson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,8 +30,25 @@ public class CreateLessonActivity extends AppCompatActivity {
 
         editTextTitle = findViewById(R.id.editText_lesson_title);
         editTextDescription = findViewById(R.id.editText_lesson_description);
-        spinnerLessonIndex = findViewById(R.id.spinner_lesson_index);
+//        spinnerLessonIndex = findViewById(R.id.spinner_lesson_index);
         setUpSpinnerChoicesWithIndexes();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.create_edu_entity_menu, menu);
+        return true; //true/false = we want to display/don't want to display menu
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.item_save_edu_entity:
+                createNewLesson();
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void setUpSpinnerChoicesWithIndexes() {
@@ -39,7 +56,7 @@ public class CreateLessonActivity extends AppCompatActivity {
         for (int index = 1; index <= Lesson.childrenCount(); index++){
             spinnerChoices.add(String.valueOf(index));
         }
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 CreateLessonActivity.this,
                 android.R.layout.simple_spinner_item,
                 spinnerChoices
@@ -66,22 +83,5 @@ public class CreateLessonActivity extends AppCompatActivity {
         //todo lastModifiedBy user.getEmail()
         lesson.create(CreateLessonActivity.this);
         finish();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.create_edu_entity_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.item_save_edu_entity:
-                createNewLesson();
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 }

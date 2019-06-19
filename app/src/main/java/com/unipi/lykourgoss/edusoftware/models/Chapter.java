@@ -1,4 +1,4 @@
-package com.unipi.lykourgoss.edusoftware.Model;
+package com.unipi.lykourgoss.edusoftware.models;
 
 import android.content.Context;
 

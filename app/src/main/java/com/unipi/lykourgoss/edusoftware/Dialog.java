@@ -9,29 +9,49 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.unipi.lykourgoss.edusoftware.Model.EduEntity;
+import com.unipi.lykourgoss.edusoftware.models.EduEntity;
 
 public class Dialog {
 
-    public static final String LOADING = "Loading...";
-    public static final String SAVING = "Saving...";
+    //for CRUD operations (Create, Load, Update, Delete)
     public static final String CREATING = "Creating...";
+    public static final String LOADING = "Loading...";
+    public static final String UPDATING = "Updating...";
+    public static final String DELETING = "Deleting...";
 
     private static AlertDialog dialog;
 
     //generic progressbar dialog, with custom action each time
     //(i.e. Loading..., Uploading..., Saving...)
     public static void progressbarAction(Context context, String action){
-        AlertDialog.Builder builder= new AlertDialog.Builder(context);
         //use custom dialog layout theme
         LayoutInflater inflater = LayoutInflater.from(context);
         View dialogView = inflater.inflate(R.layout.dialog_progressbar, null);
-        builder.setView(dialogView);
+
         //set Action text
         TextView textViewDialogAction = dialogView.findViewById(R.id.textView_dialog_action);
         textViewDialogAction.setText(action);
 
-        builder.setCancelable(false);
+        AlertDialog.Builder builder= new AlertDialog.Builder(context)
+                .setView(dialogView)
+                .setCancelable(false);
+
+        dialog = builder.create();
+        dialog.show();
+    }
+
+    // show description dialog method
+    public static void showDescription(Context context, String title, String description) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setCancelable(true);
+        builder.setTitle(title);
+        builder.setMessage(description);
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
         dialog = builder.create();
         dialog.show();
     }
@@ -87,5 +107,6 @@ public class Dialog {
 
     public static void dismiss(){
         dialog.cancel();
+        dialog = null;
     }
 }

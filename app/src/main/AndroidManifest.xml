@@ -9,17 +9,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".CodingFlowExample.CreateEditLessonActivity"
+            android:parentActivityName=".CodingFlowExample.Main2Activity"/>
+        <activity android:name=".CodingFlowExample.Main2Activity"
+            android:launchMode="singleTop"/>
         <activity
             android:name=".CreateLessonActivity"
-            android:parentActivityName=".LessonsActivity"/>
+            android:parentActivityName=".LessonsActivity" />
         <activity
             android:name=".LessonsActivity"
-            android:parentActivityName=".MainActivity"
-            android:launchMode="singleTop"/>
+            android:launchMode="singleTop"
+            android:parentActivityName=".MainActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
