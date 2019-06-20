@@ -1,4 +1,4 @@
-package com.unipi.lykourgoss.edusoftware.CodingFlowExample;
+package com.unipi.lykourgoss.edusoftware.codingflowexample;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,24 +7,21 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 
+import com.unipi.lykourgoss.edusoftware.LessonsActivity;
 import com.unipi.lykourgoss.edusoftware.R;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class CreateEditLessonActivity extends AppCompatActivity {
     public static final String EXTRA_ID =
-            "com.unipi.lykourgoss.edusoftware.CodingFlowExample.EXTRA_ID";
+            "com.unipi.lykourgoss.edusoftware.codingflowexample.EXTRA_ID";
     public static final String EXTRA_TITLE =
-            "com.unipi.lykourgoss.edusoftware.CodingFlowExample.EXTRA_TITLE";
+            "com.unipi.lykourgoss.edusoftware.codingflowexample.EXTRA_TITLE";
     public static final String EXTRA_DESCRIPTION =
-            "com.unipi.lykourgoss.edusoftware.CodingFlowExample.EXTRA_DESCRIPTION";
+            "com.unipi.lykourgoss.edusoftware.codingflowexample.EXTRA_DESCRIPTION";
     public static final String EXTRA_INDEX =
-            "com.unipi.lykourgoss.edusoftware.CodingFlowExample.EXTRA_INDEX";
+            "com.unipi.lykourgoss.edusoftware.codingflowexample.EXTRA_INDEX";
 
     private EditText editTextTitle;
     private EditText editTextDescription;
@@ -33,7 +30,7 @@ public class CreateEditLessonActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_lesson);
+        setContentView(R.layout.activity_create_edit_lesson);
 
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_white_24dp);
 
@@ -41,7 +38,7 @@ public class CreateEditLessonActivity extends AppCompatActivity {
         editTextDescription = findViewById(R.id.edit_text_lesson_description);
         numberPickerIndex = findViewById(R.id.number_picker_lesson_index);
 
-        int lastLessonIndex = getIntent().getIntExtra(Main2Activity.EXTRA_LAST_LESSON_INDEX, 1);
+        int lastLessonIndex = getIntent().getIntExtra(LessonsActivity.EXTRA_LAST_LESSON_INDEX, 1);
 
         numberPickerIndex.setMinValue(1);
         numberPickerIndex.setMaxValue(lastLessonIndex);
@@ -117,7 +114,7 @@ public class CreateEditLessonActivity extends AppCompatActivity {
 
     /*private void setUpSpinnerChoicesWithIndexes() {
         List<String> spinnerChoices = new ArrayList<>();
-        int lessonsCount = getIntent().getIntExtra(Main2Activity.EXTRA_LESSONS_COUNT, 0);
+        int lessonsCount = getIntent().getIntExtra(LessonsActivity.EXTRA_LESSONS_COUNT, 0);
         for (int index = 1; index <= lessonsCount + 1; index++) {
             spinnerChoices.add(String.valueOf(index));
         }

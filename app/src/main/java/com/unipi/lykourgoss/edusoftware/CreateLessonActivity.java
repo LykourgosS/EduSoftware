@@ -23,7 +23,7 @@ public class CreateLessonActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_lesson);
+        setContentView(R.layout.activity_create_edit_lesson);
 
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_white_24dp);
         setTitle("Create new Lesson");

@@ -7,7 +7,6 @@ import android.view.View;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
-import com.unipi.lykourgoss.edusoftware.CodingFlowExample.Main2Activity;
 
 import java.util.Arrays;
 
@@ -21,13 +20,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        startActivity(new Intent(getApplicationContext(), Main2Activity.class));
+        startActivity(new Intent(getApplicationContext(), LessonsActivity.class));
 
         findViewById(R.id.textView).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //                Dialog.progressbarAction(MainActivity.this, Dialog.LOADING);
-                startActivity(new Intent(getApplicationContext(), Main2Activity.class));
+                startActivity(new Intent(getApplicationContext(), LessonsActivity.class));
             }
         });
 

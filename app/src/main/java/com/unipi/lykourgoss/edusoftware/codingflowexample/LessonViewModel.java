@@ -1,4 +1,4 @@
-package com.unipi.lykourgoss.edusoftware.CodingFlowExample;
+package com.unipi.lykourgoss.edusoftware.codingflowexample;
 
 import android.app.Application;
 

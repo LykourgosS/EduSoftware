@@ -1,293 +1,201 @@
 package com.unipi.lykourgoss.edusoftware;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.LinearLayout;
+import com.unipi.lykourgoss.edusoftware.adapters.LessonAdapter;
+import com.unipi.lykourgoss.edusoftware.adapters.OnClickListener;
+import com.unipi.lykourgoss.edusoftware.codingflowexample.CreateEditLessonActivity;
+import com.unipi.lykourgoss.edusoftware.codingflowexample.Lesson;
+import com.unipi.lykourgoss.edusoftware.codingflowexample.LessonViewModel;
 
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.unipi.lykourgoss.edusoftware.models.Lesson;
-import com.unipi.lykourgoss.edusoftware.viewholders.LessonViewHolder;
+import java.io.IOException;
+import java.util.List;
+
+import pl.droidsonroids.gif.GifDrawable;
 
 public class LessonsActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private FirebaseAuth mAuth;
+    public static final int CREATE_LESSON_REQUEST = 1;
+    public static final int EDIT_LESSON_REQUEST = 2;
 
-    private DatabaseReference dbRef;
+    public static final String EXTRA_LAST_LESSON_INDEX =
+            "com.unipi.lykourgoss.edusoftware.codingflowexample.EXTRA_LAST_LESSON_INDEX";
 
-    //to display Lessons
-    private FirebaseRecyclerOptions<Lesson> options;
-    private FirebaseRecyclerAdapter<Lesson, LessonViewHolder> adapter;
+    private LessonViewModel lessonViewModel;
+
     private RecyclerView recyclerView;
+    private ImageView imageViewNoItems;
+    private GifDrawable gifNoItems;
+    private LinearLayout linearLayoutNoItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_lessons);
-
-        //get database reference in firebase
-        dbRef = FirebaseDatabase.getInstance().getReference();
+        setContentView(R.layout.activity_main2);
 
         findViewById(R.id.fab_create_lesson).setOnClickListener(this);
 
         setTitle("Lessons");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //TODO make all lesson items
-        //editTextTime.setFocusable(false);
-        //editTextTime.setClickable(true);
+        linearLayoutNoItems = findViewById(R.id.linear_layout_no_items);
+        imageViewNoItems = findViewById(R.id.image_view_no_items);
 
-        //Init RecyclerView
-        recyclerView = findViewById(R.id.recyclerView_lessons);
+        // set up imageViewNoItems with Gif drawable
+        try {
+            gifNoItems = new GifDrawable(getResources(), R.drawable.no_items_tumbleweed);
+            imageViewNoItems.setImageDrawable(gifNoItems);
+        } catch (IOException e) {
+            Toast.makeText(LessonsActivity.this, "Error loading image", Toast.LENGTH_SHORT).show();
+        }
+
+        recyclerView = findViewById(R.id.recycler_view_lessons);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+
+        final LessonAdapter adapter = new LessonAdapter();
         recyclerView.setAdapter(adapter);
+
+        // create and observe viewModel and its liveData
+        lessonViewModel = ViewModelProviders.of(this).get(LessonViewModel.class);
+        lessonViewModel.getAllLessons().observe(this, new Observer<List<Lesson>>() {
+            @Override
+            public void onChanged(List<Lesson> lessons) {
+                //update recyclerView
+                adapter.submitList(lessons);
+                // show lessons or no items gif
+                setUpVisibilities(lessons.isEmpty());
+            }
+        });
+
+        // if user is admin or better if they are on their MyLessons
+        if (true) {
+            // swipe right to delete (->) or left to edit (<-)
+            new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
+                    ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+                @Override
+                public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                    return false;
+                }
+
+                @Override
+                public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                    if (direction == ItemTouchHelper.RIGHT) { //swipe right to delete (->)
+                        lessonViewModel.delete(adapter.getLessonAt(viewHolder.getAdapterPosition()));
+                        Toast.makeText(LessonsActivity.this, "Lesson deleted", Toast.LENGTH_SHORT).show();
+                    } else { //swipe left to edit (<-)
+                        //todo edit functionality here and not in itemView click
+                        // (which will be used for going to chaptersActivity)
+                        //adapter.notifyDataSetChanged();
+                        Toast.makeText(LessonsActivity.this, "Lesson to edit", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }).attachToRecyclerView(recyclerView);
+        }
+
+        adapter.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onItemClick(Lesson lesson) {
+                // TODO method for making an intent for editing existing Lesson
+                Intent intent = lesson.putToIntent(LessonsActivity.this, true);
+                // put in extras: the index of the last lesson (so the user can't set the lesson's
+                // index at maximum same as the last lesson) -> used to set up numberPicker choices
+                // (for selecting index)
+                intent.putExtra(EXTRA_LAST_LESSON_INDEX, lessonViewModel.getLessonsCount());
+                startActivityForResult(intent, EDIT_LESSON_REQUEST);
+            }
+
+            @Override
+            public void onDescriptionClick(Lesson lesson) {
+                Dialog.showDescription(LessonsActivity.this, lesson.getTitle(), lesson.getDescription());
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // default value for lesson's index is the last available index
+        int defaultIndex = lessonViewModel.getAllLessons().getValue().size();
+
+        if (requestCode == CREATE_LESSON_REQUEST && resultCode == RESULT_OK) {
+            // creating a new Lesson object and saving it in the database
+            Lesson lesson = Lesson.getFromIntent(data, false, defaultIndex);
+            lessonViewModel.insert(lesson);
+            Toast.makeText(this, "Lesson created", Toast.LENGTH_SHORT).show();
+
+        } else if (requestCode == EDIT_LESSON_REQUEST && resultCode == RESULT_OK) {
+            // updating existing lesson in database
+            Lesson lesson = Lesson.getFromIntent(data, true, defaultIndex);
+            if (lesson == null) {
+                Toast.makeText(this, "Lesson cannot be updated", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            lessonViewModel.update(lesson);
+            Toast.makeText(this, "Lesson updated", Toast.LENGTH_SHORT).show();
+
+        } else { // something went wrong or user clicked to go back
+            Toast.makeText(this, "Lesson not created", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fab_create_lesson:
-                startActivity(new Intent(getApplicationContext(), CreateLessonActivity.class));
-//                createLessonDialog();
-                break;
+                // Create new Lesson
+                Intent intent = new Intent(LessonsActivity.this, CreateEditLessonActivity.class);
+                // put in extras: the index for new lesson (hypothesis: will be added at the end
+                // of the lessons) -> used to set up numberPicker choices (for selecting index)
+                intent.putExtra(EXTRA_LAST_LESSON_INDEX, lessonViewModel.getLessonsCount() + 1);
+                startActivityForResult(intent, CREATE_LESSON_REQUEST);
         }
     }
 
-
-    /*private void loadListFromFirebase() {
-
-        Query keyQuery = dbRef.child(Lesson.LESSONS_REF).orderByChild(Lesson.PROP_ID);
-
-        DatabaseReference dataRef = dbRef.child(Lesson.LESSONS_REF);
-
-        // >>> initialize the query for the recyclerView's adapter
-        // keyQuery - the Firebase location containing the list of keys to be found in dataRef
-        // dataRef - the Firebase location to watch for data changes. Each key found at
-        // keyRef's location represents a list item.
-        options = new FirebaseRecyclerOptions.Builder<Lesson>()
-                .setIndexedQuery(keyQuery, dataRef, Lesson.class)
-                .build();
-
-        //Initialize the adapter
-        adapter = new FirebaseRecyclerAdapter<Lesson, LessonViewHolder>(options) {
-
-            @NonNull
-            @Override
-            public LessonViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-                View itemView = LayoutInflater.from(viewGroup.getContext())
-                        .inflate(R.layout.item_lesson, viewGroup, false);
-                return new LessonViewHolder(itemView);
-            }
-
-            @Override
-            protected void onBindViewHolder(@NonNull LessonViewHolder holder, int position, @NonNull final Lesson model) {
-                holder.textViewName.setText(model.getName());
-                holder.textViewDateTime.setText(model.getDateTime());
-                holder.textViewDuration.setText(durationOptions[model.getDuration()]);
-                holder.textViewNotificationStatus.setText(model.notificationStatus());
-                holder.textViewClickForUsersList.setText(Html.fromHtml("<u>Meeting's participants</u>"));
-
-                loadClickListenerForParticipants(model.getMeetingId(), model.getName());
-
-                //onClick method for meeting's participants
-                holder.textViewClickForUsersList.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        //TODO see if ok without the following line
-//                        loadClickListenerForParticipants(model.getMeetingId(), model.getName());
-                        showMeetingParticipants(model.getName(), emailListOfClickedMeeting);
-                    }
-                });
-
-                //onClick method to edit meeting
-                holder.textViewEdit.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        loadClickListenerForParticipants(model.getMeetingId(), model.getName());
-                        editOrAddMeeting(model.getMeetingId());
-                    }
-                });
-            }
-
-            @Override
-            public int getItemCount() {
-                return super.getItemCount();
-            }
-
-            @Override
-            public void onDataChanged() {
-                progressBar.setVisibility(View.VISIBLE);
-                super.onDataChanged();
-                //when there are no meetings show a TextView "No meetings to show" instead of the RecyclerView
-                if (adapter.getItemCount() == 0) {
-                    recyclerView.setVisibility(View.GONE);
-                    textViewNoMeetings.setVisibility(View.VISIBLE);
-                } else {
-                    recyclerView.setVisibility(View.VISIBLE);
-                    textViewNoMeetings.setVisibility(View.GONE);
-                }
-                progressBar.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onError(@NonNull DatabaseError error) {
-                super.onError(error);
-                Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        };
-    }*/
-
-
-    private void createLessonDialog() {
-        AlertDialog.Builder builder= new AlertDialog.Builder(LessonsActivity.this);
-
-        //use create eduEntity dialog layout
-        LayoutInflater inflater = LayoutInflater.from(LessonsActivity.this);
-        View dialogView = inflater.inflate(R.layout.dialog_create_edu_entity, null);
-        builder.setView(dialogView);
-
-        //in placeholder linearLayout use appropriate fields layout,
-        //depends on the type of the EduEntity
-        LinearLayout layout = dialogView.findViewById(R.id.linearLayout_placeholder);
-        View fields = inflater.inflate(R.layout.fields_lesson, (ViewGroup) findViewById(R.id.linearLayout_placeholder));
-
-        builder.setCancelable(false);
-        final AlertDialog dialog = builder.create();
-        //save button -> creates and uploads to firebase the new EduEntity
-        Button buttonSave = dialogView.findViewById(R.id.button_save);
-        buttonSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Lesson lesson = new Lesson();
-                lesson.create(LessonsActivity.this);
-                dialog.cancel();
-            }
-        });
-        //cancel button -> closes the dialog
-        Button buttonCancel = dialogView.findViewById(R.id.button_cancel);
-        buttonCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.cancel();
-            }
-        });
-        dialog.show();
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.delete_all_menu, menu);
+        return true;
     }
 
-//    private void loadLessonsFromFirebase() {
-//
-//        Query query = databaseReference.child(Lesson.LESSONS_REF);
-//
-////        DatabaseReference dataRef = databaseReference.child(Lesson.LESSONS_REF);
-//
-//        // >>> initialize the query for the recyclerView's adapter
-//        // keyQuery - the Firebase location containing the list of keys to be found in dataRef
-//        // dataRef - the Firebase location to watch for data changes. Each key found at
-//        // keyRef's location represents a list item.
-//        FirebaseRecyclerOptions<Lesson> options = new FirebaseRecyclerOptions.Builder<Lesson>()
-//                .setQuery(query, Lesson.class)
-//                .build();
-//
-//        //Initialize the adapter
-//        FirebaseRecyclerAdapter adapter = new FirebaseRecyclerAdapter<Lesson, LessonViewHolder>(options){
-//
-//            @NonNull
-//            @Override
-//            public LessonViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-//                // Create a new instance of the viewholder, in this case we are using a custom
-//                // layout called R.layout.message for each item
-//                View view = LayoutInflater.from(viewGroup.getContext())
-//                        .inflate(R.layout.item_lesson, viewGroup, false);
-//
-//                return new LessonViewHolder(view);
-//            }
-//
-//            @Override
-//            protected void onBindViewHolder(@NonNull LessonViewHolder holder, int position, @NonNull Lesson model) {
-//
-//            }
-//        };
-//
-//
-//        adapter = new FirebaseRecyclerAdapter<Meeting, MeetingViewHolder>(options) {
-//
-//            @NonNull
-//            @Override
-//            public MeetingViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-//                View itemView = LayoutInflater.from(viewGroup.getContext())
-//                        .inflate(R.layout.meeting_item, viewGroup, false);
-//                return new MeetingViewHolder(itemView);
-//            }
-//
-//            @Override
-//            protected void onBindViewHolder(@NonNull MeetingViewHolder holder, int position, @NonNull final Meeting model) {
-//                holder.textViewName.setText(model.getName());
-//                holder.textViewDateTime.setText(model.getDateTime());
-//                holder.textViewDuration.setText(durationOptions[model.getDuration()]);
-//                holder.textViewNotificationStatus.setText(model.notificationStatus());
-//                holder.textViewClickForUsersList.setText(Html.fromHtml("<u>Meeting's participants</u>"));
-//
-//                loadClickListenerForParticipants(model.getMeetingId(), model.getName());
-//
-//                //onClick method for meeting's participants
-//                holder.textViewClickForUsersList.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        //TODO see if ok without the following line
-////                        loadClickListenerForParticipants(model.getMeetingId(), model.getName());
-//                        showMeetingParticipants(model.getName(), emailListOfClickedMeeting);
-//                    }
-//                });
-//
-//                //onClick method to edit meeting
-//                holder.textViewEdit.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        loadClickListenerForParticipants(model.getMeetingId(), model.getName());
-//                        editOrAddMeeting(model.getMeetingId());
-//                    }
-//                });
-//            }
-//
-//            @Override
-//            public int getItemCount() {
-//                return super.getItemCount();
-//            }
-//
-//            @Override
-//            public void onDataChanged() {
-//                progressBar.setVisibility(View.VISIBLE);
-//                super.onDataChanged();
-//                //when there are no meetings show a TextView "No meetings to show" instead of the RecyclerView
-//                if (adapter.getItemCount() == 0) {
-//                    recyclerView.setVisibility(View.GONE);
-//                    textViewNoMeetings.setVisibility(View.VISIBLE);
-//                } else {
-//                    recyclerView.setVisibility(View.VISIBLE);
-//                    textViewNoMeetings.setVisibility(View.GONE);
-//                }
-//                progressBar.setVisibility(View.GONE);
-//            }
-//
-//            @Override
-//            public void onError(@NonNull DatabaseError error) {
-//                super.onError(error);
-//                Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
-//            }
-//        };
-//    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.item_delete_all:
+                // Delete all lessons
+                lessonViewModel.deleteAllLessons();
+                Toast.makeText(this, "All lessons deleted", Toast.LENGTH_SHORT).show();
+                return true;
+            // todo add help case: dialog for how to edit, create, delete, delete all, click for description
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void setUpVisibilities(boolean noItems) {
+        if (noItems) {
+            linearLayoutNoItems.setVisibility(View.VISIBLE);
+        } else {
+            linearLayoutNoItems.setVisibility(View.GONE);
+        }
+    }
 }
