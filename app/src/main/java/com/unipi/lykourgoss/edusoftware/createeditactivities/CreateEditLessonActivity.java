@@ -1,6 +1,4 @@
-package com.unipi.lykourgoss.edusoftware.codingflowexample;
-
-import androidx.appcompat.app.AppCompatActivity;
+package com.unipi.lykourgoss.edusoftware.createeditactivities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,18 +8,26 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.unipi.lykourgoss.edusoftware.LessonsActivity;
 import com.unipi.lykourgoss.edusoftware.R;
 
 public class CreateEditLessonActivity extends AppCompatActivity {
     public static final String EXTRA_ID =
-            "com.unipi.lykourgoss.edusoftware.codingflowexample.EXTRA_ID";
+            "com.unipi.lykourgoss.edusoftware.createeditactivities.CreateEditLessonActivity.EXTRA_ID";
     public static final String EXTRA_TITLE =
-            "com.unipi.lykourgoss.edusoftware.codingflowexample.EXTRA_TITLE";
-    public static final String EXTRA_DESCRIPTION =
-            "com.unipi.lykourgoss.edusoftware.codingflowexample.EXTRA_DESCRIPTION";
+            "com.unipi.lykourgoss.edusoftware.createeditactivities.CreateEditLessonActivity.EXTRA_TITLE";
     public static final String EXTRA_INDEX =
-            "com.unipi.lykourgoss.edusoftware.codingflowexample.EXTRA_INDEX";
+            "com.unipi.lykourgoss.edusoftware.createeditactivities.CreateEditLessonActivity.EXTRA_INDEX";
+    public static final String EXTRA_DESCRIPTION =
+            "com.unipi.lykourgoss.edusoftware.createeditactivities.CreateEditLessonActivity.EXTRA_DESCRIPTION";
+    public static final String EXTRA_CHILD_COUNT =
+            "com.unipi.lykourgoss.edusoftware.createeditactivities.CreateEditLessonActivity.EXTRA_CHILD_COUNT";
+    public static final String EXTRA_AUTHOR_ID =
+            "com.unipi.lykourgoss.edusoftware.createeditactivities.CreateEditLessonActivity.EXTRA_AUTHOR_ID";
+    public static final String EXTRA_AUTHOR_EMAIL =
+            "com.unipi.lykourgoss.edusoftware.createeditactivities.CreateEditLessonActivity.EXTRA_AUTHOR_EMAIL";
 
     private EditText editTextTitle;
     private EditText editTextDescription;
@@ -77,8 +83,8 @@ public class CreateEditLessonActivity extends AppCompatActivity {
         data.putExtra(EXTRA_INDEX, index);
 
         // todo string for key in firebase OR! using the index ass key
-        int id = getIntent().getIntExtra(EXTRA_ID, -1); // using -1, because is an invalid value
-        if (id != -1) {
+        String id = getIntent().getStringExtra(EXTRA_ID); // using -1, because is an invalid value
+        if (id != null) {
             data.putExtra(EXTRA_ID, id);
         }
 
@@ -91,7 +97,7 @@ public class CreateEditLessonActivity extends AppCompatActivity {
                 .index()
                 .build();
         //todo lastModifiedBy user.getEmail()
-        lesson.create(com.unipi.lykourgoss.edusoftware.CreateEditLessonActivity.this);
+        lesson.create(com.unipi.lykourgoss.edusoftware.createeditactivities.CreateEditLessonActivity.this);
         finish();*/
     }
 

@@ -1,4 +1,5 @@
-package com.unipi.lykourgoss.edusoftware;
+/*
+package com.unipi.lykourgoss.edusoftware.filestoremove;
 
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -19,10 +20,10 @@ import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.unipi.lykourgoss.edusoftware.models.Lesson;
-import com.unipi.lykourgoss.edusoftware.viewholders.LessonViewHolderOld;
+import com.unipi.lykourgoss.edusoftware.R;
+import com.unipi.lykourgoss.edusoftware.filestoremove.codingflowexample.Lesson;
 
-public class LessonsActivityOld extends AppCompatActivity implements View.OnClickListener {
+public class LessonsActivityOld extends AppCompatActivity implements View.OnItemClickListener {
 
     private FirebaseAuth mAuth;
 
@@ -68,7 +69,8 @@ public class LessonsActivityOld extends AppCompatActivity implements View.OnClic
     }
 
 
-    /*private void loadListFromFirebase() {
+    */
+/*private void loadListFromFirebase() {
 
         Query keyQuery = dbRef.child(Lesson.LESSONS_REF).orderByChild(Lesson.PROP_ID);
 
@@ -89,7 +91,7 @@ public class LessonsActivityOld extends AppCompatActivity implements View.OnClic
             @Override
             public LessonViewHolderOld onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
                 View itemView = LayoutInflater.from(viewGroup.getContext())
-                        .inflate(R.layout.item_lesson, viewGroup, false);
+                        .inflate(R.layout.item_lesson_old, viewGroup, false);
                 return new LessonViewHolderOld(itemView);
             }
 
@@ -104,7 +106,7 @@ public class LessonsActivityOld extends AppCompatActivity implements View.OnClic
                 loadClickListenerForParticipants(model.getMeetingId(), model.getName());
 
                 //onClick method for meeting's participants
-                holder.textViewClickForUsersList.setOnClickListener(new View.OnClickListener() {
+                holder.textViewClickForUsersList.setOnClickListener(new View.OnItemClickListener() {
                     @Override
                     public void onClick(View v) {
                         //TODO see if ok without the following line
@@ -114,7 +116,7 @@ public class LessonsActivityOld extends AppCompatActivity implements View.OnClic
                 });
 
                 //onClick method to edit meeting
-                holder.textViewEdit.setOnClickListener(new View.OnClickListener() {
+                holder.textViewEdit.setOnClickListener(new View.OnItemClickListener() {
                     @Override
                     public void onClick(View v) {
                         loadClickListenerForParticipants(model.getMeetingId(), model.getName());
@@ -149,7 +151,8 @@ public class LessonsActivityOld extends AppCompatActivity implements View.OnClic
                 Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         };
-    }*/
+    }*//*
+
 
 
     private void createLessonDialog() {
@@ -169,7 +172,7 @@ public class LessonsActivityOld extends AppCompatActivity implements View.OnClic
         final AlertDialog dialog = builder.create();
         //save button -> creates and uploads to firebase the new EduEntity
         Button buttonSave = dialogView.findViewById(R.id.button_save);
-        buttonSave.setOnClickListener(new View.OnClickListener() {
+        buttonSave.setOnClickListener(new View.OnItemClickListener() {
             @Override
             public void onClick(View v) {
                 Lesson lesson = new Lesson();
@@ -179,7 +182,7 @@ public class LessonsActivityOld extends AppCompatActivity implements View.OnClic
         });
         //cancel button -> closes the dialog
         Button buttonCancel = dialogView.findViewById(R.id.button_cancel);
-        buttonCancel.setOnClickListener(new View.OnClickListener() {
+        buttonCancel.setOnClickListener(new View.OnItemClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.cancel();
@@ -211,7 +214,7 @@ public class LessonsActivityOld extends AppCompatActivity implements View.OnClic
 //                // Create a new instance of the viewholder, in this case we are using a custom
 //                // layout called R.layout.message for each item
 //                View view = LayoutInflater.from(viewGroup.getContext())
-//                        .inflate(R.layout.item_lesson, viewGroup, false);
+//                        .inflate(R.layout.item_lesson_old, viewGroup, false);
 //
 //                return new LessonViewHolderOld(view);
 //            }
@@ -244,7 +247,7 @@ public class LessonsActivityOld extends AppCompatActivity implements View.OnClic
 //                loadClickListenerForParticipants(model.getMeetingId(), model.getName());
 //
 //                //onClick method for meeting's participants
-//                holder.textViewClickForUsersList.setOnClickListener(new View.OnClickListener() {
+//                holder.textViewClickForUsersList.setOnClickListener(new View.OnItemClickListener() {
 //                    @Override
 //                    public void onClick(View v) {
 //                        //TODO see if ok without the following line
@@ -254,7 +257,7 @@ public class LessonsActivityOld extends AppCompatActivity implements View.OnClic
 //                });
 //
 //                //onClick method to edit meeting
-//                holder.textViewEdit.setOnClickListener(new View.OnClickListener() {
+//                holder.textViewEdit.setOnClickListener(new View.OnItemClickListener() {
 //                    @Override
 //                    public void onClick(View v) {
 //                        loadClickListenerForParticipants(model.getMeetingId(), model.getName());
@@ -291,3 +294,4 @@ public class LessonsActivityOld extends AppCompatActivity implements View.OnClic
 //        };
 //    }
 }
+*/

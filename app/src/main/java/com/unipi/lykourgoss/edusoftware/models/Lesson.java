@@ -1,108 +1,90 @@
 package com.unipi.lykourgoss.edusoftware.models;
 
 import android.content.Context;
-import androidx.annotation.NonNull;
+import android.content.Intent;
 
-import android.widget.Toast;
+import com.unipi.lykourgoss.edusoftware.createeditactivities.CreateEditLessonActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
-import com.unipi.lykourgoss.edusoftware.Dialog;
-
-import java.util.HashMap;
-import java.util.Map;
+/**
+ * Created by LykourgosS <lpsarantidis@gmail.com>
+ * on 21,June,2019.
+ */
 
 public class Lesson extends EduEntity {
 
-    //constant, Database child reference for Lessons
-    public static final String LESSONS_REF = "Lessons";
-    //todo undo initialization
-    private static int childrenCount = 10;
-//    public static final int LESSONS_FIELDS_LAYOUT = R.layout.fields_lesson;
+    public static final String _AUTHOR_ID ="authorId";
+    public static final String _AUTHOR_EMAIL ="authorEmail";
+
+    /*Unique properties*/
+
+    private String authorId;
+
+    private String authorEmail;
+
+    /*Constructors (default & all properties except id)*/
 
     public Lesson() {
     }
 
-    private Lesson(Builder builder) {
-        this.id = builder.id;
-        this.title = builder.title;
-        this.index = builder.index;
-        this.lastModifiedBy = builder.lastModifiedBy;
+    public Lesson(String title, int index, String description, int childCount, String authorId, String authorEmail) {
+        super(title, index, description, childCount);
+        this.authorId = authorId;
+        this.authorEmail = authorEmail;
     }
 
-//    @Override
-//    public int fieldsLayout() {
-//        return LESSONS_FIELDS_LAYOUT;
-//    }
+    /*Getters for this*/
 
-    public static int childrenCount() {
-        dbRef.child(LESSONS_REF).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                childrenCount = (int) dataSnapshot.getChildrenCount();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-        return childrenCount;
+    public String getAuthorId() {
+        return authorId;
     }
+
+    public String getAuthorEmail() {
+        return authorEmail;
+    }
+
+    /*Override methods putToIntent()*/
 
     @Override
-    public void create(final Context context) {
-        Dialog.progressbarAction(context, Dialog.CREATING);
-        Map<String, Object> childUpdates = new HashMap<>();
-
-        //stores this lesson object to firebase (/LESSONS_REF/id)
-        childUpdates.put("/" + LESSONS_REF + "/" + id, this);
-        dbRef.updateChildren(childUpdates)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        Dialog.dismiss();
-                        if (task.isSuccessful()){
-                            Toast.makeText(context, "Lesson created", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(context, task.getException().getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
+    public Intent putToIntent(Context context) {
+        Intent intent = new Intent(context, CreateEditLessonActivity.class);
+        intent.putExtra(CreateEditLessonActivity.EXTRA_ID, getId());
+        intent.putExtra(CreateEditLessonActivity.EXTRA_TITLE, getTitle());
+        intent.putExtra(CreateEditLessonActivity.EXTRA_INDEX, getIndex());
+        intent.putExtra(CreateEditLessonActivity.EXTRA_DESCRIPTION, getDescription());
+        intent.putExtra(CreateEditLessonActivity.EXTRA_CHILD_COUNT, getChildCount());
+        intent.putExtra(CreateEditLessonActivity.EXTRA_AUTHOR_ID, getAuthorId());
+        intent.putExtra(CreateEditLessonActivity.EXTRA_AUTHOR_EMAIL, getAuthorEmail());
+        return intent;
     }
 
-    public static class Builder{
-        private final String id;
-        private String title;
-        private String description;
-        private int index;
-        private String lastModifiedBy;
+    /*getFromIntent() method returns a Lesson object taken from given Intent*/
 
-        public Builder(String title) {
-            this.id = dbRef.child(LESSONS_REF).push().getKey();
-            this.title = title;
-        }
+    public static Lesson getFromIntent(Intent intent, boolean toUpdate, int defaultIndex) {
+        String title = intent.getStringExtra(CreateEditLessonActivity.EXTRA_TITLE);
+        int index = intent.getIntExtra(CreateEditLessonActivity.EXTRA_INDEX, defaultIndex);
+        String description = intent.getStringExtra(CreateEditLessonActivity.EXTRA_DESCRIPTION);
+        int childCount = intent.getIntExtra(CreateEditLessonActivity.EXTRA_CHILD_COUNT, 0);
+        String authorId = intent.getStringExtra(CreateEditLessonActivity.EXTRA_AUTHOR_ID);
+        String authorEmail = intent.getStringExtra(CreateEditLessonActivity.EXTRA_AUTHOR_EMAIL);
 
-        public Builder description(String description){
-            this.description = description;
-            return this;
-        }
+        Lesson lesson = new Lesson(title, index, description, childCount, authorId, authorEmail);
 
-        public Builder index(int index){
-            this.index = index;
-            return this;
+        if (toUpdate){
+            String id = intent.getStringExtra(CreateEditLessonActivity.EXTRA_ID);
+            lesson.setId(id);
         }
+        return lesson;
+    }
 
-        public Builder lastModifiedBy(String lastModifiedBy){
-            this.lastModifiedBy = lastModifiedBy;
-            return this;
-        }
+    /*equalsTo method:
+    for comparing lesson's properties, although probably have
+    different object reference (used for updating recyclerView adapter)*/
 
-        public Lesson build(){
-            return new Lesson(this);
-        }
+    public boolean equalsTo(Lesson otherLesson) {
+        //same lesson's properties
+        // todo why not check all properties
+        return super.equalsTo(otherLesson)/* &&
+                getAuthorId().equals(otherLesson.getAuthorId()) &&
+                getAuthorEmail().equals(otherLesson.getAuthorEmail())*/;
     }
 }

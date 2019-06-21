@@ -1,10 +1,12 @@
-package com.unipi.lykourgoss.edusoftware.codingflowexample;
+package com.unipi.lykourgoss.edusoftware.filestoremove.codingflowexample;
 
 import android.content.Context;
 import android.content.Intent;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+
+import com.unipi.lykourgoss.edusoftware.createeditactivities.CreateEditLessonActivity;
 
 /**
  * Created by LykourgosS <lpsarantidis@gmail.com>
@@ -24,13 +26,13 @@ public class Lesson {
 
     private String description;
 
-    private String lastModifiedBy;
+    private String authorId;
 
-    public Lesson(String title, String description, int index, String lastModifiedBy) {
+    public Lesson(String title, String description, int index, String authorId) {
         this.title = title;
         this.index = index;
         this.description = description;
-        this.lastModifiedBy = lastModifiedBy;
+        this.authorId = authorId;
     }
 
     public void setId(int id) {
@@ -53,8 +55,22 @@ public class Lesson {
         return description;
     }
 
-    public String getLastModifiedBy() {
-        return lastModifiedBy;
+    public String getAuthorId() {
+        return authorId;
+    }
+
+    // equalsTo method for comparing lesson's properties, although probably have
+    // different object reference (used for updating recyclerView adapter)
+    public boolean equalsTo(Lesson otherLesson) {
+        if (getId() == otherLesson.getId() &&
+                getTitle() == otherLesson.getTitle() &&
+                getDescription() == otherLesson.getDescription() &&
+                getIndex() == otherLesson.getIndex() &&
+                getAuthorId() == otherLesson.getAuthorId()){
+            return true; //same lesson's properties
+        } else {
+            return false;
+        }
     }
 
     public Intent putToIntent(Context context, boolean toEdit){
@@ -82,19 +98,5 @@ public class Lesson {
             lesson.setId(id);
         }
         return lesson;
-    }
-
-    // equalsTo method for comparing lesson's properties, although probably have
-    // different object reference (used for updating recyclerView adapter)
-    public boolean equalsTo(Lesson otherLesson) {
-        if (getId() == otherLesson.getId() &&
-                getTitle() == otherLesson.getTitle() &&
-                getDescription() == otherLesson.getDescription() &&
-                getIndex() == otherLesson.getIndex() &&
-                getLastModifiedBy() == otherLesson.getLastModifiedBy()){
-            return true; //same lesson's properties
-        } else {
-            return false;
-        }
     }
 }

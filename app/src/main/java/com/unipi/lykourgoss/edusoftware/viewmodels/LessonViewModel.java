@@ -1,10 +1,16 @@
-package com.unipi.lykourgoss.edusoftware.codingflowexample;
+package com.unipi.lykourgoss.edusoftware.viewmodels;
 
+import android.app.AlertDialog;
 import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModel;
+
+import com.unipi.lykourgoss.edusoftware.Dialog;
+import com.unipi.lykourgoss.edusoftware.models.Lesson;
+import com.unipi.lykourgoss.edusoftware.repositories.LessonRepository;
 
 import java.util.List;
 
@@ -20,9 +26,16 @@ public class LessonViewModel extends AndroidViewModel {
 
     public LessonViewModel(@NonNull Application application) {
         super(application);
-        lessonRepository = new LessonRepository(application);
-        allLessons = lessonRepository.getAllLessons();
+        lessonRepository = new LessonRepository(/*userId*/);
+        allLessons = lessonRepository.getAll();
     }
+
+    // todo make MyLessonsViewModel for editing user's lessons
+    /*public LessonViewModel(*//*String userId*//*) {
+        super();
+        lessonRepository = new LessonRepository(*//*userId*//*);
+        allLessons = lessonRepository.getAll();
+    }*/
 
     public void insert(Lesson lesson){
         lessonRepository.insert(lesson);
@@ -37,7 +50,7 @@ public class LessonViewModel extends AndroidViewModel {
     }
 
     public void deleteAllLessons(){
-        lessonRepository.deleteAllLessons();
+        lessonRepository.deleteAll();
     }
 
     public LiveData<List<Lesson>> getAllLessons() {

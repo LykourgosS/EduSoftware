@@ -1,28 +1,39 @@
 package com.unipi.lykourgoss.edusoftware.models;
 
 import android.content.Context;
+import android.content.Intent;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public abstract class EduEntity {
 
-    public final static String PROP_ID = "id";
-    public final static String PROP_TITLE = "title";
-    public final static String PROP_DESCRIPTION = "description";
-    public final static String PROP_INDEX = "index";
-    public final static String PROP_LAST_MODIFIED_BY = "lastModifiedBy";
+    public static final String _ID = "id";
+    public static final String _TITLE = "title";
+    public static final String _INDEX = "index";
+    public static final String _DESCRIPTION = "description";
+    public static final String _CHILD_COUNT = "childCount";
 
-    protected final static DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
+    protected String id;
 
-    protected String id; //required
-    protected String title; //required
+    protected String title;
+
+    protected int index;
+
     protected String description;
-    protected int index; //required
-    protected String lastModifiedBy; //todo required
 
-    //public abstract int fieldsLayout();
-    public abstract void create(Context context);
+    protected int childCount;
+
+    // to be used by firebase serialization
+    protected EduEntity() {
+    }
+
+    public EduEntity(String title, int index, String description, int childCount) {
+        this.title = title;
+        this.index = index;
+        this.description = description;
+        this.childCount = childCount;
+    }
 
     public String getId() {
         return id;
@@ -36,31 +47,30 @@ public abstract class EduEntity {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public int getIndex() {
+        return index;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public int getChildCount() {
+        return childCount;
     }
 
-    public int getIndex() {
-        return index;
+    // chapters have chapterId so must override it (the same for every other class)
+    public  <Model extends EduEntity> boolean equalsTo(Model model){
+        //same model's properties
+        return /*getId().equals(model.getId()) &&*/
+                getTitle().equals(model.getTitle()) &&
+                getIndex() == model.getIndex() &&
+                getDescription().equals(model.getDescription())/* &&
+                getChildCount() == model.getChildCount()*/;
     }
 
-    public void setIndex(int index) {
-        this.index = index;
-    }
+    protected abstract Intent putToIntent(Context context);
 
-    public String getLastModifiedBy() {
-        return lastModifiedBy;
-    }
-
-    public void setLastModifiedBy(String lastModifiedBy) {
-        this.lastModifiedBy = lastModifiedBy;
-    }
+    // always use casting for this method
+//    protected abstract EduEntity getFromIntent (Intent intent, boolean toUpdate, int defaultIndex);
 }

@@ -1,4 +1,4 @@
-package com.unipi.lykourgoss.edusoftware.codingflowexample;
+package com.unipi.lykourgoss.edusoftware.filestoremove.codingflowexample;
 
 import android.app.Application;
 import android.os.AsyncTask;

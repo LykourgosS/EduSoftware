@@ -1,4 +1,5 @@
-package com.unipi.lykourgoss.edusoftware;
+/*
+package com.unipi.lykourgoss.edusoftware.filestoremove;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,7 +10,8 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import com.unipi.lykourgoss.edusoftware.models.Lesson;
+import com.unipi.lykourgoss.edusoftware.R;
+import com.unipi.lykourgoss.edusoftware.filestoremove.codingflowexample.Lesson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,3 +87,4 @@ public class CreateLessonActivity extends AppCompatActivity {
         finish();
     }
 }
+*/

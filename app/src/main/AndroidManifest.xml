@@ -9,16 +9,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".codingflowexample.CreateEditLessonActivity"
-            android:parentActivityName=".LessonsActivity"/>
-        <activity android:name=".LessonsActivity"
-            android:parentActivityName=".MainActivity"
-            android:launchMode="singleTop"/><!--TODO see for proper launch mode-->
+        <activity android:name=".TestFirebaseActivity"></activity>
         <activity
-            android:name=".CreateLessonActivity"
-            android:parentActivityName=".LessonsActivityOld" />
+            android:name=".createeditactivities.CreateEditLessonActivity"
+            android:parentActivityName=".LessonsActivity" />
         <activity
-            android:name=".LessonsActivityOld"
+            android:name=".LessonsActivity"
+            android:launchMode="singleTop"
+            android:parentActivityName=".MainActivity" /> <!-- TODO see for proper launch mode -->
+        <activity
+            android:name=".filestoremove.CreateLessonActivity"
+            android:parentActivityName=".filestoremove.LessonsActivityOld" />
+        <activity
+            android:name=".filestoremove.LessonsActivityOld"
             android:launchMode="singleTop"
             android:parentActivityName=".MainActivity" />
         <activity android:name=".MainActivity">

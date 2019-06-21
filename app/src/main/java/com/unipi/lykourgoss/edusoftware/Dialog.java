@@ -1,6 +1,5 @@
 package com.unipi.lykourgoss.edusoftware;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.view.LayoutInflater;
@@ -9,7 +8,10 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
+
 import com.unipi.lykourgoss.edusoftware.models.EduEntity;
+import com.unipi.lykourgoss.edusoftware.models.Lesson;
 
 public class Dialog {
 
@@ -19,46 +21,54 @@ public class Dialog {
     public static final String UPDATING = "Updating...";
     public static final String DELETING = "Deleting...";
 
-    private static AlertDialog dialog;
-
     //generic progressbar dialog, with custom action each time
     //(i.e. Loading..., Uploading..., Saving...)
-    public static void progressbarAction(Context context, String action){
+    public static AlertDialog progressbarAction(Context context, String action) {
         //use custom dialog layout theme
         LayoutInflater inflater = LayoutInflater.from(context);
         View dialogView = inflater.inflate(R.layout.dialog_progressbar, null);
 
         //set Action text
-        TextView textViewDialogAction = dialogView.findViewById(R.id.textView_dialog_action);
-        textViewDialogAction.setText(action);
+        ((TextView) dialogView.findViewById(R.id.textView_dialog_action)).setText(action);
 
-        AlertDialog.Builder builder= new AlertDialog.Builder(context)
+        AlertDialog dialog = new AlertDialog.Builder(context)
                 .setView(dialogView)
-                .setCancelable(false);
-
-        dialog = builder.create();
+                .setCancelable(false)
+                .create();
         dialog.show();
+        return dialog;
     }
 
     // show description dialog method
-    public static void showDescription(Context context, String title, String description) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setCancelable(true);
-        builder.setTitle(title);
-        builder.setMessage(description);
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-        dialog = builder.create();
+    public static AlertDialog showLessonDetails(Context context, Lesson lesson) {
+        //use custom dialog layout theme
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View dialogView = inflater.inflate(R.layout.dialog_details_lesson, null);
+
+        /*fill textViews with lesson properties*/
+        ((TextView) dialogView.findViewById(R.id.dialog_details_lesson_title)).setText(lesson.getTitle());
+        ((TextView) dialogView.findViewById(R.id.dialog_details_lesson_index)).setText(String.valueOf(lesson.getIndex()));
+        ((TextView) dialogView.findViewById(R.id.dialog_details_lesson_child_count)).setText(String.valueOf(lesson.getChildCount()));
+        ((TextView) dialogView.findViewById(R.id.dialog_details_lesson_description)).setText(lesson.getDescription());
+        ((TextView) dialogView.findViewById(R.id.dialog_details_lesson_author_email)).setText(lesson.getAuthorEmail());
+
+        AlertDialog dialog = new AlertDialog.Builder(context)
+                .setView(dialogView)
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                })
+                .create();
         dialog.show();
+        return dialog;
     }
 
     //generic dialog for creating a new EduEntity (i.e. lesson, chapter, section etc.) dialog
-    public static void createEduEntity(final Context context, final EduEntity eduEntity){
-        AlertDialog.Builder builder= new AlertDialog.Builder(context);
+    public static void createEduEntity(final Context context, final EduEntity eduEntity) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
         //use create eduEntity dialog layout
         LayoutInflater inflater = LayoutInflater.from(context);
         View dialogView = inflater.inflate(R.layout.dialog_create_edu_entity, null);
@@ -72,7 +82,7 @@ public class Dialog {
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                eduEntity.create(context);
+//                eduEntity.create(context);
             }
         });
         //cancel button -> closes the dialog
@@ -80,12 +90,12 @@ public class Dialog {
         buttonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog.cancel();
+//                dialog.cancel();
             }
         });
         builder.setCancelable(false);
-        dialog = builder.create();
-        dialog.show();
+//        dialog = builder.create();
+//        dialog.show();
     }
 
 
@@ -101,12 +111,7 @@ public class Dialog {
                 dialog.cancel();
             }
         });
-        dialog = builder.create();
-        dialog.show();
-    }
-
-    public static void dismiss(){
-        dialog.cancel();
-        dialog = null;
+//        dialog = builder.create();
+//        dialog.show();
     }
 }

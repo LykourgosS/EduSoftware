@@ -1,4 +1,4 @@
-package com.unipi.lykourgoss.edusoftware.codingflowexample;
+package com.unipi.lykourgoss.edusoftware.filestoremove.codingflowexample;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
