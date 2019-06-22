@@ -23,7 +23,7 @@ public class LessonRepository {
         allLessons = lessonDao.getAllLessons();
     }
 
-    // insert
+    // create
     private static class InsertLessonAsyncTask extends AsyncTask<Lesson, Void, Void>{
         private LessonDao lessonDao;
 

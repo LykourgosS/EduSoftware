@@ -10,7 +10,8 @@ import java.util.List;
  */
 
 public interface FirebaseRepository <Model> {
-    void insert(Model model);
+
+    void create(Model model);
 
     void update(Model model);
 

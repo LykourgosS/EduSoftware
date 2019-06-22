@@ -25,8 +25,8 @@ public class Section extends EduEntity {
     public Section() {
     }
 
-    public Section(String title, int index, String description, int childCount, String chapterId) {
-        super(title, index, description, childCount);
+    public Section(String title, int index, String description, int childrenCount, String chapterId) {
+        super(title, index, description, childrenCount);
         this.chapterId = chapterId;
     }
 
@@ -49,7 +49,7 @@ public class Section extends EduEntity {
         intent.putExtra(CreateEditSectionActivity.EXTRA_TITLE, getTitle());
         intent.putExtra(CreateEditSectionActivity.EXTRA_INDEX, getIndex());
         intent.putExtra(CreateEditSectionActivity.EXTRA_DESCRIPTION, getDescription());
-        intent.putExtra(CreateEditSectionActivity.EXTRA_CHILD_COUNT, getChildCount());
+        intent.putExtra(CreateEditSectionActivity.EXTRA_CHILD_COUNT, getChildrenCount());
         intent.putExtra(CreateEditSectionActivity.EXTRA_CHAPTER_ID, getChapterId());
         return intent;
     }
@@ -62,10 +62,10 @@ public class Section extends EduEntity {
         String title = intent.getStringExtra(CreateEditSectionActivity.EXTRA_TITLE);
         int index = intent.getIntExtra(CreateEditSectionActivity.EXTRA_INDEX, defaultIndex);
         String description = intent.getStringExtra(CreateEditSectionActivity.EXTRA_DESCRIPTION);
-        int childCount = intent.getIntExtra(CreateEditSectionActivity.EXTRA_CHILD_COUNT, 0);
+        int childrenCount = intent.getIntExtra(CreateEditSectionActivity.EXTRA_CHILD_COUNT, 0);
         String chapterId = intent.getStringExtra(CreateEditSectionActivity.EXTRA_CHAPTER_ID);
 
-        Section section = new Section(title, index, description, childCount, chapterId);
+        Section section = new Section(title, index, description, childrenCount, chapterId);
 
         if (toUpdate){
             String id = intent.getStringExtra(CreateEditSectionActivity.EXTRA_ID);

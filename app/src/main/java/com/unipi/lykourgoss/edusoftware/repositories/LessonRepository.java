@@ -1,7 +1,5 @@
 package com.unipi.lykourgoss.edusoftware.repositories;
 
-import android.app.Application;
-
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
@@ -23,19 +21,19 @@ import java.util.List;
 
 public class LessonRepository implements FirebaseRepository<Lesson> {
 
-    private FirebaseQueryLiveData firebaseQueryLiveData;
-    private final MediatorLiveData<List<Lesson>> lessonsLiveData;
+    private MediatorLiveData<List<Lesson>> lessonsLiveData;
 
     private static final DatabaseReference LESSONS_REF =
             FirebaseDatabase.getInstance().getReference("/lessons");
 
-    /*userId used to fetch all the lessons that user's has made (My Lessons case)*/
-    public LessonRepository() {
-        String userId = null;
-        if (userId == null) { // display All Lessons
-            firebaseQueryLiveData = new FirebaseQueryLiveData(LESSONS_REF);
-        } else { // display only My (user's) Lessons
-            Query queryMyLessons = LESSONS_REF.orderByChild(Lesson._AUTHOR_ID).equalTo(userId);
+    /* parentId used to fetch all the lessons that user's has made (My Lessons case)*/
+    public LessonRepository(String parentId) {
+        FirebaseQueryLiveData firebaseQueryLiveData;
+        if (parentId == null) { // display All Lessons
+            Query queryAllLessons = LESSONS_REF.orderByChild(Lesson._INDEX);
+            firebaseQueryLiveData = new FirebaseQueryLiveData(queryAllLessons);
+        } else { // display only Lessons that belong to specific user (parent)
+            Query queryMyLessons = LESSONS_REF.orderByChild(Lesson._AUTHOR_ID).equalTo(parentId);
             firebaseQueryLiveData = new FirebaseQueryLiveData(queryMyLessons);
         }
         // lessonsLiveData is used to store either all lessons or my lesson
@@ -62,10 +60,15 @@ public class LessonRepository implements FirebaseRepository<Lesson> {
     }
 
     @Override
-    public void insert(Lesson lesson) {
+    public void create(Lesson lesson) {
         String key = LESSONS_REF.push().getKey();
         lesson.setId(key);
         LESSONS_REF.child(key).setValue(lesson);
+    }
+
+    @Override
+    public MutableLiveData<List<Lesson>> getAll() {
+        return lessonsLiveData;
     }
 
     @Override
@@ -77,7 +80,7 @@ public class LessonRepository implements FirebaseRepository<Lesson> {
     // a lesson cannot be deleted, unless it has no chapters
     @Override
     public boolean delete(Lesson lesson) {
-        if (lesson.getChildCount() == 0) {
+        if (lesson.getChildrenCount() == 0) {
             String key = lesson.getId();
             LESSONS_REF.child(key).setValue(null);
             return true;
@@ -92,11 +95,5 @@ public class LessonRepository implements FirebaseRepository<Lesson> {
         for (Lesson lesson: getAll().getValue()){
             delete(lesson);
         }
-
-    }
-
-    @Override
-    public MutableLiveData<List<Lesson>> getAll() {
-        return lessonsLiveData;
     }
 }

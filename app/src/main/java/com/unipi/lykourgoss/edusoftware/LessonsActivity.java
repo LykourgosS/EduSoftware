@@ -20,11 +20,12 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.unipi.lykourgoss.edusoftware.adapters.SwipeToDelete;
 import com.unipi.lykourgoss.edusoftware.adapters.LessonAdapter;
 import com.unipi.lykourgoss.edusoftware.adapters.OnItemClickListener;
 import com.unipi.lykourgoss.edusoftware.createeditactivities.CreateEditLessonActivity;
 import com.unipi.lykourgoss.edusoftware.models.Lesson;
-import com.unipi.lykourgoss.edusoftware.viewmodels.LessonViewModel;
+import com.unipi.lykourgoss.edusoftware.viewmodels.LessonsViewModel;
 
 import java.io.IOException;
 import java.util.List;
@@ -41,7 +42,7 @@ public class LessonsActivity extends AppCompatActivity implements View.OnClickLi
 
     public AlertDialog dialog;
 
-    private LessonViewModel lessonViewModel;
+    private LessonsViewModel lessonsViewModel;
 
     private LessonAdapter adapter;
 
@@ -81,14 +82,14 @@ public class LessonsActivity extends AppCompatActivity implements View.OnClickLi
         /*create and observe viewModel and its liveData. ViewModel object will either be newly
         created if no ViewModel of the named class for the Activity exists, or obtained from a
         prior instance of the Activity before a configuration change occurred.*/
-        lessonViewModel = ViewModelProviders.of(this).get(LessonViewModel.class);
-        lessonViewModel.getAllLessons().observe(this, new Observer<List<Lesson>>() {
+        lessonsViewModel = ViewModelProviders.of(this).get(LessonsViewModel.class);
+        lessonsViewModel.setParentId(null);
+        lessonsViewModel.getAll().observe(this, new Observer<List<Lesson>>() {
             @Override
             public void onChanged(List<Lesson> lessons) {
                 //update recyclerView items
                 adapter.submitList(lessons);
-                // if no items show tumbleweed gif
-                if (lessons.isEmpty()) {
+                if (lessons.isEmpty()) { // if no items show tumbleweed gif
                     linearLayoutNoItems.setVisibility(View.VISIBLE);
                 } else {
                     linearLayoutNoItems.setVisibility(View.GONE);
@@ -96,9 +97,8 @@ public class LessonsActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
 
-        // if user is admin or better if they are on their MyLessons
-        if (true) {
-            // swipe right to delete (->) or left to edit (<-)
+        // todo if user is admin or better if they are on their MyLessons
+        if (false) {
             new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
                     ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
                 @Override
@@ -110,24 +110,15 @@ public class LessonsActivity extends AppCompatActivity implements View.OnClickLi
 
                 @Override
                 public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                    if (direction == ItemTouchHelper.RIGHT) { //swipe right to delete (->)
-                        lessonViewModel.delete(adapter.getLessonAt(viewHolder.getAdapterPosition()));
-                        Toast.makeText(LessonsActivity.this, "Lesson deleted", Toast.LENGTH_SHORT).show();
-                    } else { //swipe left to edit (<-)
-                        // TODO should i make a method for making an intent for editing existing Lesson
-                        Intent intent = adapter.getLessonAt(viewHolder.getAdapterPosition())
-                                .putToIntent(LessonsActivity.this);
-                        // put in extras the index of the last lesson (so the user can't set the lesson's
-                        // index at maximum same as the last lesson) -> used to set up numberPicker choices
-                        // (for selecting index)
-                        intent.putExtra(EXTRA_LAST_LESSON_INDEX, lessonViewModel.getLessonsCount());
-                        startActivityForResult(intent, EDIT_LESSON_REQUEST);
-                    }
-                    //todo SEE: swipe menu -> codeburst
-                    adapter.notifyDataSetChanged();
+                    //swipe left or right to delete (<- or ->)
+                    delete(adapter.getItemAt(viewHolder.getAdapterPosition()));
                 }
             }).attachToRecyclerView(recyclerView);
         }
+
+        SwipeToDelete<Lesson, LessonsViewModel> swipeToDelete = new SwipeToDelete<>(lessonsViewModel, adapter);
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeToDelete);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
 
         adapter.setOnClickListener(new OnItemClickListener<Lesson>() {
             @Override
@@ -147,29 +138,14 @@ public class LessonsActivity extends AppCompatActivity implements View.OnClickLi
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        // default value for lesson's index is the last available index
-        int defaultIndex = lessonViewModel.getLessonsCount();
+        /* default value for lesson's index is the last available index */
+        int defaultIndex = lessonsViewModel.getChildrenCount();
 
         if (requestCode == CREATE_LESSON_REQUEST) {
-            if (resultCode == RESULT_OK){
-                // creating a new Lesson object and saving it in the database
-                Lesson lesson = Lesson.getFromIntent(data, false, defaultIndex);
-                lessonViewModel.insert(lesson);
-                Toast.makeText(this, "Lesson created", Toast.LENGTH_SHORT).show();
-            } else {// something went wrong or user clicked to go back
-                Toast.makeText(this, "Lesson not created", Toast.LENGTH_SHORT).show();
-            }
+            createNew(Lesson.getFromIntent(data, false, defaultIndex), resultCode);
+
         } else if (requestCode == EDIT_LESSON_REQUEST) {
-            if (resultCode == RESULT_OK){
-                /* updating existing lesson in database */
-                Lesson lesson = Lesson.getFromIntent(data, true, defaultIndex);
-                if (lesson != null) { // check getFromIntent(...) declaration for the purpose of if
-                    lessonViewModel.update(lesson);
-                    Toast.makeText(this, "Lesson updated", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-            }
-            Toast.makeText(this, "Lesson not updated", Toast.LENGTH_SHORT).show();
+            update(Lesson.getFromIntent(data, true, defaultIndex), resultCode);
         }
     }
 
@@ -177,14 +153,7 @@ public class LessonsActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fab_create_lesson:
-                /* Create new Lesson */
-                Intent intent = new Intent(LessonsActivity.this, CreateEditLessonActivity.class);
-                /*
-                put in extras: the index for new lesson (hypothesis: will be added at the end
-                of the lessons) -> used to set up numberPicker choices (for selecting index)
-                */
-                intent.putExtra(EXTRA_LAST_LESSON_INDEX, lessonViewModel.getLessonsCount() + 1);
-                startActivityForResult(intent, CREATE_LESSON_REQUEST);
+                startActivityToCreateNew();
         }
     }
 
@@ -199,13 +168,60 @@ public class LessonsActivity extends AppCompatActivity implements View.OnClickLi
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.item_delete_all:
-                // Delete all lessons
-                lessonViewModel.deleteAllLessons();
-                Toast.makeText(this, "All lessons deleted", Toast.LENGTH_SHORT).show();
+                deleteAll();
                 return true;
             // todo add help case: dialog for how to edit, create, delete, delete all, long click for details
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    /*Methods for CRUD operations*/
+
+    private void startActivityToCreateNew(){
+        Intent intent = new Intent(LessonsActivity.this, CreateEditLessonActivity.class);
+                /*put in extras: the index for new lesson (hypothesis: will be added at the end
+                of the lessons) -> used to set up numberPicker choices (for selecting index)*/
+        intent.putExtra(EXTRA_LAST_LESSON_INDEX, lessonsViewModel.getChildrenCount() + 1);
+        startActivityForResult(intent, CREATE_LESSON_REQUEST);
+    }
+
+    private void createNew(Lesson lesson, int resultCode) {
+        if (resultCode == RESULT_OK) {
+            lessonsViewModel.create(lesson);
+            Toast.makeText(this, "Lesson created", Toast.LENGTH_SHORT).show();
+        } else {// something went wrong or user clicked to go back
+            Toast.makeText(this, "Lesson not created", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /* todo on call use: adapter.getItemAt(viewHolder.getAdapterPosition()) */
+    private void startActivityToEdit(Lesson lesson){
+        Intent intent = lesson.putToIntent(LessonsActivity.this);
+        // put in extras the index of the last lesson (so the user can't set the lesson's
+        // index at maximum same as the last lesson) -> used to set up numberPicker choices
+        // (for selecting index)
+        intent.putExtra(EXTRA_LAST_LESSON_INDEX, lessonsViewModel.getChildrenCount());
+        startActivityForResult(intent, EDIT_LESSON_REQUEST);
+    }
+
+    private void update(Lesson lesson, int resultCode) {
+        if (resultCode == RESULT_OK) {
+            lessonsViewModel.update(lesson);
+            Toast.makeText(this, "Lesson updated", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Lesson not updated", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void delete(Lesson lesson){
+        lessonsViewModel.delete(lesson);
+        Toast.makeText(LessonsActivity.this, "Lesson deleted", Toast.LENGTH_SHORT).show();
+    }
+
+    /*deletes all lessons that don't have any children (chapters)*/
+    private void deleteAll() {
+        lessonsViewModel.deleteAll();
+        Toast.makeText(this, "All lessons deleted", Toast.LENGTH_SHORT).show();
     }
 }

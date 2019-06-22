@@ -44,13 +44,13 @@ public class LessonsFirebaseViewModel extends ViewModel {
     public LessonsFirebaseViewModel() {
         super();
         repository = new LessonFirebaseRepository();
-        allLessons = lessonRepository.getAllLessons();
+        allLessons = lessonRepository.getAll();
     }
 
-    public void insert(Lesson lesson){
+    public void create(Lesson lesson){
         String lessonId = LESSONS_REF.push().getKey();
         lesson.setId(lessonId);
-        lessonRepository.insert(lesson);
+        lessonRepository.create(lesson);
     }
 
     public void update(Lesson lesson){
@@ -62,7 +62,7 @@ public class LessonsFirebaseViewModel extends ViewModel {
     }
 
     public void deleteAll(){
-        lessonRepository.deleteAllLessons();
+        lessonRepository.deleteAll();
     }
 
     public LiveData<List<Lesson>> getAll() {

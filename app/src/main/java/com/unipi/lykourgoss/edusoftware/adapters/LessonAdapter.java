@@ -21,9 +21,7 @@ import java.util.List;
  * on 17,June,2019.
  */
 
-public class LessonAdapter extends ListAdapter<Lesson, LessonViewHolder> {
-
-    private OnItemClickListener listener;
+public class LessonAdapter extends MyAdapter<Lesson, LessonViewHolder> {
 
     // static because we want to be initialised before
     // executing the constructor (in which we used it)
@@ -41,13 +39,14 @@ public class LessonAdapter extends ListAdapter<Lesson, LessonViewHolder> {
 
     public LessonAdapter() {
         super(DIFF_CALLBACK);
+        this.layoutId = R.layout.item_lesson;
     }
 
     @NonNull
     @Override
     public LessonViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_lesson, parent, false);
+                .inflate(layoutId, parent, false);
         return new LessonViewHolder(itemView);
     }
 
@@ -55,18 +54,5 @@ public class LessonAdapter extends ListAdapter<Lesson, LessonViewHolder> {
     public void onBindViewHolder(@NonNull LessonViewHolder holder, int position) {
         holder.setItem(getItem(position));
         holder.setOnItemClickListener(listener);
-    }
-
-    @Override
-    public void submitList(@Nullable List<Lesson> list) {
-        super.submitList(list != null ? new ArrayList<>(list) : null);
-    }
-
-    public Lesson getLessonAt(int position) {
-        return getItem(position);
-    }
-
-    public void setOnClickListener(OnItemClickListener listener) {
-        this.listener = listener;
     }
 }

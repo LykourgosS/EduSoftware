@@ -48,7 +48,7 @@ public class Dialog {
         /*fill textViews with lesson properties*/
         ((TextView) dialogView.findViewById(R.id.dialog_details_lesson_title)).setText(lesson.getTitle());
         ((TextView) dialogView.findViewById(R.id.dialog_details_lesson_index)).setText(String.valueOf(lesson.getIndex()));
-        ((TextView) dialogView.findViewById(R.id.dialog_details_lesson_child_count)).setText(String.valueOf(lesson.getChildCount()));
+        ((TextView) dialogView.findViewById(R.id.dialog_details_lesson_child_count)).setText(String.valueOf(lesson.getChildrenCount()));
         ((TextView) dialogView.findViewById(R.id.dialog_details_lesson_description)).setText(lesson.getDescription());
         ((TextView) dialogView.findViewById(R.id.dialog_details_lesson_author_email)).setText(lesson.getAuthorEmail());
 

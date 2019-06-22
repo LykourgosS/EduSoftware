@@ -51,7 +51,7 @@ public class Lesson extends EduEntity {
         intent.putExtra(CreateEditLessonActivity.EXTRA_TITLE, getTitle());
         intent.putExtra(CreateEditLessonActivity.EXTRA_INDEX, getIndex());
         intent.putExtra(CreateEditLessonActivity.EXTRA_DESCRIPTION, getDescription());
-        intent.putExtra(CreateEditLessonActivity.EXTRA_CHILD_COUNT, getChildCount());
+        intent.putExtra(CreateEditLessonActivity.EXTRA_CHILD_COUNT, getChildrenCount());
         intent.putExtra(CreateEditLessonActivity.EXTRA_AUTHOR_ID, getAuthorId());
         intent.putExtra(CreateEditLessonActivity.EXTRA_AUTHOR_EMAIL, getAuthorEmail());
         return intent;

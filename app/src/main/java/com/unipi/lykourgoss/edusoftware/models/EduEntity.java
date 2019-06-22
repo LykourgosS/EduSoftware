@@ -3,16 +3,13 @@ package com.unipi.lykourgoss.edusoftware.models;
 import android.content.Context;
 import android.content.Intent;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
 public abstract class EduEntity {
 
     public static final String _ID = "id";
     public static final String _TITLE = "title";
     public static final String _INDEX = "index";
     public static final String _DESCRIPTION = "description";
-    public static final String _CHILD_COUNT = "childCount";
+    public static final String _CHILD_COUNT = "childrenCount";
 
     protected String id;
 
@@ -22,17 +19,17 @@ public abstract class EduEntity {
 
     protected String description;
 
-    protected int childCount;
+    protected int childrenCount;
 
     // to be used by firebase serialization
     protected EduEntity() {
     }
 
-    public EduEntity(String title, int index, String description, int childCount) {
+    public EduEntity(String title, int index, String description, int childrenCount) {
         this.title = title;
         this.index = index;
         this.description = description;
-        this.childCount = childCount;
+        this.childrenCount = childrenCount;
     }
 
     public String getId() {
@@ -55,8 +52,8 @@ public abstract class EduEntity {
         return description;
     }
 
-    public int getChildCount() {
-        return childCount;
+    public int getChildrenCount() {
+        return childrenCount;
     }
 
     // chapters have chapterId so must override it (the same for every other class)
@@ -66,7 +63,7 @@ public abstract class EduEntity {
                 getTitle().equals(model.getTitle()) &&
                 getIndex() == model.getIndex() &&
                 getDescription().equals(model.getDescription())/* &&
-                getChildCount() == model.getChildCount()*/;
+                getChildrenCount() == model.getChildrenCount()*/;
     }
 
     protected abstract Intent putToIntent(Context context);
