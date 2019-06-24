@@ -23,7 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.unipi.lykourgoss.edusoftware.adapters.SwipeToDelete;
 import com.unipi.lykourgoss.edusoftware.adapters.LessonAdapter;
 import com.unipi.lykourgoss.edusoftware.adapters.OnItemClickListener;
-import com.unipi.lykourgoss.edusoftware.createeditactivities.CreateEditLessonActivity;
+import com.unipi.lykourgoss.edusoftware.activities.createedit.CreateEditLessonActivity;
 import com.unipi.lykourgoss.edusoftware.models.Lesson;
 import com.unipi.lykourgoss.edusoftware.viewmodels.LessonsViewModel;
 
@@ -139,13 +139,22 @@ public class LessonsActivity extends AppCompatActivity implements View.OnClickLi
         super.onActivityResult(requestCode, resultCode, data);
 
         /* default value for lesson's index is the last available index */
-        int defaultIndex = lessonsViewModel.getChildrenCount();
+        int defaultIndex = lessonsViewModel.getChildCount();
 
         if (requestCode == CREATE_LESSON_REQUEST) {
-            createNew(Lesson.getFromIntent(data, false, defaultIndex), resultCode);
-
+            if (resultCode == RESULT_OK) {
+                lessonsViewModel.create(Lesson.getFromIntent(data, false, defaultIndex));
+                Toast.makeText(this, "Lesson created", Toast.LENGTH_SHORT).show();
+            } else {// something went wrong or user clicked to go back
+                Toast.makeText(this, "Lesson not created", Toast.LENGTH_SHORT).show();
+            }
         } else if (requestCode == EDIT_LESSON_REQUEST) {
-            update(Lesson.getFromIntent(data, true, defaultIndex), resultCode);
+            if (resultCode == RESULT_OK) {
+                lessonsViewModel.update(Lesson.getFromIntent(data, true, defaultIndex));
+                Toast.makeText(this, "Lesson updated", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Lesson not updated", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -182,7 +191,7 @@ public class LessonsActivity extends AppCompatActivity implements View.OnClickLi
         Intent intent = new Intent(LessonsActivity.this, CreateEditLessonActivity.class);
                 /*put in extras: the index for new lesson (hypothesis: will be added at the end
                 of the lessons) -> used to set up numberPicker choices (for selecting index)*/
-        intent.putExtra(EXTRA_LAST_LESSON_INDEX, lessonsViewModel.getChildrenCount() + 1);
+        intent.putExtra(EXTRA_LAST_LESSON_INDEX, lessonsViewModel.getChildCount() + 1);
         startActivityForResult(intent, CREATE_LESSON_REQUEST);
     }
 
@@ -201,17 +210,12 @@ public class LessonsActivity extends AppCompatActivity implements View.OnClickLi
         // put in extras the index of the last lesson (so the user can't set the lesson's
         // index at maximum same as the last lesson) -> used to set up numberPicker choices
         // (for selecting index)
-        intent.putExtra(EXTRA_LAST_LESSON_INDEX, lessonsViewModel.getChildrenCount());
+        intent.putExtra(EXTRA_LAST_LESSON_INDEX, lessonsViewModel.getChildCount());
         startActivityForResult(intent, EDIT_LESSON_REQUEST);
     }
 
     private void update(Lesson lesson, int resultCode) {
-        if (resultCode == RESULT_OK) {
-            lessonsViewModel.update(lesson);
-            Toast.makeText(this, "Lesson updated", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, "Lesson not updated", Toast.LENGTH_SHORT).show();
-        }
+
     }
 
     private void delete(Lesson lesson){

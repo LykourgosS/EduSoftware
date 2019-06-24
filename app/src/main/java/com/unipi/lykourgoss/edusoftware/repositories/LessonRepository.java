@@ -1,3 +1,4 @@
+/*
 package com.unipi.lykourgoss.edusoftware.repositories;
 
 import androidx.lifecycle.MediatorLiveData;
@@ -14,10 +15,12 @@ import com.unipi.lykourgoss.edusoftware.viewmodels.FirebaseQueryLiveData;
 import java.util.ArrayList;
 import java.util.List;
 
+*/
 /**
  * Created by LykourgosS <lpsarantidis@gmail.com>
  * on 21,June,2019.
- */
+ *//*
+
 
 public class LessonRepository implements FirebaseRepository<Lesson> {
 
@@ -26,7 +29,9 @@ public class LessonRepository implements FirebaseRepository<Lesson> {
     private static final DatabaseReference LESSONS_REF =
             FirebaseDatabase.getInstance().getReference("/lessons");
 
-    /* parentId used to fetch all the lessons that user's has made (My Lessons case)*/
+    */
+/* parentId used to fetch all the lessons that user's has made (My Lessons case)*//*
+
     public LessonRepository(String parentId) {
         FirebaseQueryLiveData firebaseQueryLiveData;
         if (parentId == null) { // display All Lessons
@@ -59,11 +64,15 @@ public class LessonRepository implements FirebaseRepository<Lesson> {
         });
     }
 
+
+    // todo add callback functionality (in all CRUD operations)
     @Override
     public void create(Lesson lesson) {
         String key = LESSONS_REF.push().getKey();
         lesson.setId(key);
-        LESSONS_REF.child(key).setValue(lesson);
+        MyCompletionListener completionListener = new MyCompletionListener();
+        LESSONS_REF.child(key).setValue(lesson, completionListener);
+        //return completionListener.getResult();
     }
 
     @Override
@@ -80,7 +89,7 @@ public class LessonRepository implements FirebaseRepository<Lesson> {
     // a lesson cannot be deleted, unless it has no chapters
     @Override
     public boolean delete(Lesson lesson) {
-        if (lesson.getChildrenCount() == 0) {
+        if (lesson.getChildCount() == 0) {
             String key = lesson.getId();
             LESSONS_REF.child(key).setValue(null);
             return true;
@@ -97,3 +106,4 @@ public class LessonRepository implements FirebaseRepository<Lesson> {
         }
     }
 }
+*/

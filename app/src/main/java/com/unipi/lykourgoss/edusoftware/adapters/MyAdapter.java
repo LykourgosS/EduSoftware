@@ -48,6 +48,11 @@ public class MyAdapter<Model extends EduEntity, VH extends RecyclerView.ViewHold
         return getItem(position);
     }
 
+    @Override
+    protected Model getItem(int position) {
+        return super.getItem(position);
+    }
+
     public void setOnClickListener(OnItemClickListener listener) {
         this.listener = listener;
     }

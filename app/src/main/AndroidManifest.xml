@@ -9,22 +9,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".TestFirebaseActivity"></activity>
+        <activity android:name=".activities.createedit.CreateEditActivity" />
+        <activity android:name=".activities.createedit.CreateEditChapterActivity" />
         <activity
-            android:name=".createeditactivities.CreateEditLessonActivity"
+            android:name=".activities.createedit.CreateEditLessonActivity"
             android:parentActivityName=".LessonsActivity" />
         <activity
             android:name=".LessonsActivity"
             android:launchMode="singleTop"
             android:parentActivityName=".MainActivity" /> <!-- TODO see for proper launch mode -->
         <activity
-            android:name=".filestoremove.CreateLessonActivity"
-            android:parentActivityName=".filestoremove.LessonsActivityOld" />
-        <activity
-            android:name=".filestoremove.LessonsActivityOld"
-            android:launchMode="singleTop"
-            android:parentActivityName=".MainActivity" />
-        <activity android:name=".MainActivity">
+            android:name=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />

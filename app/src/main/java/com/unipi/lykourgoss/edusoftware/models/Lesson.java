@@ -2,8 +2,9 @@ package com.unipi.lykourgoss.edusoftware.models;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Parcel;
 
-import com.unipi.lykourgoss.edusoftware.createeditactivities.CreateEditLessonActivity;
+import com.unipi.lykourgoss.edusoftware.activities.createedit.CreateEditLessonActivity;
 
 /**
  * Created by LykourgosS <lpsarantidis@gmail.com>
@@ -15,7 +16,15 @@ public class Lesson extends EduEntity {
     public static final String _AUTHOR_ID ="authorId";
     public static final String _AUTHOR_EMAIL ="authorEmail";
 
-    /*Unique properties*/
+    /* Initialization of Lesson Firebase Reference */
+
+    private static final String _LESSONS_REF = "/lessons";
+
+    static {
+        _ENTITY_REFERENCE = _LESSONS_REF;
+    }
+
+    /* Unique properties */
 
     private String authorId;
 
@@ -51,7 +60,7 @@ public class Lesson extends EduEntity {
         intent.putExtra(CreateEditLessonActivity.EXTRA_TITLE, getTitle());
         intent.putExtra(CreateEditLessonActivity.EXTRA_INDEX, getIndex());
         intent.putExtra(CreateEditLessonActivity.EXTRA_DESCRIPTION, getDescription());
-        intent.putExtra(CreateEditLessonActivity.EXTRA_CHILD_COUNT, getChildrenCount());
+        intent.putExtra(CreateEditLessonActivity.EXTRA_CHILD_COUNT, getChildCount());
         intent.putExtra(CreateEditLessonActivity.EXTRA_AUTHOR_ID, getAuthorId());
         intent.putExtra(CreateEditLessonActivity.EXTRA_AUTHOR_EMAIL, getAuthorEmail());
         return intent;

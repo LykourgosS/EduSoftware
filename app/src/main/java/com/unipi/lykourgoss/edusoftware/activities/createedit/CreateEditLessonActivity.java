@@ -1,4 +1,4 @@
-package com.unipi.lykourgoss.edusoftware.createeditactivities;
+package com.unipi.lykourgoss.edusoftware.activities.createedit;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,19 +15,19 @@ import com.unipi.lykourgoss.edusoftware.R;
 
 public class CreateEditLessonActivity extends AppCompatActivity {
     public static final String EXTRA_ID =
-            "com.unipi.lykourgoss.edusoftware.createeditactivities.CreateEditLessonActivity.EXTRA_ID";
+            "com.unipi.lykourgoss.edusoftware.activities.createedit.EXTRA_ID";
     public static final String EXTRA_TITLE =
-            "com.unipi.lykourgoss.edusoftware.createeditactivities.CreateEditLessonActivity.EXTRA_TITLE";
+            "com.unipi.lykourgoss.edusoftware.activities.createedit.EXTRA_TITLE";
     public static final String EXTRA_INDEX =
-            "com.unipi.lykourgoss.edusoftware.createeditactivities.CreateEditLessonActivity.EXTRA_INDEX";
+            "com.unipi.lykourgoss.edusoftware.activities.createedit.EXTRA_INDEX";
     public static final String EXTRA_DESCRIPTION =
-            "com.unipi.lykourgoss.edusoftware.createeditactivities.CreateEditLessonActivity.EXTRA_DESCRIPTION";
+            "com.unipi.lykourgoss.edusoftware.activities.createedit.EXTRA_DESCRIPTION";
     public static final String EXTRA_CHILD_COUNT =
-            "com.unipi.lykourgoss.edusoftware.createeditactivities.CreateEditLessonActivity.EXTRA_CHILD_COUNT";
+            "com.unipi.lykourgoss.edusoftware.activities.createedit.EXTRA_CHILD_COUNT";
     public static final String EXTRA_AUTHOR_ID =
-            "com.unipi.lykourgoss.edusoftware.createeditactivities.CreateEditLessonActivity.EXTRA_AUTHOR_ID";
+            "com.unipi.lykourgoss.edusoftware.activities.createedit.EXTRA_AUTHOR_ID";
     public static final String EXTRA_AUTHOR_EMAIL =
-            "com.unipi.lykourgoss.edusoftware.createeditactivities.CreateEditLessonActivity.EXTRA_AUTHOR_EMAIL";
+            "com.unipi.lykourgoss.edusoftware.activities.createedit.EXTRA_AUTHOR_EMAIL";
 
     private EditText editTextTitle;
     private EditText editTextDescription;
@@ -97,7 +97,7 @@ public class CreateEditLessonActivity extends AppCompatActivity {
                 .index()
                 .build();
         //todo lastModifiedBy user.getEmail()
-        lesson.create(com.unipi.lykourgoss.edusoftware.createeditactivities.CreateEditLessonActivity.this);
+        lesson.create(com.unipi.lykourgoss.edusoftware.activities.createedit.this);
         finish();*/
     }
 

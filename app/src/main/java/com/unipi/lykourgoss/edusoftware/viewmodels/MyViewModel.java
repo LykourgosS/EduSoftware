@@ -43,7 +43,8 @@ public abstract class MyViewModel<Model extends EduEntity> extends ViewModel {
         repository.deleteAll();
     }
 
-    public int getChildrenCount() {
+    /* don't need that use childCount property*/
+    public int getChildCount() {
         return listLiveData.getValue().size();
     }
 
@@ -54,6 +55,7 @@ public abstract class MyViewModel<Model extends EduEntity> extends ViewModel {
 
     /* used to load entities that belong to an entity (i.e lessons belong to users (authors),
     if null means all lessons. But for chapters, sections, subsections loads those that belong
-    to the clicked, selected item.) */
+    to the clicked, selected item).
+    !ATTENTION! should be called right after initialization of this */
     public abstract void setParentId(String parentId);
 }

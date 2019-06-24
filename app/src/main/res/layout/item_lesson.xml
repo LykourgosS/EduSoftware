@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginStart="8sp"
-    android:layout_marginEnd="8sp"
     android:layout_marginTop="4sp"
+    android:layout_marginEnd="8sp"
     android:layout_marginBottom="4sp"
     app:cardBackgroundColor="@android:color/white"
     app:cardCornerRadius="20sp"
@@ -55,6 +55,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
+                android:gravity="center"
                 android:orientation="vertical">
 
                 <!--Label for index-->
@@ -82,11 +83,11 @@
 
         <!--Label for description-->
         <TextView
-            android:layout_marginTop="8sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/black"
-            android:text="Description" />
+            android:layout_marginTop="8sp"
+            android:text="Description"
+            android:textColor="@android:color/black" />
 
         <!--Description-->
         <TextView
@@ -94,8 +95,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="end"
-            android:maxLines="1"
-            tools:text="This is an example of a lesson's description" />
+            android:maxLines="2"
+            tools:text="This is an example of a lesson's description. This is an example of a lesson's description. This is an example of a lesson's description. This is an example of a lesson's description." />
 
 
         <!--todo remove code below (implemented on longClick)-->

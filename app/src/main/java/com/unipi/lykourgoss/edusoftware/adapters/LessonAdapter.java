@@ -5,16 +5,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DiffUtil;
-import androidx.recyclerview.widget.ListAdapter;
 
-import com.unipi.lykourgoss.edusoftware.models.Lesson;
 import com.unipi.lykourgoss.edusoftware.R;
+import com.unipi.lykourgoss.edusoftware.models.Lesson;
 import com.unipi.lykourgoss.edusoftware.viewholders.LessonViewHolder;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by LykourgosS <lpsarantidis@gmail.com>
@@ -39,6 +34,8 @@ public class LessonAdapter extends MyAdapter<Lesson, LessonViewHolder> {
 
     public LessonAdapter() {
         super(DIFF_CALLBACK);
+        // todo maybe this will be the same for all entities...
+        //  if we need the same fields for all of them
         this.layoutId = R.layout.item_lesson;
     }
 

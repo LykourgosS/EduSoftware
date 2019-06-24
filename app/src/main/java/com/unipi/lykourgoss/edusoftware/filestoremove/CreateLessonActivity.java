@@ -55,7 +55,7 @@ public class CreateLessonActivity extends AppCompatActivity {
 
     private void setUpSpinnerChoicesWithIndexes() {
         List<String> spinnerChoices = new ArrayList<>();
-        for (int index = 1; index <= Lesson.childrenCount(); index++){
+        for (int index = 1; index <= Lesson.childCount(); index++){
             spinnerChoices.add(String.valueOf(index));
         }
         ArrayAdapter<String> adapter = new ArrayAdapter<>(

@@ -5,11 +5,13 @@ import android.content.Intent;
 
 public abstract class EduEntity {
 
+    public static String _ENTITY_REFERENCE;
+
     public static final String _ID = "id";
     public static final String _TITLE = "title";
     public static final String _INDEX = "index";
     public static final String _DESCRIPTION = "description";
-    public static final String _CHILD_COUNT = "childrenCount";
+    public static final String _CHILD_COUNT = "childCount";
 
     protected String id;
 
@@ -19,17 +21,18 @@ public abstract class EduEntity {
 
     protected String description;
 
-    protected int childrenCount;
+    protected int childCount;
 
-    // to be used by firebase serialization
-    protected EduEntity() {
+    /*Constructors (default & all properties except id)*/
+
+    public EduEntity() {
     }
 
-    public EduEntity(String title, int index, String description, int childrenCount) {
+    public EduEntity(String title, int index, String description, int childCount) {
         this.title = title;
         this.index = index;
         this.description = description;
-        this.childrenCount = childrenCount;
+        this.childCount = childCount;
     }
 
     public String getId() {
@@ -52,8 +55,8 @@ public abstract class EduEntity {
         return description;
     }
 
-    public int getChildrenCount() {
-        return childrenCount;
+    public int getChildCount() {
+        return childCount;
     }
 
     // chapters have chapterId so must override it (the same for every other class)
@@ -63,11 +66,8 @@ public abstract class EduEntity {
                 getTitle().equals(model.getTitle()) &&
                 getIndex() == model.getIndex() &&
                 getDescription().equals(model.getDescription())/* &&
-                getChildrenCount() == model.getChildrenCount()*/;
+                getChildCount() == model.getChildCount()*/;
     }
 
     protected abstract Intent putToIntent(Context context);
-
-    // always use casting for this method
-//    protected abstract EduEntity getFromIntent (Intent intent, boolean toUpdate, int defaultIndex);
 }

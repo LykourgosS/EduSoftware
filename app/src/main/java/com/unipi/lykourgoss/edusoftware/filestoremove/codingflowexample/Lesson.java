@@ -6,7 +6,7 @@ import android.content.Intent;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import com.unipi.lykourgoss.edusoftware.createeditactivities.CreateEditLessonActivity;
+import com.unipi.lykourgoss.edusoftware.activities.createedit.CreateEditLessonActivity;
 
 /**
  * Created by LykourgosS <lpsarantidis@gmail.com>

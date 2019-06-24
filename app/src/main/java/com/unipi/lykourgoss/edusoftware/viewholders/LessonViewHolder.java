@@ -4,17 +4,11 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.unipi.lykourgoss.edusoftware.adapters.OnItemClickListener;
-import com.unipi.lykourgoss.edusoftware.models.Lesson;
 import com.unipi.lykourgoss.edusoftware.R;
+import com.unipi.lykourgoss.edusoftware.models.Lesson;
 
-public class LessonViewHolder extends RecyclerView.ViewHolder {
-
-    private OnItemClickListener listener;
-
-    private Lesson lesson;
+public class LessonViewHolder extends MyViewHolder<Lesson> {
 
     private TextView textViewTitle;
     private TextView textViewIndex;
@@ -26,44 +20,15 @@ public class LessonViewHolder extends RecyclerView.ViewHolder {
         textViewTitle = itemView.findViewById(R.id.text_view_lesson_title);
         textViewIndex = itemView.findViewById(R.id.text_view_lesson_index);
         textViewDescription = itemView.findViewById(R.id.text_view_lesson_description);
-
-        itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int position = getAdapterPosition();
-                // compare it to RecyclerView.NO_POSITION to make sure that it is still valid
-                if (listener != null && position != RecyclerView.NO_POSITION) {
-                    listener.onItemClick(lesson);
-                }
-            }
-        });
-
-        itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                int position = getAdapterPosition();
-                // compare it to RecyclerView.NO_POSITION to make sure that it is still valid
-                if (listener != null && position != RecyclerView.NO_POSITION) {
-                    listener.onItemLongClick(lesson);
-                }
-                return true;
-            }
-        });
     }
 
-    public void setOnItemClickListener(OnItemClickListener listener){
-        this.listener = listener;
-    }
 
+    @Override
     public void setItem(Lesson lesson) {
-        this.lesson = lesson;
+        super.setItem(lesson);
+
         textViewTitle.setText(lesson.getTitle());
         textViewIndex.setText(String.valueOf(lesson.getIndex()));
         textViewDescription.setText(lesson.getDescription());
-    }
-
-    // todo see if not needed
-    public Lesson getItem(){
-        return lesson;
     }
 }
