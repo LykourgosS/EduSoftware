@@ -20,7 +20,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.unipi.lykourgoss.edusoftware.adapters.SwipeToDelete;
+import com.unipi.lykourgoss.edusoftware.filestoremove.codingflowexample.SwipeToDeleteCallback;
 import com.unipi.lykourgoss.edusoftware.adapters.LessonAdapter;
 import com.unipi.lykourgoss.edusoftware.adapters.OnItemClickListener;
 import com.unipi.lykourgoss.edusoftware.activities.createedit.CreateEditLessonActivity;
@@ -46,33 +46,30 @@ public class LessonsActivity extends AppCompatActivity implements View.OnClickLi
 
     private LessonAdapter adapter;
 
-    private RecyclerView recyclerView;
-    private ImageView imageViewNoItems;
-    private GifDrawable gifNoItems;
     private LinearLayout linearLayoutNoItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main2);
+        setContentView(R.layout.fragment_dispaly_my);
 
-        findViewById(R.id.fab_create_lesson).setOnClickListener(this);
+        findViewById(R.id.fab_create_new).setOnClickListener(this);
 
         setTitle("Lessons");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         linearLayoutNoItems = findViewById(R.id.linear_layout_no_items);
-        imageViewNoItems = findViewById(R.id.image_view_no_items);
+        ImageView imageViewNoItems = findViewById(R.id.image_view_no_items);
 
         // set up imageViewNoItems with Gif drawable
         try {
-            gifNoItems = new GifDrawable(getResources(), R.drawable.no_items_tumbleweed);
+            GifDrawable gifNoItems = new GifDrawable(getResources(), R.drawable.no_items_tumbleweed);
             imageViewNoItems.setImageDrawable(gifNoItems);
         } catch (IOException e) {
             Toast.makeText(LessonsActivity.this, "Error loading image", Toast.LENGTH_SHORT).show();
         }
 
-        recyclerView = findViewById(R.id.recycler_view_lessons);
+        RecyclerView recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
 
@@ -111,13 +108,13 @@ public class LessonsActivity extends AppCompatActivity implements View.OnClickLi
                 @Override
                 public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                     //swipe left or right to delete (<- or ->)
-                    delete(adapter.getItemAt(viewHolder.getAdapterPosition()));
+                    delete(adapter.getItem(viewHolder.getAdapterPosition()));
                 }
             }).attachToRecyclerView(recyclerView);
         }
 
-        SwipeToDelete<Lesson, LessonsViewModel> swipeToDelete = new SwipeToDelete<>(lessonsViewModel, adapter);
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeToDelete);
+        SwipeToDeleteCallback<Lesson, LessonsViewModel> swipeToDeleteCallback = new SwipeToDeleteCallback<>(lessonsViewModel, adapter);
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeToDeleteCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
         adapter.setOnClickListener(new OnItemClickListener<Lesson>() {
@@ -129,7 +126,12 @@ public class LessonsActivity extends AppCompatActivity implements View.OnClickLi
 
             @Override
             public void onItemLongClick(Lesson lesson) {
-                Dialog.showLessonDetails(LessonsActivity.this, lesson);
+                /*Dialog.showLessonDetails(LessonsActivity.this, true, lesson, new Dialog.OnEditClickListener() {
+                    @Override
+                    public void onEditClick() {
+
+                    }
+                });*/
             }
         });
     }
@@ -161,7 +163,7 @@ public class LessonsActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.fab_create_lesson:
+            case R.id.fab_create_new:
                 startActivityToCreateNew();
         }
     }
@@ -176,7 +178,7 @@ public class LessonsActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.item_delete_all:
+            case R.id.menu_item_delete_all:
                 deleteAll();
                 return true;
             // todo add help case: dialog for how to edit, create, delete, delete all, long click for details
@@ -189,20 +191,20 @@ public class LessonsActivity extends AppCompatActivity implements View.OnClickLi
 
     private void startActivityToCreateNew(){
         Intent intent = new Intent(LessonsActivity.this, CreateEditLessonActivity.class);
-                /*put in extras: the index for new lesson (hypothesis: will be added at the end
-                of the lessons) -> used to set up numberPicker choices (for selecting index)*/
+        /*put in extras: the index for new lesson (hypothesis: will be added at the end
+        of the lessons) -> used to set up numberPicker choices (for selecting index)*/
         intent.putExtra(EXTRA_LAST_LESSON_INDEX, lessonsViewModel.getChildCount() + 1);
         startActivityForResult(intent, CREATE_LESSON_REQUEST);
     }
 
-    private void createNew(Lesson lesson, int resultCode) {
+    /*private void createNew(Lesson lesson, int resultCode) {
         if (resultCode == RESULT_OK) {
             lessonsViewModel.create(lesson);
             Toast.makeText(this, "Lesson created", Toast.LENGTH_SHORT).show();
         } else {// something went wrong or user clicked to go back
             Toast.makeText(this, "Lesson not created", Toast.LENGTH_SHORT).show();
         }
-    }
+    }*/
 
     /* todo on call use: adapter.getItemAt(viewHolder.getAdapterPosition()) */
     private void startActivityToEdit(Lesson lesson){

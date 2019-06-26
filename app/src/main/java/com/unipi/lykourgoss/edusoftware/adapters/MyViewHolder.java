@@ -1,11 +1,13 @@
-package com.unipi.lykourgoss.edusoftware.viewholders;
+package com.unipi.lykourgoss.edusoftware.adapters;
 
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.unipi.lykourgoss.edusoftware.R;
 import com.unipi.lykourgoss.edusoftware.adapters.OnItemClickListener;
 import com.unipi.lykourgoss.edusoftware.models.EduEntity;
 
@@ -14,14 +16,24 @@ import com.unipi.lykourgoss.edusoftware.models.EduEntity;
  * on 25,June,2019.
  */
 
-public abstract class MyViewHolder <Model extends EduEntity> extends RecyclerView.ViewHolder {
+public class MyViewHolder <Model extends EduEntity> extends RecyclerView.ViewHolder {
 
-    protected OnItemClickListener<Model> listener;
+    private OnItemClickListener<Model> listener;
 
-    protected Model model;
+    private Model model;
 
-    protected MyViewHolder(@NonNull View itemView) {
+    private TextView textViewTitle;
+
+    private TextView textViewIndex;
+
+    private TextView textViewDescription;
+
+    public MyViewHolder(@NonNull View itemView) {
         super(itemView);
+
+        textViewTitle = itemView.findViewById(R.id.text_view_edu_entity_title);
+        textViewIndex = itemView.findViewById(R.id.text_view_edu_entity_index);
+        textViewDescription = itemView.findViewById(R.id.text_view_edu_entity_description);
 
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,6 +68,9 @@ public abstract class MyViewHolder <Model extends EduEntity> extends RecyclerVie
     public void setItem(Model model) {
         this.model = model;
         // on child classes fill with model's values all of the viewHolder fields
+        textViewTitle.setText(model.getTitle());
+        textViewIndex.setText(String.valueOf(model.getIndex()));
+        textViewDescription.setText(model.getDescription());
     }
 
     // todo see if not needed

@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:padding="8sp">
 
     <RelativeLayout
@@ -93,29 +93,47 @@
 
 
 
-    <LinearLayout
+    <RelativeLayout
+        android:id="@+id/linear_layout_2"
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/scroll_view"
         android:layout_margin="8sp"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom">
-        
-        <TextView
+
+        <ImageButton
+            android:id="@+id/dialog_details_lesson_button_edit"
+            android:layout_width="30sp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_edit_white_24dp"
+            android:gravity="start"
+            android:background="@color/colorPrimary"/>
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Author: " />
+            android:orientation="horizontal"
+            android:layout_gravity="end"
+            android:layout_alignParentEnd="true">
 
-        <!--AuthorEmail-->
-        <TextView
-            android:id="@+id/dialog_details_lesson_author_email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:singleLine="true"
-            tools:text="example@email.com" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Author: " />
 
-    </LinearLayout>
+            <!--AuthorEmail-->
+            <TextView
+                android:id="@+id/dialog_details_lesson_author_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:singleLine="true"
+                tools:text="example@email.com" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
 
 </RelativeLayout>

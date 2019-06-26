@@ -26,7 +26,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
-                android:layout_toStartOf="@+id/linear_layout_lesson_index"
+                android:layout_toStartOf="@+id/linear_layout_edu_entity_index"
                 android:orientation="vertical">
 
                 <!--Label for title-->
@@ -38,7 +38,7 @@
 
                 <!--Title-->
                 <TextView
-                    android:id="@+id/text_view_lesson_title"
+                    android:id="@+id/text_view_edu_entity_title"
                     style="@style/TextAppearance.AppCompat.Large"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -51,7 +51,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/linear_layout_lesson_index"
+                android:id="@+id/linear_layout_edu_entity_index"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
@@ -67,7 +67,7 @@
 
                 <!--Index-->
                 <TextView
-                    android:id="@+id/text_view_lesson_index"
+                    android:id="@+id/text_view_edu_entity_index"
                     style="@style/TextAppearance.AppCompat.Large"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -91,11 +91,12 @@
 
         <!--Description-->
         <TextView
-            android:id="@+id/text_view_lesson_description"
+            android:id="@+id/text_view_edu_entity_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="2"
+            android:text="No description"
             tools:text="This is an example of a lesson's description. This is an example of a lesson's description. This is an example of a lesson's description. This is an example of a lesson's description." />
 
 
@@ -113,7 +114,7 @@
 
             &lt;!&ndash;AuthorId&ndash;&gt;
             <TextView
-                android:id="@+id/text_view_lesson_authorId"
+                android:id="@+id/text_view_edu_entity_authorId"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
@@ -125,7 +126,7 @@
 
         <!--todo implement progress in lesson class-->
         <!--<ProgressBar-->
-        <!--android:id="@+id/progressBar_lesson_progress"-->
+        <!--android:id="@+id/progressBar_edu_entity_progress"-->
         <!--style="?android:attr/progressBarStyleHorizontal"-->
         <!--android:layout_width="match_parent"-->
         <!--android:layout_height="wrap_content"-->

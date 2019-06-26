@@ -1,10 +1,11 @@
-package com.unipi.lykourgoss.edusoftware.adapters;
+package com.unipi.lykourgoss.edusoftware.filestoremove.codingflowexample;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.unipi.lykourgoss.edusoftware.adapters.MyAdapter;
 import com.unipi.lykourgoss.edusoftware.models.EduEntity;
 import com.unipi.lykourgoss.edusoftware.viewmodels.MyViewModel;
 
@@ -13,13 +14,13 @@ import com.unipi.lykourgoss.edusoftware.viewmodels.MyViewModel;
  * on 22,June,2019.
  */
 
-public class SwipeToDelete<Model extends EduEntity, VM extends MyViewModel> extends ItemTouchHelper.SimpleCallback {
+public class SwipeToDeleteCallback<Model extends EduEntity, VM extends MyViewModel> extends ItemTouchHelper.SimpleCallback {
 
     private VM viewModel;
 
-    private MyAdapter<Model, RecyclerView.ViewHolder> adapter;
+    private MyAdapter<Model> adapter;
 
-    public SwipeToDelete(VM viewModel, MyAdapter adapter) {
+    public SwipeToDeleteCallback(VM viewModel, MyAdapter adapter) {
         super(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
         this.viewModel = viewModel;
         this.adapter = adapter;
@@ -32,6 +33,6 @@ public class SwipeToDelete<Model extends EduEntity, VM extends MyViewModel> exte
 
     @Override
     public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-        viewModel.delete(adapter.getItemAt(viewHolder.getAdapterPosition()));
+        viewModel.delete(adapter.getItem(viewHolder.getAdapterPosition()));
     }
 }

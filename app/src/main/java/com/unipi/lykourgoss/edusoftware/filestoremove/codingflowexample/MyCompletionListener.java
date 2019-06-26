@@ -1,4 +1,4 @@
-package com.unipi.lykourgoss.edusoftware.repositories;
+package com.unipi.lykourgoss.edusoftware.filestoremove.codingflowexample;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

@@ -1,5 +1,7 @@
 package com.unipi.lykourgoss.edusoftware.adapters;
 
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -8,6 +10,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.unipi.lykourgoss.edusoftware.R;
 import com.unipi.lykourgoss.edusoftware.models.EduEntity;
 
 import java.util.ArrayList;
@@ -18,11 +21,9 @@ import java.util.List;
  * on 22,June,2019.
  */
 
-public class MyAdapter<Model extends EduEntity, VH extends RecyclerView.ViewHolder> extends ListAdapter<Model, VH> {
+public class MyAdapter<Model extends EduEntity> extends ListAdapter<Model, MyViewHolder<Model>> {
 
-    protected int layoutId;
-
-    protected OnItemClickListener listener;
+    private OnItemClickListener listener;
 
     protected MyAdapter(@NonNull DiffUtil.ItemCallback<Model> diffCallback) {
         super(diffCallback);
@@ -30,13 +31,16 @@ public class MyAdapter<Model extends EduEntity, VH extends RecyclerView.ViewHold
 
     @NonNull
     @Override
-    public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return null;
+    public MyViewHolder<Model> onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_edu_entity, parent, false);
+        return new MyViewHolder<>(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull VH holder, int position) {
-
+    public void onBindViewHolder(@NonNull MyViewHolder<Model> holder, int position) {
+        holder.setItem(getItem(position));
+        holder.setOnItemClickListener(listener);
     }
 
     @Override
@@ -44,12 +48,13 @@ public class MyAdapter<Model extends EduEntity, VH extends RecyclerView.ViewHold
         super.submitList(list != null ? new ArrayList<>(list) : null);
     }
 
-    public Model getItemAt(int position) {
+    // todo remove following
+    /*public Model getItemAt(int position) {
         return getItem(position);
-    }
+    }*/
 
     @Override
-    protected Model getItem(int position) {
+    public Model getItem(int position) {
         return super.getItem(position);
     }
 

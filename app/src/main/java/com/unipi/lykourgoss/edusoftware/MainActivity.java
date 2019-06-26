@@ -8,19 +8,27 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.firebase.ui.auth.AuthUI;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.auth.FirebaseAuth;
-
-import java.util.Arrays;
+import com.squareup.picasso.Picasso;
+import com.unipi.lykourgoss.edusoftware.adapters.LessonAdapter;
+import com.unipi.lykourgoss.edusoftware.fragments.LessonsFragment;
+import com.unipi.lykourgoss.edusoftware.models.User;
+import com.unipi.lykourgoss.edusoftware.viewmodels.CurrentViewModel;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout drawer;
+
+    private CurrentViewModel currentViewModel;
 
     // Choose an arbitrary request code value
     private static final int RC_SIGN_IN = 123;
@@ -33,8 +41,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // get user info
+        currentViewModel = ViewModelProviders.of(this).get(CurrentViewModel.class);
+        // todo after SignInActivity (in which we set the User of our currentViewModel)
+        currentViewModel.setUser(new User("asdfg", "a@t.ler", "Anna",
+                "https://www.greeka.com/photos/dodecanese/leros/hero/leros-island-1920.jpg"));
+        User user = currentViewModel.getUser();
+
         drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        // set user info on navigation header of drawer
+        View headerView = navigationView.getHeaderView(0);
+        ((TextView) headerView.findViewById(R.id.nav_header_user_name)).setText(user.getName());
+        ((TextView) headerView.findViewById(R.id.nav_header_user_email)).setText(user.getEmail());
+        Picasso.get().load(user.getPhotoUri()).into((ImageView) headerView.findViewById(R.id.nav_header_user_photo));
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -44,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //checkIfSignedIn();
 
         if (savedInstanceState == null) {
+            currentViewModel.setEditEnabled(false);
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new LessonsFragment()).commit();
             navigationView.setCheckedItem(R.id.nav_all_lessons);
@@ -54,12 +77,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.nav_all_lessons:
+                currentViewModel.setEditEnabled(false);
                 // todo show all lessons (parentId = null)
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, new LessonsFragment()).commit();
                 break;
             case R.id.nav_my_lessons:
-                // todo show my lessons (parentId = userId)
+                currentViewModel.setEditEnabled(true);
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new LessonsFragment()).commit();
                 break;
             case R.id.nav_user_settings:
                 // todo user setting fragment
@@ -83,26 +109,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             drawer.closeDrawer(GravityCompat.START); // START means the drawer is on the left side
         } else {
             super.onBackPressed();
-        }
-    }
-
-    private void checkIfSignedIn() {
-        AuthUI.getInstance();
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        if (auth.getCurrentUser() != null) {
-            // already signed in
-        } else {
-            // not signed in
-            startActivityForResult(
-                    // Get an instance of AuthUI based on the default app
-                    AuthUI.getInstance()
-                            .createSignInIntentBuilder()
-                            .setAvailableProviders(Arrays.asList(
-                                    new AuthUI.IdpConfig.GoogleBuilder().build(),
-                                    new AuthUI.IdpConfig.EmailBuilder().build(),
-                                    new AuthUI.IdpConfig.PhoneBuilder().build()))
-                            .build(),
-                    RC_SIGN_IN);
         }
     }
 }

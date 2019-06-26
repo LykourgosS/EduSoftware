@@ -3,9 +3,11 @@ package com.unipi.lykourgoss.edusoftware.models;
 import android.content.Context;
 import android.content.Intent;
 
-public abstract class EduEntity {
+public abstract class EduEntity<Model extends EduEntity> {
 
     public static String _ENTITY_REFERENCE;
+
+    public static String _CLASS_NAME;
 
     public static final String _ID = "id";
     public static final String _TITLE = "title";
@@ -59,15 +61,16 @@ public abstract class EduEntity {
         return childCount;
     }
 
-    // chapters have chapterId so must override it (the same for every other class)
-    public  <Model extends EduEntity> boolean equalsTo(Model model){
-        //same model's properties
-        return /*getId().equals(model.getId()) &&*/
-                getTitle().equals(model.getTitle()) &&
-                getIndex() == model.getIndex() &&
-                getDescription().equals(model.getDescription())/* &&
-                getChildCount() == model.getChildCount()*/;
-    }
+    /*equalsTo method:
+    for comparing model's properties, although probably have
+    different object reference (used for updating recyclerView adapter)*/
+    abstract public boolean equalsTo(Model model);
 
-    protected abstract Intent putToIntent(Context context);
+    abstract public Intent putToIntent(Context context);
+
+    /* method hiding: derived classes will overload getFromIntent(...) and will have
+    as return type their own type */
+    static public EduEntity getFromIntent(Intent intent, boolean toUpdate, int defaultIndex){
+        return null;
+    }
 }

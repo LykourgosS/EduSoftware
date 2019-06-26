@@ -2,7 +2,6 @@ package com.unipi.lykourgoss.edusoftware.models;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Parcel;
 
 import com.unipi.lykourgoss.edusoftware.activities.createedit.CreateEditLessonActivity;
 
@@ -11,17 +10,20 @@ import com.unipi.lykourgoss.edusoftware.activities.createedit.CreateEditLessonAc
  * on 21,June,2019.
  */
 
-public class Lesson extends EduEntity {
+public class Lesson extends EduEntity<Lesson>{
 
-    public static final String _AUTHOR_ID ="authorId";
+    public static final String _AUTHOR_ID = "authorId";
     public static final String _AUTHOR_EMAIL ="authorEmail";
 
     /* Initialization of Lesson Firebase Reference */
 
-    private static final String _LESSONS_REF = "/lessons";
+    public static final String _LESSONS_REF = "/lessons";
+
+    public static final String _CLASS = "Lesson";
 
     static {
         _ENTITY_REFERENCE = _LESSONS_REF;
+        _CLASS_NAME = _CLASS;
     }
 
     /* Unique properties */
@@ -30,7 +32,7 @@ public class Lesson extends EduEntity {
 
     private String authorEmail;
 
-    /*Constructors (default & all properties except id)*/
+    /* Constructors (default & all properties except id) */
 
     public Lesson() {
     }
@@ -41,17 +43,36 @@ public class Lesson extends EduEntity {
         this.authorEmail = authorEmail;
     }
 
-    /*Getters for this*/
+    /* Getters for this */
+
+    public void setAuthorId(String authorId) {
+        this.authorId = authorId;
+    }
 
     public String getAuthorId() {
         return authorId;
+    }
+
+    public void setAuthorEmail(String authorEmail) {
+        this.authorEmail = authorEmail;
     }
 
     public String getAuthorEmail() {
         return authorEmail;
     }
 
-    /*Override methods putToIntent()*/
+    /* Override methods */
+
+    @Override
+    public boolean equalsTo(Lesson lesson) {
+        return /*getId().equals(lesson.getId()) &&*/
+                getTitle().equals(lesson.getTitle()) &&
+                getIndex() == lesson.getIndex() &&
+                getDescription().equals(lesson.getDescription())/* &&
+                getChildCount() == lesson.getChildCount() &&
+                getAuthorId().equals(lesson.getAuthorId()) &&
+                getAuthorEmail().equals(lesson.getAuthorEmail())*/;
+    }
 
     @Override
     public Intent putToIntent(Context context) {
@@ -65,8 +86,6 @@ public class Lesson extends EduEntity {
         intent.putExtra(CreateEditLessonActivity.EXTRA_AUTHOR_EMAIL, getAuthorEmail());
         return intent;
     }
-
-    /*getFromIntent() method returns a Lesson object taken from given Intent*/
 
     public static Lesson getFromIntent(Intent intent, boolean toUpdate, int defaultIndex) {
         String title = intent.getStringExtra(CreateEditLessonActivity.EXTRA_TITLE);
@@ -83,17 +102,5 @@ public class Lesson extends EduEntity {
             lesson.setId(id);
         }
         return lesson;
-    }
-
-    /*equalsTo method:
-    for comparing lesson's properties, although probably have
-    different object reference (used for updating recyclerView adapter)*/
-
-    public boolean equalsTo(Lesson otherLesson) {
-        //same lesson's properties
-        // todo why not check all properties
-        return super.equalsTo(otherLesson)/* &&
-                getAuthorId().equals(otherLesson.getAuthorId()) &&
-                getAuthorEmail().equals(otherLesson.getAuthorEmail())*/;
     }
 }

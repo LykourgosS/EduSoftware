@@ -6,14 +6,19 @@ import android.content.Intent;
 
 import com.unipi.lykourgoss.edusoftware.activities.createedit.CreateEditChapterActivity;
 
-public class Chapter extends EduEntity {
+public class Chapter extends EduEntity<Chapter> {
+
+    public static final String _LESSON_ID = "lessonId";
 
     /* Initialization of Chapter Firebase Reference */
 
-    private static final String _CHAPTERS_REF = "/chapters";
+    public static final String _CHAPTERS_REF = "/chapters";
+
+    public static final String _CLASS = "Chapter";
 
     static {
         _ENTITY_REFERENCE = _CHAPTERS_REF;
+        _CLASS_NAME = _CLASS;
     }
 
     /*Unique properties*/
@@ -43,14 +48,20 @@ public class Chapter extends EduEntity {
         return examQuestionCount;
     }
 
-    /*Override method putToIntent()*/
+    /* Override methods */
 
     @Override
-    protected Intent putToIntent(Context context) {
-        return null;
+    public boolean equalsTo(Chapter chapter) {
+        return getId().equals(chapter.getId()) &&
+                getTitle().equals(chapter.getTitle()) &&
+                getIndex() == chapter.getIndex() &&
+                getDescription().equals(chapter.getDescription()) &&
+                getChildCount() == chapter.getChildCount() &&
+                getLessonId().equals(chapter.getLessonId()) &&
+                getExamQuestionCount() == chapter.getExamQuestionCount();
     }
 
-    /*@Override
+    @Override
     public Intent putToIntent(Context context) {
         Intent intent = new Intent(context, CreateEditChapterActivity.class);
         intent.putExtra(CreateEditChapterActivity.EXTRA_ID, getId());
@@ -63,7 +74,6 @@ public class Chapter extends EduEntity {
         return intent;
     }
 
-    *//*getFromIntent() method returns a Chapter object taken from given Intent*//*
     public static Chapter getFromIntent(Intent intent, boolean toUpdate, int defaultIndex) {
         String title = intent.getStringExtra(CreateEditChapterActivity.EXTRA_TITLE);
         int index = intent.getIntExtra(CreateEditChapterActivity.EXTRA_INDEX, defaultIndex);
@@ -71,21 +81,13 @@ public class Chapter extends EduEntity {
         int childCount = intent.getIntExtra(CreateEditChapterActivity.EXTRA_CHILD_COUNT, 0);
         String lessonId = intent.getStringExtra(CreateEditChapterActivity.EXTRA_LESSON_ID);
         int examQuestionCount = intent.getIntExtra(CreateEditChapterActivity.EXTRA_EXAM_QUESTION_COUNT, 0);
+
         Chapter chapter = new Chapter(title, index, description, childCount, lessonId, examQuestionCount);
+
         if (toUpdate) {
             String id = intent.getStringExtra(CreateEditChapterActivity.EXTRA_ID);
             chapter.setId(id);
         }
         return chapter;
-    }*/
-
-    /*equalsTo method:
-    for comparing chapter's properties, although probably have
-    different object reference (used for updating recyclerView adapter)*/
-    public boolean equalsTo(Chapter otherChapter) {
-        //same chapter's properties
-        return super.equalsTo(otherChapter) &&
-                getLessonId().equals(otherChapter.getLessonId()) &&
-                getExamQuestionCount() == otherChapter.getExamQuestionCount();
     }
 }

@@ -3,17 +3,30 @@ package com.unipi.lykourgoss.edusoftware.models;
 import android.content.Context;
 import android.content.Intent;
 
-public class Subsection extends EduEntity{
+import com.unipi.lykourgoss.edusoftware.activities.createedit.CreateEditSubsectionActivity;
+
+public class Subsection extends EduEntity<Subsection> {
+
+    public static final String _SECTION_ID = "sectionId";
+
+    public static final String _PDF_URL = "pdfUrl";
+
+    public static final String _PDF_FILENAME = "pdfFilename";
+
+    public static final String _TEST_QUESTION_COUNT = "testQuestionCount";
 
     /* Initialization of Subsection Firebase Reference */
 
-    private static final String _SUBSECTIONS_REF = "/subsections";
+    public static final String _SUBSECTIONS_REF = "/subsections";
+
+    public static final String _CLASS = "Subsection";
 
     static {
         _ENTITY_REFERENCE = _SUBSECTIONS_REF;
+        _CLASS_NAME = _CLASS;
     }
 
-    /*Unique properties*/
+    /* Unique properties */
 
     private String sectionId;
 
@@ -23,7 +36,7 @@ public class Subsection extends EduEntity{
 
     private int testQuestionCount;
 
-    /*Constructors (default & all properties except id)*/
+    /* Constructors (default & all properties except id) */
 
     public Subsection() {
     }
@@ -36,7 +49,7 @@ public class Subsection extends EduEntity{
         this.testQuestionCount = testQuestionCount;
     }
 
-    /*Getters for this*/
+    /* Getters for this */
 
     public String getSectionId() {
         return sectionId;
@@ -54,11 +67,24 @@ public class Subsection extends EduEntity{
         return testQuestionCount;
     }
 
-    /*Override methods putToIntent() & getFromIntent()*/
+    /* Override methods */
+
+    @Override
+    public boolean equalsTo(Subsection subsection) {
+        return getId().equals(subsection.getId()) &&
+                getTitle().equals(subsection.getTitle()) &&
+                getIndex() == subsection.getIndex() &&
+                getDescription().equals(subsection.getDescription()) &&
+                getChildCount() == subsection.getChildCount() &&
+                getSectionId().equals(subsection.getSectionId()) &&
+                getPdfUrl().equals(subsection.getPdfUrl()) &&
+                getPdfFilename().equals(subsection.getPdfFilename()) &&
+                getTestQuestionCount() == subsection.getTestQuestionCount();
+    }
 
     @Override
     public Intent putToIntent(Context context) {
-        /*Intent intent = new Intent(context, CreateEditSubsectionActivity.class);
+        Intent intent = new Intent(context, CreateEditSubsectionActivity.class);
         intent.putExtra(CreateEditSubsectionActivity.EXTRA_ID, getId());
         intent.putExtra(CreateEditSubsectionActivity.EXTRA_TITLE, getTitle());
         intent.putExtra(CreateEditSubsectionActivity.EXTRA_INDEX, getIndex());
@@ -68,14 +94,11 @@ public class Subsection extends EduEntity{
         intent.putExtra(CreateEditSubsectionActivity.EXTRA_PDF_URL, getPdfUrl());
         intent.putExtra(CreateEditSubsectionActivity.EXTRA_PDF_FILENAME, getPdfFilename());
         intent.putExtra(CreateEditSubsectionActivity.EXTRA_TEST_QUESTION_COUNT, getTestQuestionCount());
-        return intent;*/
-        return null;
+        return intent;
     }
 
-    /*getFromIntent() method returns a Subsection object taken from given Intent*/
-
     public static Subsection getFromIntent(Intent intent, boolean toUpdate, int defaultIndex) {
-        /*String title = intent.getStringExtra(CreateEditSubsectionActivity.EXTRA_TITLE);
+        String title = intent.getStringExtra(CreateEditSubsectionActivity.EXTRA_TITLE);
         int index = intent.getIntExtra(CreateEditSubsectionActivity.EXTRA_INDEX, defaultIndex);
         String description = intent.getStringExtra(CreateEditSubsectionActivity.EXTRA_DESCRIPTION);
         int childCount = intent.getIntExtra(CreateEditSubsectionActivity.EXTRA_CHILD_COUNT, 0);
@@ -86,24 +109,10 @@ public class Subsection extends EduEntity{
 
         Subsection subsection = new Subsection(title, index, description, childCount, sectionId, pdfUrl, pdfFilename, testQuestionCount);
 
-        if (toUpdate){
+        if (toUpdate) {
             String id = intent.getStringExtra(CreateEditSubsectionActivity.EXTRA_ID);
             subsection.setId(id);
         }
-        return subsection;*/
-        return new Subsection();
-    }
-    
-    /*equalsTo method:
-    for comparing subsection's properties, although probably have
-    different object reference (used for updating recyclerView adapter)*/
-
-    public boolean equalsTo(Subsection otherSubsection) {
-        //same subsection's properties
-        return super.equalsTo(otherSubsection) &&
-                getSectionId().equals(otherSubsection.getSectionId()) &&
-                getPdfUrl().equals(otherSubsection.getPdfUrl()) &&
-                getPdfFilename().equals(otherSubsection.getPdfFilename()) &&
-                getTestQuestionCount() == otherSubsection.getTestQuestionCount();
+        return subsection;
     }
 }

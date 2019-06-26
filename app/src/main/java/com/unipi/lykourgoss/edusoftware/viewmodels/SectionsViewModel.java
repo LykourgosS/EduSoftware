@@ -1,24 +1,24 @@
 package com.unipi.lykourgoss.edusoftware.viewmodels;
 
-import com.unipi.lykourgoss.edusoftware.models.Lesson;
+import com.unipi.lykourgoss.edusoftware.models.Section;
 import com.unipi.lykourgoss.edusoftware.repositories.FirebaseRepository;
 
 /**
  * Created by LykourgosS <lpsarantidis@gmail.com>
- * on 22,June,2019.
+ * on 25,June,2019.
  */
 
-public class LessonsViewModel extends MyViewModel<Lesson> {
+public class SectionsViewModel extends MyViewModel<Section> {
 
     static {
-        _MODEL_REF = Lesson._LESSONS_REF;
-        _PARENT_ID_NAME = Lesson._AUTHOR_ID;
+        _MODEL_REF = Section._SECTIONS_REF;
+        _PARENT_ID_NAME = Section._CHAPTER_ID;
     }
 
     @Override
     public void setParentId(String parentId) {
         this.parentId = parentId;
-        repository = new FirebaseRepository<>(_MODEL_REF, _PARENT_ID_NAME, parentId, Lesson.class);
+        repository = new FirebaseRepository<>(_MODEL_REF, _PARENT_ID_NAME, parentId, Section.class);
         listLiveData = repository.getAll();
     }
 }

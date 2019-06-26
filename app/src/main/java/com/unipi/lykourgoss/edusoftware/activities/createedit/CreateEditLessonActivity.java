@@ -8,26 +8,19 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.unipi.lykourgoss.edusoftware.LessonsActivity;
 import com.unipi.lykourgoss.edusoftware.R;
+import com.unipi.lykourgoss.edusoftware.fragments.LessonsFragment;
+import com.unipi.lykourgoss.edusoftware.fragments.MyFragment;
 
-public class CreateEditLessonActivity extends AppCompatActivity {
-    public static final String EXTRA_ID =
-            "com.unipi.lykourgoss.edusoftware.activities.createedit.EXTRA_ID";
-    public static final String EXTRA_TITLE =
-            "com.unipi.lykourgoss.edusoftware.activities.createedit.EXTRA_TITLE";
-    public static final String EXTRA_INDEX =
-            "com.unipi.lykourgoss.edusoftware.activities.createedit.EXTRA_INDEX";
-    public static final String EXTRA_DESCRIPTION =
-            "com.unipi.lykourgoss.edusoftware.activities.createedit.EXTRA_DESCRIPTION";
-    public static final String EXTRA_CHILD_COUNT =
-            "com.unipi.lykourgoss.edusoftware.activities.createedit.EXTRA_CHILD_COUNT";
+public class CreateEditLessonActivity extends CreateEditActivity {
+
     public static final String EXTRA_AUTHOR_ID =
-            "com.unipi.lykourgoss.edusoftware.activities.createedit.EXTRA_AUTHOR_ID";
+            "com.unipi.lykourgoss.edusoftware.activities.createedit.CreateEditLessonActivity.EXTRA_AUTHOR_ID";
     public static final String EXTRA_AUTHOR_EMAIL =
-            "com.unipi.lykourgoss.edusoftware.activities.createedit.EXTRA_AUTHOR_EMAIL";
+            "com.unipi.lykourgoss.edusoftware.activities.createedit.CreateEditLessonActivity.EXTRA_AUTHOR_EMAIL";
 
     private EditText editTextTitle;
     private EditText editTextDescription;
@@ -38,13 +31,17 @@ public class CreateEditLessonActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_edit_lesson);
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        //toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_white_24dp);
 
         editTextTitle = findViewById(R.id.edit_text_lesson_title);
         editTextDescription = findViewById(R.id.edit_text_lesson_description);
         numberPickerIndex = findViewById(R.id.number_picker_lesson_index);
 
-        int lastLessonIndex = getIntent().getIntExtra(LessonsActivity.EXTRA_LAST_LESSON_INDEX, 1);
+        int lastLessonIndex = getIntent().getIntExtra(LessonsFragment.EXTRA_LAST_INDEX, 1);
 
         numberPickerIndex.setMinValue(1);
         numberPickerIndex.setMaxValue(lastLessonIndex);
@@ -90,15 +87,6 @@ public class CreateEditLessonActivity extends AppCompatActivity {
 
         setResult(RESULT_OK, data);
         finish();
-
-        /*//create lesson object that will be stored in firebase
-        Lesson lesson = new Lesson.Builder(title)
-                .description(description)
-                .index()
-                .build();
-        //todo lastModifiedBy user.getEmail()
-        lesson.create(com.unipi.lykourgoss.edusoftware.activities.createedit.this);
-        finish();*/
     }
 
     @Override
@@ -117,20 +105,5 @@ public class CreateEditLessonActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-
-    /*private void setUpSpinnerChoicesWithIndexes() {
-        List<String> spinnerChoices = new ArrayList<>();
-        int lessonsCount = getIntent().getIntExtra(LessonsActivity.EXTRA_LESSONS_COUNT, 0);
-        for (int index = 1; index <= lessonsCount + 1; index++) {
-            spinnerChoices.add(String.valueOf(index));
-        }
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_spinner_item,
-                spinnerChoices
-        );
-        //todo spinnerChoices.add("auto");
-        spinnerLessonIndex.setAdapter(adapter);
-    }*/
 }
 

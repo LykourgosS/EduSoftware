@@ -15,11 +15,13 @@ import java.util.List;
 
 public abstract class MyViewModel<Model extends EduEntity> extends ViewModel {
 
+    protected static String _MODEL_REF;
+
+    protected static String _PARENT_ID_NAME;
+
     protected FirebaseRepository<Model> repository;
 
     protected LiveData<List<Model>> listLiveData;
-
-    protected String userId;
 
     protected String parentId;
 
@@ -46,11 +48,6 @@ public abstract class MyViewModel<Model extends EduEntity> extends ViewModel {
     /* don't need that use childCount property*/
     public int getChildCount() {
         return listLiveData.getValue().size();
-    }
-
-    // todo make UserViewModel
-    public void setUserId(String userId){
-        this.userId = userId;
     }
 
     /* used to load entities that belong to an entity (i.e lessons belong to users (authors),

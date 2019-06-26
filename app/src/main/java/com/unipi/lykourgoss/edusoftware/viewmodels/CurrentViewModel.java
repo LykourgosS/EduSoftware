@@ -8,6 +8,7 @@ import com.unipi.lykourgoss.edusoftware.models.Chapter;
 import com.unipi.lykourgoss.edusoftware.models.Lesson;
 import com.unipi.lykourgoss.edusoftware.models.Section;
 import com.unipi.lykourgoss.edusoftware.models.Subsection;
+import com.unipi.lykourgoss.edusoftware.models.User;
 
 /**
  * Created by LykourgosS <lpsarantidis@gmail.com>
@@ -15,6 +16,8 @@ import com.unipi.lykourgoss.edusoftware.models.Subsection;
  */
 
 public class CurrentViewModel extends ViewModel {
+
+    private MutableLiveData<Boolean> editEnabled = new MutableLiveData<>();
 
     private MutableLiveData<User> user = new MutableLiveData<>();
     
@@ -28,13 +31,22 @@ public class CurrentViewModel extends ViewModel {
 
     /* Getters and Setters for every  entity */
 
+    /* editEnabled: If user clicked My Lessons = true, else = false*/
+    public void setEditEnabled(boolean editEnabled) {
+        this.editEnabled.setValue(editEnabled);
+    }
+
+    public boolean isEditEnabled() {
+        return editEnabled.getValue();
+    }
+
     /* Current User */
     public void setUser(User user){
         this.user.setValue(user);
     }
 
-    public LiveData<User> getUser(){
-        return user;
+    public User getUser(){
+        return user.getValue();
     }
 
     /* Current Lesson */

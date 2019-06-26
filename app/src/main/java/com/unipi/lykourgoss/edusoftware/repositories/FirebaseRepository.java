@@ -25,13 +25,13 @@ public class FirebaseRepository <Model extends EduEntity> {
 
     protected static DatabaseReference MODEL_REF;
 
-    public FirebaseRepository(String parentId, final Class<Model> klass) {
-        MODEL_REF = FirebaseDatabase.getInstance().getReference(Model._ENTITY_REFERENCE);
+    public FirebaseRepository(String modelRef, String parentIdName, String parentId, final Class<Model> klass) {
+        MODEL_REF = FirebaseDatabase.getInstance().getReference().child(modelRef);
         Query query = MODEL_REF.orderByChild(Model._INDEX);
         if (parentId != null) { // display only EduEntities that belong to specific parent
-            query = query.equalTo(parentId);
+            query = MODEL_REF.orderByChild(parentIdName).equalTo(parentId);
         }
-        // lessonsLiveData is used to store either all lessons or my lesson
+        // listMediatorLiveData is used to store either all or my
         listMediatorLiveData = new MediatorLiveData<>();
         listMediatorLiveData.addSource(new FirebaseQueryLiveData(query), new Observer<DataSnapshot>() {
             @Override
@@ -40,11 +40,11 @@ public class FirebaseRepository <Model extends EduEntity> {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            List<Model> lessons = new ArrayList<>();
+                            List<Model> models = new ArrayList<>();
                             for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                                lessons.add(snapshot.getValue(klass));
+                                models.add(snapshot.getValue(klass));
                             }
-                            listMediatorLiveData.postValue(lessons);
+                            listMediatorLiveData.postValue(models);
                         }
                     }).start();
                 } else {
