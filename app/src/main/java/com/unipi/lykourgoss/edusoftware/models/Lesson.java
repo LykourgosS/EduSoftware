@@ -12,12 +12,11 @@ import com.unipi.lykourgoss.edusoftware.activities.createedit.CreateEditLessonAc
 
 public class Lesson extends EduEntity<Lesson>{
 
-    public static final String _AUTHOR_ID = "authorId";
     public static final String _AUTHOR_EMAIL ="authorEmail";
 
     /* Initialization of Lesson Firebase Reference */
 
-    public static final String _LESSONS_REF = "/lessons";
+    public static final String _LESSONS_REF = "lessons";
 
     public static final String _CLASS = "Lesson";
 
@@ -28,8 +27,6 @@ public class Lesson extends EduEntity<Lesson>{
 
     /* Unique properties */
 
-    private String authorId;
-
     private String authorEmail;
 
     /* Constructors (default & all properties except id) */
@@ -37,21 +34,12 @@ public class Lesson extends EduEntity<Lesson>{
     public Lesson() {
     }
 
-    public Lesson(String title, int index, String description, int childCount, String authorId, String authorEmail) {
-        super(title, index, description, childCount);
-        this.authorId = authorId;
+    public Lesson(String title, int index, String description, int childCount, String parentId, String authorEmail) {
+        super(title, index, description, childCount, parentId);
         this.authorEmail = authorEmail;
     }
 
     /* Getters for this */
-
-    public void setAuthorId(String authorId) {
-        this.authorId = authorId;
-    }
-
-    public String getAuthorId() {
-        return authorId;
-    }
 
     public void setAuthorEmail(String authorEmail) {
         this.authorEmail = authorEmail;
@@ -70,8 +58,21 @@ public class Lesson extends EduEntity<Lesson>{
                 getIndex() == lesson.getIndex() &&
                 getDescription().equals(lesson.getDescription())/* &&
                 getChildCount() == lesson.getChildCount() &&
-                getAuthorId().equals(lesson.getAuthorId()) &&
+                getParentId().equals(lesson.getParentId()) &&
                 getAuthorEmail().equals(lesson.getAuthorEmail())*/;
+    }
+
+    @Override
+    public Intent putToIntent() {
+        Intent intent = new Intent();
+        intent.putExtra(CreateEditLessonActivity.EXTRA_ID, getId());
+        intent.putExtra(CreateEditLessonActivity.EXTRA_TITLE, getTitle());
+        intent.putExtra(CreateEditLessonActivity.EXTRA_INDEX, getIndex());
+        intent.putExtra(CreateEditLessonActivity.EXTRA_DESCRIPTION, getDescription());
+        intent.putExtra(CreateEditLessonActivity.EXTRA_CHILD_COUNT, getChildCount());
+        intent.putExtra(CreateEditLessonActivity.EXTRA_PARENT_ID, getParentId());
+        intent.putExtra(CreateEditLessonActivity.EXTRA_AUTHOR_EMAIL, getAuthorEmail());
+        return intent;
     }
 
     @Override
@@ -82,7 +83,7 @@ public class Lesson extends EduEntity<Lesson>{
         intent.putExtra(CreateEditLessonActivity.EXTRA_INDEX, getIndex());
         intent.putExtra(CreateEditLessonActivity.EXTRA_DESCRIPTION, getDescription());
         intent.putExtra(CreateEditLessonActivity.EXTRA_CHILD_COUNT, getChildCount());
-        intent.putExtra(CreateEditLessonActivity.EXTRA_AUTHOR_ID, getAuthorId());
+        intent.putExtra(CreateEditLessonActivity.EXTRA_PARENT_ID, getParentId());
         intent.putExtra(CreateEditLessonActivity.EXTRA_AUTHOR_EMAIL, getAuthorEmail());
         return intent;
     }
@@ -92,7 +93,7 @@ public class Lesson extends EduEntity<Lesson>{
         int index = intent.getIntExtra(CreateEditLessonActivity.EXTRA_INDEX, defaultIndex);
         String description = intent.getStringExtra(CreateEditLessonActivity.EXTRA_DESCRIPTION);
         int childCount = intent.getIntExtra(CreateEditLessonActivity.EXTRA_CHILD_COUNT, 0);
-        String authorId = intent.getStringExtra(CreateEditLessonActivity.EXTRA_AUTHOR_ID);
+        String authorId = intent.getStringExtra(CreateEditLessonActivity.EXTRA_PARENT_ID);
         String authorEmail = intent.getStringExtra(CreateEditLessonActivity.EXTRA_AUTHOR_EMAIL);
 
         Lesson lesson = new Lesson(title, index, description, childCount, authorId, authorEmail);

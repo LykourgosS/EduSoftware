@@ -11,8 +11,10 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 
+import com.unipi.lykourgoss.edusoftware.models.Chapter;
 import com.unipi.lykourgoss.edusoftware.models.EduEntity;
 import com.unipi.lykourgoss.edusoftware.models.Lesson;
+import com.unipi.lykourgoss.edusoftware.models.Section;
 
 public class Dialog<Model extends EduEntity<Model>> {
 
@@ -68,7 +70,9 @@ public class Dialog<Model extends EduEntity<Model>> {
                 .create();
 
         ImageButton editButton = dialogView.findViewById(R.id.dialog_details_lesson_button_edit);
+        editButton.setVisibility(View.GONE);
         if (isEditEnabled){
+            editButton.setVisibility(View.VISIBLE);
             editButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -76,7 +80,82 @@ public class Dialog<Model extends EduEntity<Model>> {
                 }
             });
         }
-        editButton.setEnabled(isEditEnabled);
+
+        dialog.show();
+        return dialog;
+    }
+
+    public static AlertDialog showChapterDetails(Context context, boolean isEditEnabled, final Chapter chapter, final OnEditClickListener listener) {
+        //use custom dialog layout theme
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View dialogView = inflater.inflate(R.layout.dialog_details_chapter, null);
+
+        /* fill textViews with chapter properties */
+        ((TextView) dialogView.findViewById(R.id.dialog_details_chapter_title)).setText(chapter.getTitle());
+        ((TextView) dialogView.findViewById(R.id.dialog_details_chapter_index)).setText(String.valueOf(chapter.getIndex()));
+        ((TextView) dialogView.findViewById(R.id.dialog_details_chapter_child_count)).setText(String.valueOf(chapter.getChildCount()));
+        ((TextView) dialogView.findViewById(R.id.dialog_details_chapter_description)).setText(chapter.getDescription());
+
+        final AlertDialog dialog = new AlertDialog.Builder(context)
+                .setView(dialogView)
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                })
+                .create();
+
+        ImageButton editButton = dialogView.findViewById(R.id.dialog_details_chapter_button_edit);
+        editButton.setVisibility(View.GONE);
+        if (isEditEnabled){
+            editButton.setVisibility(View.VISIBLE);
+            editButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onEditClick(dialog, chapter);
+                }
+            });
+        }
+
+        dialog.show();
+        return dialog;
+    }
+
+    public static AlertDialog showSectionDetails(Context context, boolean isEditEnabled, final Section section, final OnEditClickListener listener){
+        //use custom dialog layout theme
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View dialogView = inflater.inflate(R.layout.dialog_details_section, null);
+
+        /* fill textViews with section properties */
+        ((TextView) dialogView.findViewById(R.id.dialog_details_section_title)).setText(section.getTitle());
+        ((TextView) dialogView.findViewById(R.id.dialog_details_section_index)).setText(String.valueOf(section.getIndex()));
+        ((TextView) dialogView.findViewById(R.id.dialog_details_section_child_count)).setText(String.valueOf(section.getChildCount()));
+        ((TextView) dialogView.findViewById(R.id.dialog_details_section_description)).setText(section.getDescription());
+
+        final AlertDialog dialog = new AlertDialog.Builder(context)
+                .setView(dialogView)
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                })
+                .create();
+
+        ImageButton editButton = dialogView.findViewById(R.id.dialog_details_section_button_edit);
+        editButton.setVisibility(View.GONE);
+        if (isEditEnabled){
+            editButton.setVisibility(View.VISIBLE);
+            editButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onEditClick(dialog, section);
+                }
+            });
+        }
 
         dialog.show();
         return dialog;

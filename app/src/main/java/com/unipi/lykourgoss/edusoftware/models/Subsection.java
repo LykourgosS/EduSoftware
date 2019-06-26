@@ -7,8 +7,6 @@ import com.unipi.lykourgoss.edusoftware.activities.createedit.CreateEditSubsecti
 
 public class Subsection extends EduEntity<Subsection> {
 
-    public static final String _SECTION_ID = "sectionId";
-
     public static final String _PDF_URL = "pdfUrl";
 
     public static final String _PDF_FILENAME = "pdfFilename";
@@ -28,8 +26,6 @@ public class Subsection extends EduEntity<Subsection> {
 
     /* Unique properties */
 
-    private String sectionId;
-
     private String pdfUrl;
 
     private String pdfFilename;
@@ -41,19 +37,14 @@ public class Subsection extends EduEntity<Subsection> {
     public Subsection() {
     }
 
-    public Subsection(String title, int index, String description, int childCount, String sectionId, String pdfUrl, String pdfFilename, int testQuestionCount) {
-        super(title, index, description, childCount);
-        this.sectionId = sectionId;
+    public Subsection(String title, int index, String description, int childCount, String parentId, String pdfUrl, String pdfFilename, int testQuestionCount) {
+        super(title, index, description, childCount, parentId);
         this.pdfUrl = pdfUrl;
         this.pdfFilename = pdfFilename;
         this.testQuestionCount = testQuestionCount;
     }
 
     /* Getters for this */
-
-    public String getSectionId() {
-        return sectionId;
-    }
 
     public String getPdfUrl() {
         return pdfUrl;
@@ -76,10 +67,25 @@ public class Subsection extends EduEntity<Subsection> {
                 getIndex() == subsection.getIndex() &&
                 getDescription().equals(subsection.getDescription()) &&
                 getChildCount() == subsection.getChildCount() &&
-                getSectionId().equals(subsection.getSectionId()) &&
+                getParentId().equals(subsection.getParentId()) &&
                 getPdfUrl().equals(subsection.getPdfUrl()) &&
                 getPdfFilename().equals(subsection.getPdfFilename()) &&
                 getTestQuestionCount() == subsection.getTestQuestionCount();
+    }
+
+    @Override
+    public Intent putToIntent() {
+        Intent intent = new Intent();
+        intent.putExtra(CreateEditSubsectionActivity.EXTRA_ID, getId());
+        intent.putExtra(CreateEditSubsectionActivity.EXTRA_TITLE, getTitle());
+        intent.putExtra(CreateEditSubsectionActivity.EXTRA_INDEX, getIndex());
+        intent.putExtra(CreateEditSubsectionActivity.EXTRA_DESCRIPTION, getDescription());
+        intent.putExtra(CreateEditSubsectionActivity.EXTRA_CHILD_COUNT, getChildCount());
+        intent.putExtra(CreateEditSubsectionActivity.EXTRA_PARENT_ID, getParentId());
+        intent.putExtra(CreateEditSubsectionActivity.EXTRA_PDF_URL, getPdfUrl());
+        intent.putExtra(CreateEditSubsectionActivity.EXTRA_PDF_FILENAME, getPdfFilename());
+        intent.putExtra(CreateEditSubsectionActivity.EXTRA_TEST_QUESTION_COUNT, getTestQuestionCount());
+        return intent;
     }
 
     @Override
@@ -90,7 +96,7 @@ public class Subsection extends EduEntity<Subsection> {
         intent.putExtra(CreateEditSubsectionActivity.EXTRA_INDEX, getIndex());
         intent.putExtra(CreateEditSubsectionActivity.EXTRA_DESCRIPTION, getDescription());
         intent.putExtra(CreateEditSubsectionActivity.EXTRA_CHILD_COUNT, getChildCount());
-        intent.putExtra(CreateEditSubsectionActivity.EXTRA_SECTION_ID, getSectionId());
+        intent.putExtra(CreateEditSubsectionActivity.EXTRA_PARENT_ID, getParentId());
         intent.putExtra(CreateEditSubsectionActivity.EXTRA_PDF_URL, getPdfUrl());
         intent.putExtra(CreateEditSubsectionActivity.EXTRA_PDF_FILENAME, getPdfFilename());
         intent.putExtra(CreateEditSubsectionActivity.EXTRA_TEST_QUESTION_COUNT, getTestQuestionCount());
@@ -102,12 +108,12 @@ public class Subsection extends EduEntity<Subsection> {
         int index = intent.getIntExtra(CreateEditSubsectionActivity.EXTRA_INDEX, defaultIndex);
         String description = intent.getStringExtra(CreateEditSubsectionActivity.EXTRA_DESCRIPTION);
         int childCount = intent.getIntExtra(CreateEditSubsectionActivity.EXTRA_CHILD_COUNT, 0);
-        String sectionId = intent.getStringExtra(CreateEditSubsectionActivity.EXTRA_SECTION_ID);
+        String parentId = intent.getStringExtra(CreateEditSubsectionActivity.EXTRA_PARENT_ID);
         String pdfUrl = intent.getStringExtra(CreateEditSubsectionActivity.EXTRA_PDF_URL);
         String pdfFilename = intent.getStringExtra(CreateEditSubsectionActivity.EXTRA_PDF_FILENAME);
         int testQuestionCount = intent.getIntExtra(CreateEditSubsectionActivity.EXTRA_TEST_QUESTION_COUNT, 0);
 
-        Subsection subsection = new Subsection(title, index, description, childCount, sectionId, pdfUrl, pdfFilename, testQuestionCount);
+        Subsection subsection = new Subsection(title, index, description, childCount, parentId, pdfUrl, pdfFilename, testQuestionCount);
 
         if (toUpdate) {
             String id = intent.getStringExtra(CreateEditSubsectionActivity.EXTRA_ID);

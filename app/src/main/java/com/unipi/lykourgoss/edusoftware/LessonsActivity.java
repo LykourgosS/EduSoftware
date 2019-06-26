@@ -117,7 +117,7 @@ public class LessonsActivity extends AppCompatActivity implements View.OnClickLi
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeToDeleteCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
-        adapter.setOnClickListener(new OnItemClickListener<Lesson>() {
+        adapter.setOnItemClickListener(new OnItemClickListener<Lesson>() {
             @Override
             public void onItemClick(Lesson lesson) {
                 // todo open lesson's chapters
@@ -145,7 +145,7 @@ public class LessonsActivity extends AppCompatActivity implements View.OnClickLi
 
         if (requestCode == CREATE_LESSON_REQUEST) {
             if (resultCode == RESULT_OK) {
-                lessonsViewModel.create(Lesson.getFromIntent(data, false, defaultIndex));
+                lessonsViewModel.create(Lesson.getFromIntent(data, false, defaultIndex), defaultIndex);
                 Toast.makeText(this, "Lesson created", Toast.LENGTH_SHORT).show();
             } else {// something went wrong or user clicked to go back
                 Toast.makeText(this, "Lesson not created", Toast.LENGTH_SHORT).show();
@@ -171,7 +171,7 @@ public class LessonsActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.delete_all_menu, menu);
+        menuInflater.inflate(R.menu.main_menu, menu);
         return true;
     }
 
@@ -221,13 +221,13 @@ public class LessonsActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void delete(Lesson lesson){
-        lessonsViewModel.delete(lesson);
+        lessonsViewModel.delete(lesson, lessonsViewModel.getChildCount());
         Toast.makeText(LessonsActivity.this, "Lesson deleted", Toast.LENGTH_SHORT).show();
     }
 
     /*deletes all lessons that don't have any children (chapters)*/
     private void deleteAll() {
-        lessonsViewModel.deleteAll();
+        lessonsViewModel.deleteAll(lessonsViewModel.getChildCount());
         Toast.makeText(this, "All lessons deleted", Toast.LENGTH_SHORT).show();
     }
 }

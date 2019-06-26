@@ -7,8 +7,6 @@ import com.unipi.lykourgoss.edusoftware.activities.createedit.CreateEditSectionA
 
 public class Section extends EduEntity<Section> {
 
-    public static final String _CHAPTER_ID = "chapterId";
-
     /* Initialization of Section Firebase Reference */
 
     public static final String _SECTIONS_REF = "/sections";
@@ -20,24 +18,13 @@ public class Section extends EduEntity<Section> {
         _CLASS_NAME = _CLASS;
     }
 
-    /*Unique properties*/
-
-    private String chapterId;
-
     /*Constructors (default & all properties except id)*/
 
     public Section() {
     }
 
-    public Section(String title, int index, String description, int childCount, String chapterId) {
-        super(title, index, description, childCount);
-        this.chapterId = chapterId;
-    }
-
-    /*Getters for this*/
-
-    public String getChapterId() {
-        return chapterId;
+    public Section(String title, int index, String description, int childCount, String parentId) {
+        super(title, index, description, childCount, parentId);
     }
 
     /* Override methods */
@@ -49,7 +36,19 @@ public class Section extends EduEntity<Section> {
                 getIndex() == section.getIndex() &&
                 getDescription().equals(section.getDescription()) &&
                 getChildCount() == section.getChildCount() &&
-                getChapterId().equals(section.getChapterId());
+                getParentId().equals(section.getParentId());
+    }
+
+    @Override
+    public Intent putToIntent() {
+        Intent intent = new Intent();
+        intent.putExtra(CreateEditSectionActivity.EXTRA_ID, getId());
+        intent.putExtra(CreateEditSectionActivity.EXTRA_TITLE, getTitle());
+        intent.putExtra(CreateEditSectionActivity.EXTRA_INDEX, getIndex());
+        intent.putExtra(CreateEditSectionActivity.EXTRA_DESCRIPTION, getDescription());
+        intent.putExtra(CreateEditSectionActivity.EXTRA_CHILD_COUNT, getChildCount());
+        intent.putExtra(CreateEditSectionActivity.EXTRA_PARENT_ID, getParentId());
+        return intent;
     }
 
     @Override
@@ -60,7 +59,7 @@ public class Section extends EduEntity<Section> {
         intent.putExtra(CreateEditSectionActivity.EXTRA_INDEX, getIndex());
         intent.putExtra(CreateEditSectionActivity.EXTRA_DESCRIPTION, getDescription());
         intent.putExtra(CreateEditSectionActivity.EXTRA_CHILD_COUNT, getChildCount());
-        intent.putExtra(CreateEditSectionActivity.EXTRA_CHAPTER_ID, getChapterId());
+        intent.putExtra(CreateEditSectionActivity.EXTRA_PARENT_ID, getParentId());
         return intent;
     }
 
@@ -69,9 +68,9 @@ public class Section extends EduEntity<Section> {
         int index = intent.getIntExtra(CreateEditSectionActivity.EXTRA_INDEX, defaultIndex);
         String description = intent.getStringExtra(CreateEditSectionActivity.EXTRA_DESCRIPTION);
         int childCount = intent.getIntExtra(CreateEditSectionActivity.EXTRA_CHILD_COUNT, 0);
-        String chapterId = intent.getStringExtra(CreateEditSectionActivity.EXTRA_CHAPTER_ID);
+        String parentId = intent.getStringExtra(CreateEditSectionActivity.EXTRA_PARENT_ID);
 
-        Section section = new Section(title, index, description, childCount, chapterId);
+        Section section = new Section(title, index, description, childCount, parentId);
 
         if (toUpdate) {
             String id = intent.getStringExtra(CreateEditSectionActivity.EXTRA_ID);

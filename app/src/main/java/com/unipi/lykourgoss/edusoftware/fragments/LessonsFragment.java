@@ -6,16 +6,16 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.unipi.lykourgoss.edusoftware.Dialog;
 import com.unipi.lykourgoss.edusoftware.R;
 import com.unipi.lykourgoss.edusoftware.activities.createedit.CreateEditLessonActivity;
 import com.unipi.lykourgoss.edusoftware.adapters.LessonAdapter;
 import com.unipi.lykourgoss.edusoftware.models.Lesson;
-import com.unipi.lykourgoss.edusoftware.models.User;
-import com.unipi.lykourgoss.edusoftware.viewmodels.CurrentViewModel;
 import com.unipi.lykourgoss.edusoftware.viewmodels.LessonsViewModel;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by LykourgosS <lpsarantidis@gmail.com>
@@ -32,14 +32,53 @@ public class LessonsFragment extends MyFragment<Lesson, LessonsViewModel> {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        currentViewModel = ViewModelProviders.of(getActivity()).get(CurrentViewModel.class);
+        /* Set title and subtitle */
+
+        String title = "My Lessons";
         String userId = currentViewModel.getUser().getId();
-        getActivity().setTitle("My Lessons");
         if (!isEditEnabled) {
             userId = null;
-            getActivity().setTitle("All Lessons");
+            title = "All Lessons";
         }
+        getActivity().setTitle(title);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setSubtitle("");
+
+        /* Set up viewModel */
         setUpViewModel(LessonsViewModel.class, userId);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        /* Handle result when creating new or updating an existing one */
+
+        /* default value for model's index is the last available index */
+        int lessonCount = viewModel.getChildCount();
+
+        if (requestCode == CREATE_NEW_REQUEST) {
+            if (resultCode == RESULT_OK) {
+
+                /* !ATTENTION! Creating lesson object and adding user's info and childCount */
+                Lesson lesson = Lesson.getFromIntent(data, false, lessonCount + 1);
+                lesson.setParentId(currentViewModel.getUser().getId());
+                lesson.setAuthorEmail(currentViewModel.getUser().getEmail());
+                lesson.setChildCount(0);
+                viewModel.create(lesson, lessonCount);
+
+                Toast.makeText(getActivity(), "Lesson created", Toast.LENGTH_SHORT).show();
+            } else {// something went wrong or user clicked to go back
+                Toast.makeText(getActivity(), "Lesson not created", Toast.LENGTH_SHORT).show();
+            }
+        } else if (requestCode == EDIT_REQUEST) {
+            if (resultCode == RESULT_OK) {
+
+                viewModel.update(Lesson.getFromIntent(data, true, lessonCount));
+
+                Toast.makeText(getActivity(), "Lesson updated", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getActivity(), "Lesson not updated", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     @Override
@@ -54,34 +93,34 @@ public class LessonsFragment extends MyFragment<Lesson, LessonsViewModel> {
     @Override
     protected void startActivityToEdit(Lesson lesson) {
         Intent intent = lesson.putToIntent(getActivity());
-        // put in extras the index of the last lesson (so the user can't set the lesson's
-        // index at maximum same as the last lesson) -> used to set up numberPicker choices
-        // (for selecting index)
+        /*put in extras: the index for new lesson (hypothesis: will be added at the end
+        of the lessons) -> used to set up numberPicker choices (for selecting index)*/
         intent.putExtra(EXTRA_LAST_INDEX, viewModel.getChildCount());
         startActivityForResult(intent, EDIT_REQUEST);
     }
 
     @Override
-    protected void createNew(Intent data, int defaultIndex) {
-        Lesson lesson = Lesson.getFromIntent(data, false, defaultIndex);
-        // add user's info
-        User user = currentViewModel.getUser();
-        lesson.setAuthorId(user.getId());
-        lesson.setAuthorEmail(user.getEmail());
-        viewModel.create(lesson);
+    protected void delete(Lesson lesson) {
+        String deleteMsg = "Lesson deleted";
+        if (!viewModel.delete(lesson, viewModel.getChildCount())){
+            deleteMsg = "Lesson cannot be deleted, because it is not empty";
+            adapter.notifyDataSetChanged();
+        }
+        Toast.makeText(getActivity(), deleteMsg, Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    protected void update(Intent data, int defaultIndex) {
-        viewModel.update(Lesson.getFromIntent(data, true, defaultIndex));
+    protected void deleteAll() {
+        viewModel.deleteAll(viewModel.getChildCount());
+        Toast.makeText(getActivity(), "All empty lessons deleted", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onItemClick(Lesson lesson) {
+        /* Open fragment displaying chapter's sections */
         currentViewModel.setLesson(lesson);
         getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, new ChaptersFragment()).commit();
-        Toast.makeText(getActivity(), "Open Chapters", Toast.LENGTH_SHORT).show();
     }
 
     @Override

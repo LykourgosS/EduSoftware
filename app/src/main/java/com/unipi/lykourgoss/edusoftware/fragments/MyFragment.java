@@ -69,14 +69,18 @@ public abstract class MyFragment<Model extends EduEntity, VM extends MyViewModel
         this.adapter = adapter;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_dispaly_my, container, false);
 
         fabCreateNew = view.findViewById(R.id.fab_create_new);
-        fabCreateNew.setOnClickListener(this);
-        fabCreateNew.hide();
 
         // set up imageViewNoItems with Gif drawable
         linearLayoutNoItems = view.findViewById(R.id.linear_layout_no_items);
@@ -102,61 +106,47 @@ public abstract class MyFragment<Model extends EduEntity, VM extends MyViewModel
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        // callback for swipe to delete
-        ItemTouchHelper.SimpleCallback callback = new ItemTouchHelper.SimpleCallback(0,
-                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-            @Override
-            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-                return false;
-            }
-
-            @Override
-            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                delete(adapter.getItem(viewHolder.getAdapterPosition()));
-            }
-        };
-        final ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
-
         currentViewModel = ViewModelProviders.of(getActivity()).get(CurrentViewModel.class);
         isEditEnabled = currentViewModel.isEditEnabled();
         if (isEditEnabled) {
+
+            // callback for swipe to delete
+            ItemTouchHelper.SimpleCallback callback = new ItemTouchHelper.SimpleCallback(0,
+                    ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+                @Override
+                public boolean onMove(@NonNull RecyclerView recyclerView,
+                                      @NonNull RecyclerView.ViewHolder viewHolder,
+                                      @NonNull RecyclerView.ViewHolder target) {
+                    return false;
+                }
+
+                @Override
+                public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                    delete(adapter.getItem(viewHolder.getAdapterPosition()));
+                }
+            };
+            final ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
+
             // add swipe to delete functionality
             itemTouchHelper.attachToRecyclerView(recyclerView);
             // fab: Visible
+            fabCreateNew.setOnClickListener(this);
             fabCreateNew.show();
         } else {
-            itemTouchHelper.attachToRecyclerView(null);
             fabCreateNew.hide();
         }
 
         // todo implement adapters click listener on sub-classes
-        adapter.setOnClickListener(this);
+        adapter.setOnItemClickListener(this);
     }
 
+    /**
+     * on overriding onActivityResult() check requestCode and resultCode and then create or update
+     * the item and displaying corresponding Toasts
+     * */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        /* default value for model's index is the last available index */
-        int defaultIndex = viewModel.getChildCount();
-
-        if (requestCode == CREATE_NEW_REQUEST) {
-            if (resultCode == RESULT_OK) {
-                // todo viewModel.create(Model.getFromIntent(data, false, defaultIndex));
-                createNew(data, defaultIndex);
-                Toast.makeText(getActivity(), Model._CLASS_NAME + " created", Toast.LENGTH_SHORT).show();
-            } else {// something went wrong or user clicked to go back
-                Toast.makeText(getActivity(), Model._CLASS_NAME + " not created", Toast.LENGTH_SHORT).show();
-            }
-        } else if (requestCode == EDIT_REQUEST) {
-            if (resultCode == RESULT_OK) {
-                // todo viewModel.update(Model.getFromIntent(data, true, defaultIndex));
-                update(data, defaultIndex);
-                Toast.makeText(getActivity(), Model._CLASS_NAME + " updated", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(getActivity(), Model._CLASS_NAME + " not updated", Toast.LENGTH_SHORT).show();
-            }
-        }
     }
 
     @Override
@@ -169,8 +159,9 @@ public abstract class MyFragment<Model extends EduEntity, VM extends MyViewModel
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        MenuInflater menuInflater = getActivity().getMenuInflater();
-        menuInflater.inflate(R.menu.delete_all_menu, menu);
+        if (isEditEnabled){
+            inflater.inflate(R.menu.fragment_menu, menu);
+        }
     }
 
     @Override
@@ -180,24 +171,22 @@ public abstract class MyFragment<Model extends EduEntity, VM extends MyViewModel
                 deleteAll();
                 return true;
             // todo add help case: dialog for how to edit, create, delete, delete all, long click for details
-            default:
-                return super.onOptionsItemSelected(item);
         }
+        return false;
     }
 
-    @Override
-    public void onPrepareOptionsMenu(final Menu menu) {
-        menu.findItem(R.id.menu_item_delete_all).setEnabled(isEditEnabled);
-    }
-
-    // for displaying all (not only my) pass parentId: null
+    /**
+     * create and observe viewModel and its liveData. ViewModel object will either be newly
+     * created if no ViewModel of the named class for the Activity exists, or obtained from a
+     * prior instance of the Activity before a configuration change occurred.
+     * */
     protected void setUpViewModel(Class<VM> vmClass, String parentId) {
         /*create and observe viewModel and its liveData. ViewModel object will either be newly
         created if no ViewModel of the named class for the Activity exists, or obtained from a
         prior instance of the Activity before a configuration change occurred.*/
-        viewModel = ViewModelProviders.of(this).get(vmClass);
+        viewModel = ViewModelProviders.of(getActivity()).get(vmClass);
         viewModel.setParentId(parentId);
-        viewModel.getAll().observe(this, new Observer<List<Model>>() {
+        viewModel.getAll().observe(getViewLifecycleOwner(), new Observer<List<Model>>() {
             @Override
             public void onChanged(List<Model> models) {
                 //update recyclerView items
@@ -215,16 +204,7 @@ public abstract class MyFragment<Model extends EduEntity, VM extends MyViewModel
 
     protected abstract void startActivityToEdit(Model model);
 
-    protected void delete(Model model) {
-        viewModel.delete(model);
-    }
+    protected abstract void delete(Model model);
 
-    protected abstract void createNew(Intent data, int resultCode);
-
-    protected abstract void update(Intent data, int resultCode);
-
-    protected void deleteAll() {
-        viewModel.deleteAll();
-        Toast.makeText(getActivity(), "All " + Model._CLASS_NAME + "s deleted", Toast.LENGTH_SHORT).show();
-    }
+    protected abstract void deleteAll();
 }

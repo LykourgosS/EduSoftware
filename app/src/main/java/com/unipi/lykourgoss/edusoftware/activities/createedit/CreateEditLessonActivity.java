@@ -10,15 +10,12 @@ import android.widget.NumberPicker;
 
 import androidx.appcompat.widget.Toolbar;
 
-import com.unipi.lykourgoss.edusoftware.LessonsActivity;
 import com.unipi.lykourgoss.edusoftware.R;
 import com.unipi.lykourgoss.edusoftware.fragments.LessonsFragment;
-import com.unipi.lykourgoss.edusoftware.fragments.MyFragment;
+import com.unipi.lykourgoss.edusoftware.models.Lesson;
 
 public class CreateEditLessonActivity extends CreateEditActivity {
 
-    public static final String EXTRA_AUTHOR_ID =
-            "com.unipi.lykourgoss.edusoftware.activities.createedit.CreateEditLessonActivity.EXTRA_AUTHOR_ID";
     public static final String EXTRA_AUTHOR_EMAIL =
             "com.unipi.lykourgoss.edusoftware.activities.createedit.CreateEditLessonActivity.EXTRA_AUTHOR_EMAIL";
 
@@ -26,10 +23,12 @@ public class CreateEditLessonActivity extends CreateEditActivity {
     private EditText editTextDescription;
     private NumberPicker numberPickerIndex;
 
+    private Lesson lesson;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_edit_lesson);
+        setContentView(R.layout.activity_create_edit);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -41,14 +40,18 @@ public class CreateEditLessonActivity extends CreateEditActivity {
         editTextDescription = findViewById(R.id.edit_text_lesson_description);
         numberPickerIndex = findViewById(R.id.number_picker_lesson_index);
 
-        int lastLessonIndex = getIntent().getIntExtra(LessonsFragment.EXTRA_LAST_INDEX, 1);
-
-        numberPickerIndex.setMinValue(1);
-        numberPickerIndex.setMaxValue(lastLessonIndex);
-
         Intent intent = getIntent();
 
+        int lastIndex = intent.getIntExtra(LessonsFragment.EXTRA_LAST_INDEX, 1);
+
+        numberPickerIndex.setMinValue(1);
+        numberPickerIndex.setMaxValue(lastIndex);
+
+        lesson = null;
         if (intent.hasExtra(EXTRA_ID)) { // update situation
+
+            lesson = Lesson.getFromIntent(intent, true, 0);
+
             setTitle("Edit Lesson");
             // fill editTexts with lesson values for editing
             editTextTitle.setText(intent.getStringExtra(EXTRA_TITLE));
@@ -57,13 +60,12 @@ public class CreateEditLessonActivity extends CreateEditActivity {
         } else { // create new situation
             setTitle("Create new Lesson");
             //default is to add it as last...
-            numberPickerIndex.setValue(lastLessonIndex);
+            numberPickerIndex.setValue(lastIndex);
         }
-
-
     }
 
-    private void createNewLesson() {
+    @Override
+    protected void saveEntity() {
         String title = editTextTitle.getText().toString().trim();
         String description = editTextDescription.getText().toString().trim();
         int index = numberPickerIndex.getValue();
@@ -74,36 +76,24 @@ public class CreateEditLessonActivity extends CreateEditActivity {
             return;
         }
 
-        Intent data = new Intent();
-        data.putExtra(EXTRA_TITLE, title);
-        data.putExtra(EXTRA_DESCRIPTION, description);
-        data.putExtra(EXTRA_INDEX, index);
+        Intent data;
 
-        // todo string for key in firebase OR! using the index ass key
-        String id = getIntent().getStringExtra(EXTRA_ID); // using -1, because is an invalid value
-        if (id != null) {
-            data.putExtra(EXTRA_ID, id);
+        if (lesson != null) {
+            // set every field that might have change to update
+            lesson.setTitle(title);
+            lesson.setDescription(description);
+            lesson.setIndex(index);
+            data = lesson.putToIntent();
+        } else {
+            // put extras for creating new
+            data = new Intent();
+            data.putExtra(EXTRA_TITLE, title);
+            data.putExtra(EXTRA_DESCRIPTION, description);
+            data.putExtra(EXTRA_INDEX, index);
         }
 
         setResult(RESULT_OK, data);
         finish();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.create_edu_entity_menu, menu);
-        return true; //true or false = we either want to display or don't want to display the menu
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.item_save_edu_entity:
-                createNewLesson();
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 }
 

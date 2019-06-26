@@ -8,9 +8,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -19,7 +20,6 @@ import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 import com.squareup.picasso.Picasso;
-import com.unipi.lykourgoss.edusoftware.adapters.LessonAdapter;
 import com.unipi.lykourgoss.edusoftware.fragments.LessonsFragment;
 import com.unipi.lykourgoss.edusoftware.models.User;
 import com.unipi.lykourgoss.edusoftware.viewmodels.CurrentViewModel;
@@ -110,5 +110,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            /*case R.id.menu_item_delete_all:
+                // will be implemented by fragment that currently is displayed,
+                // delete all items that are being displayed
+                return false;*/
+            case R.id.menu_item_help:
+                // help dialog
+                // todo add help case: dialog for how to edit, create, delete, delete all, long click for details
+                return true;
+            case R.id.menu_item_about:
+                // about dialog
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

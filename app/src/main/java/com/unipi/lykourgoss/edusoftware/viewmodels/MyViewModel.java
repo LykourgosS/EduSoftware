@@ -15,9 +15,9 @@ import java.util.List;
 
 public abstract class MyViewModel<Model extends EduEntity> extends ViewModel {
 
-    protected static String _MODEL_REF;
+    protected String _MODEL_REF;
 
-    protected static String _PARENT_ID_NAME;
+    protected String _PARENT_ID_NAME;
 
     protected FirebaseRepository<Model> repository;
 
@@ -25,8 +25,8 @@ public abstract class MyViewModel<Model extends EduEntity> extends ViewModel {
 
     protected String parentId;
 
-    public void create(Model model) {
-        repository.create(model);
+    public void create(Model model, int parentChildCount) {
+        repository.create(model, parentChildCount);
     }
 
     public LiveData<List<Model>> getAll() {
@@ -37,12 +37,12 @@ public abstract class MyViewModel<Model extends EduEntity> extends ViewModel {
         repository.update(model);
     }
 
-    public void delete(Model model) {
-        repository.delete(model);
+    public boolean delete(Model model, int parentChildCount) {
+        return repository.delete(model, parentChildCount);
     }
 
-    public void deleteAll() {
-        repository.deleteAll();
+    public void deleteAll(int parentChildCount) {
+        repository.deleteAll(parentChildCount);
     }
 
     /* don't need that use childCount property*/

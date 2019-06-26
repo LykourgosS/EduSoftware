@@ -14,6 +14,7 @@ public abstract class EduEntity<Model extends EduEntity> {
     public static final String _INDEX = "index";
     public static final String _DESCRIPTION = "description";
     public static final String _CHILD_COUNT = "childCount";
+    public static final String _PARENT_ID = "parentId";
 
     protected String id;
 
@@ -25,16 +26,19 @@ public abstract class EduEntity<Model extends EduEntity> {
 
     protected int childCount;
 
-    /*Constructors (default & all properties except id)*/
+    protected String parentId;
+
+    /* Constructors (default & all properties except id) */
 
     public EduEntity() {
     }
 
-    public EduEntity(String title, int index, String description, int childCount) {
+    public EduEntity(String title, int index, String description, int childCount, String parentId) {
         this.title = title;
         this.index = index;
         this.description = description;
         this.childCount = childCount;
+        this.parentId = parentId;
     }
 
     public String getId() {
@@ -49,22 +53,48 @@ public abstract class EduEntity<Model extends EduEntity> {
         return title;
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public int getIndex() {
         return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
     }
 
     public String getDescription() {
         return description;
     }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public int getChildCount() {
         return childCount;
+    }
+
+    public void setChildCount(int childCount) {
+        this.childCount = childCount;
+    }
+
+    public String getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
     }
 
     /*equalsTo method:
     for comparing model's properties, although probably have
     different object reference (used for updating recyclerView adapter)*/
     abstract public boolean equalsTo(Model model);
+
+    abstract public Intent putToIntent();
 
     abstract public Intent putToIntent(Context context);
 

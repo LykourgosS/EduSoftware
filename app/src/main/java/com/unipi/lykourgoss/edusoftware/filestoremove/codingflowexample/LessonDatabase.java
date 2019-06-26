@@ -15,7 +15,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
  */
 
 //todo to add more entities add them with a comma above
-@Database(entities = {Lesson.class}, version = 1)
+@Database(entities = {Lesson.class}, version = 1, exportSchema = false)
 public abstract class LessonDatabase extends RoomDatabase {
 
     private static LessonDatabase instance;

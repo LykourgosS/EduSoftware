@@ -33,6 +33,6 @@ public class SwipeToDeleteCallback<Model extends EduEntity, VM extends MyViewMod
 
     @Override
     public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-        viewModel.delete(adapter.getItem(viewHolder.getAdapterPosition()));
+//        viewModel.delete(adapter.getItem(viewHolder.getAdapterPosition()));
     }
 }

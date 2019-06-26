@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8sp">
+
+    <RelativeLayout
+        android:id="@+id/relative_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8sp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@+id/linear_layout"
+            android:orientation="vertical">
+
+            <!--Title-->
+            <TextView
+                android:id="@+id/dialog_details_section_title"
+                style="@style/TextAppearance.AppCompat.Large"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:singleLine="true"
+                tools:text="Example Section" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linear_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:orientation="vertical">
+
+            <!--Index-->
+            <TextView
+                android:id="@+id/dialog_details_section_index"
+                style="@style/TextAppearance.AppCompat.Large"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:singleLine="true"
+                tools:text="1" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_margin="8sp"
+        android:layout_below="@+id/relative_layout"
+        android:id="@+id/linear_layout_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No. of Subsections: " />
+
+        <!--ChapterCount-->
+        <TextView
+            android:id="@+id/dialog_details_section_child_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="8" />
+
+    </LinearLayout>
+
+    <ScrollView
+        android:id="@+id/scroll_view"
+        android:layout_below="@+id/linear_layout_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8sp">
+
+        <!--Description-->
+        <TextView
+            android:id="@+id/dialog_details_section_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="This is an example of a section's description"/>
+
+    </ScrollView>
+
+
+
+    <RelativeLayout
+        android:id="@+id/linear_layout_2"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/scroll_view"
+        android:layout_margin="8sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom">
+
+        <ImageButton
+            android:id="@+id/dialog_details_section_button_edit"
+            android:layout_width="30sp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_edit_white_24dp"
+            android:gravity="start"
+            android:background="@color/colorPrimary"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>

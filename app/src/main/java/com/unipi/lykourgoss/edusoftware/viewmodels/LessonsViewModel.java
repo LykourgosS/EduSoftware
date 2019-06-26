@@ -2,6 +2,7 @@ package com.unipi.lykourgoss.edusoftware.viewmodels;
 
 import com.unipi.lykourgoss.edusoftware.models.Lesson;
 import com.unipi.lykourgoss.edusoftware.repositories.FirebaseRepository;
+import com.unipi.lykourgoss.edusoftware.repositories.LessonsRepository;
 
 /**
  * Created by LykourgosS <lpsarantidis@gmail.com>
@@ -10,15 +11,15 @@ import com.unipi.lykourgoss.edusoftware.repositories.FirebaseRepository;
 
 public class LessonsViewModel extends MyViewModel<Lesson> {
 
-    static {
+    {
         _MODEL_REF = Lesson._LESSONS_REF;
-        _PARENT_ID_NAME = Lesson._AUTHOR_ID;
+        _PARENT_ID_NAME = Lesson._PARENT_ID;
     }
 
     @Override
     public void setParentId(String parentId) {
         this.parentId = parentId;
-        repository = new FirebaseRepository<>(_MODEL_REF, _PARENT_ID_NAME, parentId, Lesson.class);
+        repository = new LessonsRepository(_MODEL_REF, parentId);
         listLiveData = repository.getAll();
     }
 }

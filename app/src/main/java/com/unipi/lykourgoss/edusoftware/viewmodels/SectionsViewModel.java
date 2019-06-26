@@ -1,5 +1,6 @@
 package com.unipi.lykourgoss.edusoftware.viewmodels;
 
+import com.unipi.lykourgoss.edusoftware.models.Chapter;
 import com.unipi.lykourgoss.edusoftware.models.Section;
 import com.unipi.lykourgoss.edusoftware.repositories.FirebaseRepository;
 
@@ -10,15 +11,15 @@ import com.unipi.lykourgoss.edusoftware.repositories.FirebaseRepository;
 
 public class SectionsViewModel extends MyViewModel<Section> {
 
-    static {
+    {
         _MODEL_REF = Section._SECTIONS_REF;
-        _PARENT_ID_NAME = Section._CHAPTER_ID;
+        _PARENT_ID_NAME = Section._PARENT_ID;
     }
 
     @Override
     public void setParentId(String parentId) {
         this.parentId = parentId;
-        repository = new FirebaseRepository<>(_MODEL_REF, _PARENT_ID_NAME, parentId, Section.class);
+        repository = new FirebaseRepository<>(_MODEL_REF, Chapter._CHAPTERS_REF, parentId, Section.class);
         listLiveData = repository.getAll();
     }
 }

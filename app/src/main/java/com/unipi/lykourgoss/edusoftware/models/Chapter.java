@@ -8,8 +8,6 @@ import com.unipi.lykourgoss.edusoftware.activities.createedit.CreateEditChapterA
 
 public class Chapter extends EduEntity<Chapter> {
 
-    public static final String _LESSON_ID = "lessonId";
-
     /* Initialization of Chapter Firebase Reference */
 
     public static final String _CHAPTERS_REF = "/chapters";
@@ -23,8 +21,6 @@ public class Chapter extends EduEntity<Chapter> {
 
     /*Unique properties*/
 
-    private String lessonId;
-
     private int examQuestionCount;
 
     /*Constructors (default & all properties except id)*/
@@ -32,16 +28,15 @@ public class Chapter extends EduEntity<Chapter> {
     public Chapter() {
     }
 
-    public Chapter(String title, int index, String description, int childCount, String lessonId, int examQuestionCount) {
-        super(title, index, description, childCount);
-        this.lessonId = lessonId;
+    public Chapter(String title, int index, String description, int childCount, String parentId, int examQuestionCount) {
+        super(title, index, description, childCount, parentId);
         this.examQuestionCount = examQuestionCount;
     }
 
     /*Getters for this*/
 
-    public String getLessonId() {
-        return lessonId;
+    public void setExamQuestionCount(int examQuestionCount) {
+        this.examQuestionCount = examQuestionCount;
     }
 
     public int getExamQuestionCount() {
@@ -57,8 +52,21 @@ public class Chapter extends EduEntity<Chapter> {
                 getIndex() == chapter.getIndex() &&
                 getDescription().equals(chapter.getDescription()) &&
                 getChildCount() == chapter.getChildCount() &&
-                getLessonId().equals(chapter.getLessonId()) &&
+                getParentId().equals(chapter.getParentId()) &&
                 getExamQuestionCount() == chapter.getExamQuestionCount();
+    }
+
+    @Override
+    public Intent putToIntent() {
+        Intent intent = new Intent();
+        intent.putExtra(CreateEditChapterActivity.EXTRA_ID, getId());
+        intent.putExtra(CreateEditChapterActivity.EXTRA_TITLE, getTitle());
+        intent.putExtra(CreateEditChapterActivity.EXTRA_INDEX, getIndex());
+        intent.putExtra(CreateEditChapterActivity.EXTRA_DESCRIPTION, getDescription());
+        intent.putExtra(CreateEditChapterActivity.EXTRA_CHILD_COUNT, getChildCount());
+        intent.putExtra(CreateEditChapterActivity.EXTRA_PARENT_ID, getParentId());
+        intent.putExtra(CreateEditChapterActivity.EXTRA_EXAM_QUESTION_COUNT, getExamQuestionCount());
+        return intent;
     }
 
     @Override
@@ -69,7 +77,7 @@ public class Chapter extends EduEntity<Chapter> {
         intent.putExtra(CreateEditChapterActivity.EXTRA_INDEX, getIndex());
         intent.putExtra(CreateEditChapterActivity.EXTRA_DESCRIPTION, getDescription());
         intent.putExtra(CreateEditChapterActivity.EXTRA_CHILD_COUNT, getChildCount());
-        intent.putExtra(CreateEditChapterActivity.EXTRA_LESSON_ID, getLessonId());
+        intent.putExtra(CreateEditChapterActivity.EXTRA_PARENT_ID, getParentId());
         intent.putExtra(CreateEditChapterActivity.EXTRA_EXAM_QUESTION_COUNT, getExamQuestionCount());
         return intent;
     }
@@ -79,10 +87,10 @@ public class Chapter extends EduEntity<Chapter> {
         int index = intent.getIntExtra(CreateEditChapterActivity.EXTRA_INDEX, defaultIndex);
         String description = intent.getStringExtra(CreateEditChapterActivity.EXTRA_DESCRIPTION);
         int childCount = intent.getIntExtra(CreateEditChapterActivity.EXTRA_CHILD_COUNT, 0);
-        String lessonId = intent.getStringExtra(CreateEditChapterActivity.EXTRA_LESSON_ID);
+        String parentId = intent.getStringExtra(CreateEditChapterActivity.EXTRA_PARENT_ID);
         int examQuestionCount = intent.getIntExtra(CreateEditChapterActivity.EXTRA_EXAM_QUESTION_COUNT, 0);
 
-        Chapter chapter = new Chapter(title, index, description, childCount, lessonId, examQuestionCount);
+        Chapter chapter = new Chapter(title, index, description, childCount, parentId, examQuestionCount);
 
         if (toUpdate) {
             String id = intent.getStringExtra(CreateEditChapterActivity.EXTRA_ID);

@@ -58,7 +58,7 @@ public class MyAdapter<Model extends EduEntity> extends ListAdapter<Model, MyVie
         return super.getItem(position);
     }
 
-    public void setOnClickListener(OnItemClickListener listener) {
+    public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
     }
 }
