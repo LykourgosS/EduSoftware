@@ -46,12 +46,24 @@ public class Subsection extends EduEntity<Subsection> {
 
     /* Getters for this */
 
+    public void setPdfUrl(String pdfUrl) {
+        this.pdfUrl = pdfUrl;
+    }
+
     public String getPdfUrl() {
         return pdfUrl;
     }
 
+    public void setPdfFilename(String pdfFilename) {
+        this.pdfFilename = pdfFilename;
+    }
+
     public String getPdfFilename() {
         return pdfFilename;
+    }
+
+    public void setTestQuestionCount(int testQuestionCount) {
+        this.testQuestionCount = testQuestionCount;
     }
 
     public int getTestQuestionCount() {

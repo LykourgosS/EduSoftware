@@ -53,13 +53,13 @@ public class Lesson extends EduEntity<Lesson>{
 
     @Override
     public boolean equalsTo(Lesson lesson) {
-        return /*getId().equals(lesson.getId()) &&*/
+        return getId().equals(lesson.getId()) &&
                 getTitle().equals(lesson.getTitle()) &&
                 getIndex() == lesson.getIndex() &&
-                getDescription().equals(lesson.getDescription())/* &&
+                getDescription().equals(lesson.getDescription()) &&
                 getChildCount() == lesson.getChildCount() &&
                 getParentId().equals(lesson.getParentId()) &&
-                getAuthorEmail().equals(lesson.getAuthorEmail())*/;
+                getAuthorEmail().equals(lesson.getAuthorEmail());
     }
 
     @Override

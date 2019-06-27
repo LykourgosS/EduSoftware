@@ -2,13 +2,8 @@ package com.unipi.lykourgoss.edusoftware.activities.createedit;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.NumberPicker;
-
-import androidx.appcompat.widget.Toolbar;
 
 import com.unipi.lykourgoss.edusoftware.R;
 import com.unipi.lykourgoss.edusoftware.fragments.LessonsFragment;
@@ -30,15 +25,9 @@ public class CreateEditLessonActivity extends CreateEditActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_edit);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        //toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_white_24dp);
-
-        editTextTitle = findViewById(R.id.edit_text_lesson_title);
-        editTextDescription = findViewById(R.id.edit_text_lesson_description);
-        numberPickerIndex = findViewById(R.id.number_picker_lesson_index);
+        editTextTitle = findViewById(R.id.create_edit_title);
+        editTextDescription = findViewById(R.id.create_edit_description);
+        numberPickerIndex = findViewById(R.id.create_edit_index);
 
         Intent intent = getIntent();
 
@@ -58,7 +47,7 @@ public class CreateEditLessonActivity extends CreateEditActivity {
             editTextDescription.setText(intent.getStringExtra(EXTRA_DESCRIPTION));
             numberPickerIndex.setValue(intent.getIntExtra(EXTRA_INDEX, 1));
         } else { // create new situation
-            setTitle("Create new Lesson");
+            setTitle("Create Νew Lesson");
             //default is to add it as last...
             numberPickerIndex.setValue(lastIndex);
         }

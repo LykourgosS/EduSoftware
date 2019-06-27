@@ -133,7 +133,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.menu_item_about:
                 // about dialog
                 return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 }

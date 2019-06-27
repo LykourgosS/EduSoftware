@@ -1,4 +1,4 @@
-package com.unipi.lykourgoss.edusoftware;
+package com.unipi.lykourgoss.edusoftware.filestoremove;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.unipi.lykourgoss.edusoftware.R;
 import com.unipi.lykourgoss.edusoftware.filestoremove.codingflowexample.SwipeToDeleteCallback;
 import com.unipi.lykourgoss.edusoftware.adapters.LessonAdapter;
 import com.unipi.lykourgoss.edusoftware.adapters.OnItemClickListener;
@@ -38,7 +39,7 @@ public class LessonsActivity extends AppCompatActivity implements View.OnClickLi
     public static final int EDIT_LESSON_REQUEST = 2;
 
     public static final String EXTRA_LAST_LESSON_INDEX =
-            "com.unipi.lykourgoss.edusoftware.LessonsActivity.EXTRA_LAST_LESSON_INDEX";
+            "com.unipi.lykourgoss.edusoftware.filestoremove.LessonsActivity.EXTRA_LAST_LESSON_INDEX";
 
     public AlertDialog dialog;
 

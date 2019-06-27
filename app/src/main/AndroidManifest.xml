@@ -11,13 +11,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".PdfViewerActivity"></activity>
         <activity
             android:name=".activities.createedit.CreateEditSubsectionActivity"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".activities.createedit.CreateEditSectionActivity"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".activities.createedit.CreateEditActivity" />
         <activity
             android:name=".activities.createedit.CreateEditChapterActivity"
             android:parentActivityName=".MainActivity" />
@@ -25,7 +25,7 @@
             android:name=".activities.createedit.CreateEditLessonActivity"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".LessonsActivity"
+            android:name=".filestoremove.LessonsActivity"
             android:launchMode="singleTop"
             android:parentActivityName=".MainActivity" /> <!-- TODO see for proper launch mode -->
         <activity

@@ -18,13 +18,13 @@ import com.unipi.lykourgoss.edusoftware.models.EduEntity;
 
 public class MyViewHolder <Model extends EduEntity> extends RecyclerView.ViewHolder {
 
-    private OnItemClickListener<Model> listener;
+    protected OnItemClickListener<Model> listener;
 
-    private Model model;
+    protected Model model;
 
-    private TextView textViewTitle;
+    protected TextView textViewTitle;
 
-    private TextView textViewIndex;
+    protected TextView textViewIndex;
 
     private TextView textViewDescription;
 

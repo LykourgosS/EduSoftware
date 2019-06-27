@@ -12,6 +12,8 @@ import com.unipi.lykourgoss.edusoftware.models.EduEntity;
 import com.unipi.lykourgoss.edusoftware.viewmodels.FirebaseQueryLiveData;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +23,7 @@ import java.util.Map;
  * on 21,June,2019.
  */
 
-public class FirebaseRepository <Model extends EduEntity> {
+public class FirebaseRepository<Model extends EduEntity> {
 
     protected MediatorLiveData<List<Model>> listMediatorLiveData;
 
@@ -31,7 +33,7 @@ public class FirebaseRepository <Model extends EduEntity> {
 
     private String parentIdName;
 
-    protected FirebaseRepository(String modelRef, String parentId){
+    protected FirebaseRepository(String modelRef, String parentId) {
 
     }
 
@@ -59,7 +61,7 @@ public class FirebaseRepository <Model extends EduEntity> {
                             for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                 models.add(snapshot.getValue(klass));
                             }
-                            listMediatorLiveData.postValue(models);
+                            listMediatorLiveData.postValue(sortByIndex(models));
                         }
                     }).start();
                 } else {
@@ -69,7 +71,7 @@ public class FirebaseRepository <Model extends EduEntity> {
         });
     }
 
-    public void create(Model model, int parentChildCount){
+    public void create(Model model, int parentChildCount) {
         String key = MODEL_REF.push().getKey();
         model.setId(key);
         //MODEL_REF.child(key).setValue(model);
@@ -88,17 +90,17 @@ public class FirebaseRepository <Model extends EduEntity> {
 
     }
 
-    public LiveData<List<Model>> getAll(){
+    public LiveData<List<Model>> getAll() {
         return listMediatorLiveData;
     }
 
-    public void update(Model model){
+    public void update(Model model) {
         String key = model.getId();
         MODEL_REF.child(key).setValue(model);
     }
 
     /* model cannot be deleted, unless it has no children */
-    public boolean delete(Model model, int parentChildCount){
+    public boolean delete(Model model, int parentChildCount) {
         if (model.getChildCount() == 0) {
             String key = model.getId();
             // todo the same as create
@@ -121,9 +123,29 @@ public class FirebaseRepository <Model extends EduEntity> {
         }
     }
 
-    public void deleteAll(int parentChildCount){
-        for (Model model: getAll().getValue()){
+    public void deleteAll(int parentChildCount) {
+        for (Model model : getAll().getValue()) {
             delete(model, parentChildCount);
         }
+    }
+
+    private List<Model> sortByIndex(List<Model> models){
+        Collections.sort(models, new Comparator<Model>() {
+            @Override
+            public int compare(Model o1, Model o2) {
+                return Integer.compare(o1.getIndex(), o2.getIndex());
+            }
+        });
+        return models;
+    }
+
+    protected List<Model> sortByTitle(List<Model> models){
+        Collections.sort(models, new Comparator<Model>() {
+            @Override
+            public int compare(Model o1, Model o2) {
+                return o1.getTitle().compareToIgnoreCase(o2.getTitle());
+            }
+        });
+        return models;
     }
 }

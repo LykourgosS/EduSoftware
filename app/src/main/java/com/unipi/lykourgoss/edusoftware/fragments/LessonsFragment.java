@@ -84,8 +84,6 @@ public class LessonsFragment extends MyFragment<Lesson, LessonsViewModel> {
     @Override
     protected void startActivityToCreateNew() {
         Intent intent = new Intent(getActivity(), CreateEditLessonActivity.class);
-        /*put in extras: the index for new lesson (hypothesis: will be added at the end
-        of the lessons) -> used to set up numberPicker choices (for selecting index)*/
         intent.putExtra(EXTRA_LAST_INDEX, viewModel.getChildCount() + 1);
         startActivityForResult(intent, CREATE_NEW_REQUEST);
     }
@@ -93,8 +91,6 @@ public class LessonsFragment extends MyFragment<Lesson, LessonsViewModel> {
     @Override
     protected void startActivityToEdit(Lesson lesson) {
         Intent intent = lesson.putToIntent(getActivity());
-        /*put in extras: the index for new lesson (hypothesis: will be added at the end
-        of the lessons) -> used to set up numberPicker choices (for selecting index)*/
         intent.putExtra(EXTRA_LAST_INDEX, viewModel.getChildCount());
         startActivityForResult(intent, EDIT_REQUEST);
     }
@@ -126,11 +122,5 @@ public class LessonsFragment extends MyFragment<Lesson, LessonsViewModel> {
     @Override
     public void onItemLongClick(final Lesson lesson) {
         Dialog.showLessonDetails(getActivity(), isEditEnabled, lesson, this);
-    }
-
-    @Override
-    public void onEditClick(AlertDialog dialog, Lesson lesson) {
-        startActivityToEdit(lesson);
-        dialog.cancel();
     }
 }

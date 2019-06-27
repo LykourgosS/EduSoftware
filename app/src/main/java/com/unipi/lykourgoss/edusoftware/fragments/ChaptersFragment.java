@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.unipi.lykourgoss.edusoftware.Dialog;
@@ -84,8 +83,6 @@ public class ChaptersFragment extends MyFragment<Chapter, ChaptersViewModel> {
     @Override
     protected void startActivityToCreateNew() {
         Intent intent = new Intent(getActivity(), CreateEditChapterActivity.class);
-        /*put in extras: the index for new chapter (hypothesis: will be added at the end
-        of the chapters) -> used to set up numberPicker choices (for selecting index)*/
         intent.putExtra(EXTRA_LAST_INDEX, viewModel.getChildCount() + 1);
         startActivityForResult(intent, CREATE_NEW_REQUEST);
     }
@@ -93,8 +90,6 @@ public class ChaptersFragment extends MyFragment<Chapter, ChaptersViewModel> {
     @Override
     protected void startActivityToEdit(Chapter chapter) {
         Intent intent = chapter.putToIntent(getActivity());
-        /*put in extras: the index for new chapter (hypothesis: will be added at the end
-        of the chapters) -> used to set up numberPicker choices (for selecting index)*/
         intent.putExtra(EXTRA_LAST_INDEX, viewModel.getChildCount());
         startActivityForResult(intent, EDIT_REQUEST);
     }
@@ -117,7 +112,6 @@ public class ChaptersFragment extends MyFragment<Chapter, ChaptersViewModel> {
 
     @Override
     public void onItemClick(Chapter chapter) {
-        /* Open fragment displaying chapter's sections */
         currentViewModel.setChapter(chapter);
         getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, new SectionsFragment()).commit();
@@ -126,11 +120,5 @@ public class ChaptersFragment extends MyFragment<Chapter, ChaptersViewModel> {
     @Override
     public void onItemLongClick(Chapter chapter) {
         Dialog.showChapterDetails(getActivity(), isEditEnabled, chapter, this);
-    }
-
-    @Override
-    public void onEditClick(AlertDialog dialog, Chapter chapter) {
-        startActivityToEdit(chapter);
-        dialog.cancel();
     }
 }

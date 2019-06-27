@@ -14,7 +14,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -64,7 +66,7 @@ public abstract class MyFragment<Model extends EduEntity, VM extends MyViewModel
 
     protected static boolean isEditEnabled;
 
-    public MyFragment(MyAdapter<Model> adapter) {
+    protected MyFragment(MyAdapter<Model> adapter) {
         super();
         this.adapter = adapter;
     }
@@ -162,6 +164,7 @@ public abstract class MyFragment<Model extends EduEntity, VM extends MyViewModel
         if (isEditEnabled){
             inflater.inflate(R.menu.fragment_menu, menu);
         }
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -200,11 +203,48 @@ public abstract class MyFragment<Model extends EduEntity, VM extends MyViewModel
         });
     }
 
+    /**
+     * (1) put in Extras how many models are in viewModel (hypothesis: the new section will be
+     *     added at the end of the sections -> used to select index and
+     * (2) start activity for result
+     * */
     protected abstract void startActivityToCreateNew();
 
-    protected abstract void startActivityToEdit(Model model);
+    /**
+     * (1) put in Extras the model,
+     * (2) put in Extras how many models are in viewModel (hypothesis: the new section will be
+     *     added at the end of the sections -> used to select index and
+     * (3) start activity for result
+     * */
+    protected void startActivityToEdit(Model model){
+        Intent intent = model.putToIntent(getActivity());
+        intent.putExtra(EXTRA_LAST_INDEX, viewModel.getChildCount());
+        startActivityForResult(intent, EDIT_REQUEST);
+    }
 
     protected abstract void delete(Model model);
 
     protected abstract void deleteAll();
+
+    /**
+     * Open fragment displaying model's children
+     * */
+    @Override
+    public abstract void onItemClick(Model model);
+
+    /**
+     * Show dialog with model's details (if isEditEnable an edit button will be visible)
+     * */
+    @Override
+    public abstract void onItemLongClick(Model model);
+
+
+    /**
+     * Start activity to edit model (startActivityToEdit(...) is called)
+     * */
+    @Override
+    public void onEditClick(AlertDialog dialog, Model model) {
+        startActivityToEdit(model);
+        dialog.cancel();
+    }
 }

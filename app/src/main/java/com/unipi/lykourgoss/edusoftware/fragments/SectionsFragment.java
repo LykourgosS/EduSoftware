@@ -84,19 +84,8 @@ public class SectionsFragment extends MyFragment<Section, SectionsViewModel> {
     @Override
     protected void startActivityToCreateNew() {
         Intent intent = new Intent(getActivity(), CreateEditSectionActivity.class);
-        /*put in extras: the index for new section (hypothesis: will be added at the end
-        of the sections) -> used to set up numberPicker choices (for selecting index)*/
         intent.putExtra(EXTRA_LAST_INDEX, viewModel.getChildCount() + 1);
         startActivityForResult(intent, CREATE_NEW_REQUEST);
-    }
-
-    @Override
-    protected void startActivityToEdit(Section section) {
-        Intent intent = section.putToIntent(getActivity());
-        /*put in extras: the index for new section (hypothesis: will be added at the end
-        of the sections) -> used to set up numberPicker choices (for selecting index)*/
-        intent.putExtra(EXTRA_LAST_INDEX, viewModel.getChildCount());
-        startActivityForResult(intent, EDIT_REQUEST);
     }
 
     @Override
@@ -117,7 +106,6 @@ public class SectionsFragment extends MyFragment<Section, SectionsViewModel> {
 
     @Override
     public void onItemClick(Section section) {
-        /* Open fragment displaying section's subsections */
         currentViewModel.setSection(section);
         getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, new SubsectionsFragment()).commit();
@@ -126,11 +114,5 @@ public class SectionsFragment extends MyFragment<Section, SectionsViewModel> {
     @Override
     public void onItemLongClick(Section section) {
         Dialog.showSectionDetails(getActivity(), isEditEnabled, section, this);
-    }
-
-    @Override
-    public void onEditClick(AlertDialog dialog, Section section) {
-        startActivityToEdit(section);
-        dialog.cancel();
     }
 }

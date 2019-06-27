@@ -1,4 +1,4 @@
-package com.unipi.lykourgoss.edusoftware.fragments;
+package com.unipi.lykourgoss.edusoftware.filestoremove;
 
 import android.view.MenuItem;
 

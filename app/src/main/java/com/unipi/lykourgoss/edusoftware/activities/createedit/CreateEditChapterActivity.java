@@ -5,8 +5,6 @@ import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 
-import androidx.appcompat.widget.Toolbar;
-
 import com.unipi.lykourgoss.edusoftware.R;
 import com.unipi.lykourgoss.edusoftware.fragments.ChaptersFragment;
 import com.unipi.lykourgoss.edusoftware.models.Chapter;
@@ -27,14 +25,9 @@ public class CreateEditChapterActivity extends CreateEditActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_edit);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_white_24dp);
-
-        editTextTitle = findViewById(R.id.edit_text_lesson_title);
-        editTextDescription = findViewById(R.id.edit_text_lesson_description);
-        numberPickerIndex = findViewById(R.id.number_picker_lesson_index);
+        editTextTitle = findViewById(R.id.create_edit_title);
+        editTextDescription = findViewById(R.id.create_edit_description);
+        numberPickerIndex = findViewById(R.id.create_edit_index);
 
         Intent intent = getIntent();
 
@@ -54,7 +47,7 @@ public class CreateEditChapterActivity extends CreateEditActivity {
             editTextDescription.setText(intent.getStringExtra(EXTRA_DESCRIPTION));
             numberPickerIndex.setValue(intent.getIntExtra(EXTRA_INDEX, 1));
         } else { // create new situation
-            setTitle("Create new Chapter");
+            setTitle("Create Νew Chapter");
             //default is to add it as last...
             numberPickerIndex.setValue(lastIndex);
         }
@@ -73,7 +66,6 @@ public class CreateEditChapterActivity extends CreateEditActivity {
         }
 
         Intent data;
-
 
         if (chapter != null) {
             // set every field that might have change to update

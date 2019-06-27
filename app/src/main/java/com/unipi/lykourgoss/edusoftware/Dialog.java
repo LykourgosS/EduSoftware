@@ -15,6 +15,7 @@ import com.unipi.lykourgoss.edusoftware.models.Chapter;
 import com.unipi.lykourgoss.edusoftware.models.EduEntity;
 import com.unipi.lykourgoss.edusoftware.models.Lesson;
 import com.unipi.lykourgoss.edusoftware.models.Section;
+import com.unipi.lykourgoss.edusoftware.models.Subsection;
 
 public class Dialog<Model extends EduEntity<Model>> {
 
@@ -23,6 +24,7 @@ public class Dialog<Model extends EduEntity<Model>> {
     public static final String LOADING = "Loading...";
     public static final String UPDATING = "Updating...";
     public static final String DELETING = "Deleting...";
+    public static final String UPLOADING = "Uploading...";
     public static final String DOWNLOADING = "Downloading...";
 
 //    private OnEditClickListener<Model> listener;
@@ -159,6 +161,11 @@ public class Dialog<Model extends EduEntity<Model>> {
 
         dialog.show();
         return dialog;
+    }
+
+    // todo see if needed
+    public static AlertDialog showSubsectionDetails(Context context, boolean isEditEnabled, final Subsection subsection, final OnEditClickListener listener){
+        return null;
     }
 
     public interface OnEditClickListener<Model extends EduEntity>{

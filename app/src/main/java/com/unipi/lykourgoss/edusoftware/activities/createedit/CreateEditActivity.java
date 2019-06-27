@@ -1,6 +1,7 @@
 package com.unipi.lykourgoss.edusoftware.activities.createedit;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -8,6 +9,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.unipi.lykourgoss.edusoftware.R;
+import com.unipi.lykourgoss.edusoftware.viewmodels.CurrentViewModel;
 
 public abstract class CreateEditActivity extends AppCompatActivity {
 
@@ -24,9 +26,15 @@ public abstract class CreateEditActivity extends AppCompatActivity {
     public static final String EXTRA_PARENT_ID =
             "com.unipi.lykourgoss.edusoftware.activities.createedit.EXTRA_PARENT_ID";
 
+    // todo remove -> protected CurrentViewModel currentViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_white_24dp);
+
+        /*viewModel = ViewModelProviders.of(this).get(CurrentViewModel.class);*/
     }
 
     @Override
@@ -41,6 +49,7 @@ public abstract class CreateEditActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.item_save_edu_entity:
                 saveEntity();
+                return  true;
             default:
                 return super.onOptionsItemSelected(item);
         }
