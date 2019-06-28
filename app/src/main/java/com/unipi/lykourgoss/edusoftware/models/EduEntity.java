@@ -3,6 +3,8 @@ package com.unipi.lykourgoss.edusoftware.models;
 import android.content.Context;
 import android.content.Intent;
 
+import com.unipi.lykourgoss.edusoftware.Constant;
+
 public abstract class EduEntity<Model extends EduEntity> {
 
     public static String _ENTITY_REFERENCE;
@@ -94,7 +96,16 @@ public abstract class EduEntity<Model extends EduEntity> {
     different object reference (used for updating recyclerView adapter)*/
     abstract public boolean equalsTo(Model model);
 
-    abstract public Intent putToIntent();
+    public Intent putToIntent(){
+        Intent intent = new Intent();
+        intent.putExtra(Constant.EXTRA_ID, getId());
+        intent.putExtra(Constant.EXTRA_TITLE, getTitle());
+        intent.putExtra(Constant.EXTRA_INDEX, getIndex());
+        intent.putExtra(Constant.EXTRA_DESCRIPTION, getDescription());
+        intent.putExtra(Constant.EXTRA_CHILD_COUNT, getChildCount());
+        intent.putExtra(Constant.EXTRA_PARENT_ID, getParentId());
+        return intent;
+    }
 
     abstract public Intent putToIntent(Context context);
 

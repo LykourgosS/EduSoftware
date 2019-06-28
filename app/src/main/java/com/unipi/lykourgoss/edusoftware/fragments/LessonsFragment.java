@@ -5,9 +5,9 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.unipi.lykourgoss.edusoftware.Constant;
 import com.unipi.lykourgoss.edusoftware.Dialog;
 import com.unipi.lykourgoss.edusoftware.R;
 import com.unipi.lykourgoss.edusoftware.activities.createedit.CreateEditLessonActivity;
@@ -55,7 +55,7 @@ public class LessonsFragment extends MyFragment<Lesson, LessonsViewModel> {
         /* default value for model's index is the last available index */
         int lessonCount = viewModel.getChildCount();
 
-        if (requestCode == CREATE_NEW_REQUEST) {
+        if (requestCode == Constant.CREATE_NEW_REQUEST) {
             if (resultCode == RESULT_OK) {
 
                 /* !ATTENTION! Creating lesson object and adding user's info and childCount */
@@ -69,7 +69,7 @@ public class LessonsFragment extends MyFragment<Lesson, LessonsViewModel> {
             } else {// something went wrong or user clicked to go back
                 Toast.makeText(getActivity(), "Lesson not created", Toast.LENGTH_SHORT).show();
             }
-        } else if (requestCode == EDIT_REQUEST) {
+        } else if (requestCode == Constant.EDIT_REQUEST) {
             if (resultCode == RESULT_OK) {
 
                 viewModel.update(Lesson.getFromIntent(data, true, lessonCount));
@@ -84,15 +84,15 @@ public class LessonsFragment extends MyFragment<Lesson, LessonsViewModel> {
     @Override
     protected void startActivityToCreateNew() {
         Intent intent = new Intent(getActivity(), CreateEditLessonActivity.class);
-        intent.putExtra(EXTRA_LAST_INDEX, viewModel.getChildCount() + 1);
-        startActivityForResult(intent, CREATE_NEW_REQUEST);
+        intent.putExtra(Constant.EXTRA_LAST_INDEX, viewModel.getChildCount() + 1);
+        startActivityForResult(intent, Constant.CREATE_NEW_REQUEST);
     }
 
     @Override
     protected void startActivityToEdit(Lesson lesson) {
         Intent intent = lesson.putToIntent(getActivity());
-        intent.putExtra(EXTRA_LAST_INDEX, viewModel.getChildCount());
-        startActivityForResult(intent, EDIT_REQUEST);
+        intent.putExtra(Constant.EXTRA_LAST_INDEX, viewModel.getChildCount());
+        startActivityForResult(intent, Constant.EDIT_REQUEST);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.unipi.lykourgoss.edusoftware.viewmodels;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.unipi.lykourgoss.edusoftware.models.EduEntity;
@@ -48,6 +49,18 @@ public abstract class MyViewModel<Model extends EduEntity> extends ViewModel {
     /* don't need that use childCount property*/
     public int getChildCount() {
         return listLiveData.getValue().size();
+    }
+
+    public LiveData<Model> getModel(String id){
+        List<Model> models = listLiveData.getValue();
+        for (Model model : models){
+            if (model.getId() == id){
+                MutableLiveData<Model> modelLiveData = new MutableLiveData<Model>();
+                modelLiveData.setValue(model);
+                return modelLiveData;
+            }
+        }
+        return null;
     }
 
     /* used to load entities that belong to an entity (i.e lessons belong to users (authors),

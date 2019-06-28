@@ -17,29 +17,18 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.unipi.lykourgoss.edusoftware.Constant;
 import com.unipi.lykourgoss.edusoftware.Dialog;
 import com.unipi.lykourgoss.edusoftware.R;
-import com.unipi.lykourgoss.edusoftware.fragments.SubsectionsFragment;
 import com.unipi.lykourgoss.edusoftware.models.Subsection;
 
 import java.io.File;
 
 public class CreateEditSubsectionActivity extends CreateEditActivity implements View.OnClickListener {
-
-    public static final String EXTRA_PDF_URL =
-            "com.unipi.lykourgoss.edusoftware.activities.createedit.CreateEditSubsectionActivity.EXTRA_PDF_URL";
-    public static final String EXTRA_PDF_FILENAME =
-            "com.unipi.lykourgoss.edusoftware.activities.createedit.CreateEditSubsectionActivity.EXTRA_PDF_FILENAME";
-    public static final String EXTRA_TEST_QUESTION_COUNT =
-            "com.unipi.lykourgoss.edusoftware.activities.createedit.CreateEditSubsectionActivity.EXTRA_TEST_QUESTION_COUNT";
-
-    public static final int SELECT_PDF_REQUEST = 3;
 
     private StorageReference mStorageRef;
 
@@ -74,21 +63,21 @@ public class CreateEditSubsectionActivity extends CreateEditActivity implements 
 
         Intent intent = getIntent();
 
-        int lastIndex = intent.getIntExtra(SubsectionsFragment.EXTRA_LAST_INDEX, 1);
+        int lastIndex = intent.getIntExtra(Constant.EXTRA_LAST_INDEX, 1);
 
         numberPickerIndex.setMinValue(1);
         numberPickerIndex.setMaxValue(lastIndex);
 
         subsection = null;
-        if (intent.hasExtra(EXTRA_ID)) { // update situation
+        if (intent.hasExtra(Constant.EXTRA_ID)) { // update situation
 
             subsection = Subsection.getFromIntent(intent, true, 0);
 
             setTitle("Edit Subsection");
             // fill editTexts with subsection values for editing
-            editTextTitle.setText(intent.getStringExtra(EXTRA_TITLE));
-            editTextPdfFilename.setText(intent.getStringExtra(EXTRA_PDF_FILENAME));
-            numberPickerIndex.setValue(intent.getIntExtra(EXTRA_INDEX, 1));
+            editTextTitle.setText(intent.getStringExtra(Constant.EXTRA_TITLE));
+            editTextPdfFilename.setText(intent.getStringExtra(Constant.EXTRA_PDF_FILENAME));
+            numberPickerIndex.setValue(intent.getIntExtra(Constant.EXTRA_INDEX, 1));
         } else { // create new situation
             setTitle("Create Νew Subsection");
             //default is to add it as last...
@@ -125,7 +114,7 @@ public class CreateEditSubsectionActivity extends CreateEditActivity implements 
                 buttonSelectPdf.clearFocus();
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.setType("application/pdf");
-                startActivityForResult(Intent.createChooser(intent, "Select Pdf"), SELECT_PDF_REQUEST);
+                startActivityForResult(Intent.createChooser(intent, "Select Pdf"), Constant.SELECT_PDF_REQUEST);
                 break;
             default:
                 break;
@@ -136,7 +125,7 @@ public class CreateEditSubsectionActivity extends CreateEditActivity implements 
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == SELECT_PDF_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+        if (requestCode == Constant.SELECT_PDF_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             pdfFilepath = data.getData();
             editTextPdfFilename.setText(new File(pdfFilepath.getPath()).getName());
             pdfUrl = null;
@@ -177,12 +166,12 @@ public class CreateEditSubsectionActivity extends CreateEditActivity implements 
         } else {
             // put extras for creating new
             data = new Intent();
-            data.putExtra(EXTRA_TITLE, title);
-            data.putExtra(EXTRA_DESCRIPTION, description);
-            data.putExtra(EXTRA_INDEX, index);
+            data.putExtra(Constant.EXTRA_TITLE, title);
+            data.putExtra(Constant.EXTRA_DESCRIPTION, description);
+            data.putExtra(Constant.EXTRA_INDEX, index);
 
-            data.putExtra(EXTRA_PDF_URL, pdfUrl);
-            data.putExtra(EXTRA_PDF_FILENAME, pdfFilename);
+            data.putExtra(Constant.EXTRA_PDF_URL, pdfUrl);
+            data.putExtra(Constant.EXTRA_PDF_FILENAME, pdfFilename);
         }
 
         setResult(RESULT_OK, data);
@@ -193,7 +182,7 @@ public class CreateEditSubsectionActivity extends CreateEditActivity implements 
     private void uploadPdf() {
         if (pdfFilepath != null){
             String filename = editTextPdfFilename.getText().toString().trim();
-            String chapterId = getIntent().getStringExtra(EXTRA_PARENT_ID);
+            String chapterId = getIntent().getStringExtra(Constant.EXTRA_PARENT_ID);
             final StorageReference subsectionsRef = mStorageRef.child("subsections/").child(chapterId).child(filename);
             final AlertDialog uploadingDialog = Dialog.progressbarAction(this, Dialog.UPLOADING);
             subsectionsRef.putFile(pdfFilepath).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {

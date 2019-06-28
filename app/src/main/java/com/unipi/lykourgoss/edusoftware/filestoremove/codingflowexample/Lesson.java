@@ -6,6 +6,7 @@ import android.content.Intent;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.unipi.lykourgoss.edusoftware.Constant;
 import com.unipi.lykourgoss.edusoftware.activities.createedit.CreateEditLessonActivity;
 
 /**
@@ -75,22 +76,22 @@ public class Lesson {
 
     public Intent putToIntent(Context context, boolean toEdit){
         Intent intent = new Intent(context, CreateEditLessonActivity.class);
-        intent.putExtra(CreateEditLessonActivity.EXTRA_ID, getId());
-        intent.putExtra(CreateEditLessonActivity.EXTRA_TITLE, getTitle());
-        intent.putExtra(CreateEditLessonActivity.EXTRA_INDEX, getIndex());
-        intent.putExtra(CreateEditLessonActivity.EXTRA_DESCRIPTION, getDescription());
+        intent.putExtra(Constant.EXTRA_ID, getId());
+        intent.putExtra(Constant.EXTRA_TITLE, getTitle());
+        intent.putExtra(Constant.EXTRA_INDEX, getIndex());
+        intent.putExtra(Constant.EXTRA_DESCRIPTION, getDescription());
         return intent;
     }
 
     // returns a new lesson object to be stored in the database, in case of updating
     // (toUpdate = true) could return null if there is a problem getting lesson's id
     public static Lesson getFromIntent(Intent intent, boolean toUpdate, int defaultIndex){
-        String title = intent.getStringExtra(CreateEditLessonActivity.EXTRA_TITLE);
-        String description = intent.getStringExtra(CreateEditLessonActivity.EXTRA_DESCRIPTION);
-        int index = intent.getIntExtra(CreateEditLessonActivity.EXTRA_INDEX, defaultIndex);
+        String title = intent.getStringExtra(Constant.EXTRA_TITLE);
+        String description = intent.getStringExtra(Constant.EXTRA_DESCRIPTION);
+        int index = intent.getIntExtra(Constant.EXTRA_INDEX, defaultIndex);
         Lesson lesson = new Lesson(title,description, index, ""/*todo getUserEmail*/);
         if (toUpdate){
-            int id = intent.getIntExtra(CreateEditLessonActivity.EXTRA_ID, -1);
+            int id = intent.getIntExtra(Constant.EXTRA_ID, -1);
             // check if id = -1 => something went really wrong
             if (id == -1) {
                 return null;

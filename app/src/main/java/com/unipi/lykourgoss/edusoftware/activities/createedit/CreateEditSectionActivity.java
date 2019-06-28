@@ -1,18 +1,13 @@
 package com.unipi.lykourgoss.edusoftware.activities.createedit;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.ViewModelProviders;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 
+import com.unipi.lykourgoss.edusoftware.Constant;
 import com.unipi.lykourgoss.edusoftware.R;
-import com.unipi.lykourgoss.edusoftware.fragments.SectionsFragment;
 import com.unipi.lykourgoss.edusoftware.models.Section;
-import com.unipi.lykourgoss.edusoftware.viewmodels.CurrentViewModel;
 
 public class CreateEditSectionActivity extends CreateEditActivity {
 
@@ -33,13 +28,13 @@ public class CreateEditSectionActivity extends CreateEditActivity {
 
         Intent intent = getIntent();
         
-        int lastIndex = intent.getIntExtra(SectionsFragment.EXTRA_LAST_INDEX, 1);
+        int lastIndex = intent.getIntExtra(Constant.EXTRA_LAST_INDEX, 1);
 
         numberPickerIndex.setMinValue(1);
         numberPickerIndex.setMaxValue(lastIndex);
 
         section = null;
-        if (intent.hasExtra(EXTRA_ID)) { // update situation
+        if (intent.hasExtra(Constant.EXTRA_ID)) { // update situation
             
             section = Section.getFromIntent(intent, true, 0);
             
@@ -78,9 +73,9 @@ public class CreateEditSectionActivity extends CreateEditActivity {
         } else {
             // put extras for creating new
             data = new Intent();
-            data.putExtra(EXTRA_TITLE, title);
-            data.putExtra(EXTRA_DESCRIPTION, description);
-            data.putExtra(EXTRA_INDEX, index);
+            data.putExtra(Constant.EXTRA_TITLE, title);
+            data.putExtra(Constant.EXTRA_DESCRIPTION, description);
+            data.putExtra(Constant.EXTRA_INDEX, index);
         }
 
         setResult(RESULT_OK, data);

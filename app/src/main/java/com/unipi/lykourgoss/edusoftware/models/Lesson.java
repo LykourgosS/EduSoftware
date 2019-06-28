@@ -3,6 +3,7 @@ package com.unipi.lykourgoss.edusoftware.models;
 import android.content.Context;
 import android.content.Intent;
 
+import com.unipi.lykourgoss.edusoftware.Constant;
 import com.unipi.lykourgoss.edusoftware.activities.createedit.CreateEditLessonActivity;
 
 /**
@@ -64,42 +65,36 @@ public class Lesson extends EduEntity<Lesson>{
 
     @Override
     public Intent putToIntent() {
-        Intent intent = new Intent();
-        intent.putExtra(CreateEditLessonActivity.EXTRA_ID, getId());
-        intent.putExtra(CreateEditLessonActivity.EXTRA_TITLE, getTitle());
-        intent.putExtra(CreateEditLessonActivity.EXTRA_INDEX, getIndex());
-        intent.putExtra(CreateEditLessonActivity.EXTRA_DESCRIPTION, getDescription());
-        intent.putExtra(CreateEditLessonActivity.EXTRA_CHILD_COUNT, getChildCount());
-        intent.putExtra(CreateEditLessonActivity.EXTRA_PARENT_ID, getParentId());
-        intent.putExtra(CreateEditLessonActivity.EXTRA_AUTHOR_EMAIL, getAuthorEmail());
+        Intent intent = super.putToIntent();
+        intent.putExtra(Constant.EXTRA_AUTHOR_EMAIL, getAuthorEmail());
         return intent;
     }
 
     @Override
     public Intent putToIntent(Context context) {
         Intent intent = new Intent(context, CreateEditLessonActivity.class);
-        intent.putExtra(CreateEditLessonActivity.EXTRA_ID, getId());
-        intent.putExtra(CreateEditLessonActivity.EXTRA_TITLE, getTitle());
-        intent.putExtra(CreateEditLessonActivity.EXTRA_INDEX, getIndex());
-        intent.putExtra(CreateEditLessonActivity.EXTRA_DESCRIPTION, getDescription());
-        intent.putExtra(CreateEditLessonActivity.EXTRA_CHILD_COUNT, getChildCount());
-        intent.putExtra(CreateEditLessonActivity.EXTRA_PARENT_ID, getParentId());
-        intent.putExtra(CreateEditLessonActivity.EXTRA_AUTHOR_EMAIL, getAuthorEmail());
+        intent.putExtra(Constant.EXTRA_ID, getId());
+        intent.putExtra(Constant.EXTRA_TITLE, getTitle());
+        intent.putExtra(Constant.EXTRA_INDEX, getIndex());
+        intent.putExtra(Constant.EXTRA_DESCRIPTION, getDescription());
+        intent.putExtra(Constant.EXTRA_CHILD_COUNT, getChildCount());
+        intent.putExtra(Constant.EXTRA_PARENT_ID, getParentId());
+        intent.putExtra(Constant.EXTRA_AUTHOR_EMAIL, getAuthorEmail());
         return intent;
     }
 
     public static Lesson getFromIntent(Intent intent, boolean toUpdate, int defaultIndex) {
-        String title = intent.getStringExtra(CreateEditLessonActivity.EXTRA_TITLE);
-        int index = intent.getIntExtra(CreateEditLessonActivity.EXTRA_INDEX, defaultIndex);
-        String description = intent.getStringExtra(CreateEditLessonActivity.EXTRA_DESCRIPTION);
-        int childCount = intent.getIntExtra(CreateEditLessonActivity.EXTRA_CHILD_COUNT, 0);
-        String authorId = intent.getStringExtra(CreateEditLessonActivity.EXTRA_PARENT_ID);
-        String authorEmail = intent.getStringExtra(CreateEditLessonActivity.EXTRA_AUTHOR_EMAIL);
+        String title = intent.getStringExtra(Constant.EXTRA_TITLE);
+        int index = intent.getIntExtra(Constant.EXTRA_INDEX, defaultIndex);
+        String description = intent.getStringExtra(Constant.EXTRA_DESCRIPTION);
+        int childCount = intent.getIntExtra(Constant.EXTRA_CHILD_COUNT, 0);
+        String authorId = intent.getStringExtra(Constant.EXTRA_PARENT_ID);
+        String authorEmail = intent.getStringExtra(Constant.EXTRA_AUTHOR_EMAIL);
 
         Lesson lesson = new Lesson(title, index, description, childCount, authorId, authorEmail);
 
         if (toUpdate){
-            String id = intent.getStringExtra(CreateEditLessonActivity.EXTRA_ID);
+            String id = intent.getStringExtra(Constant.EXTRA_ID);
             lesson.setId(id);
         }
         return lesson;

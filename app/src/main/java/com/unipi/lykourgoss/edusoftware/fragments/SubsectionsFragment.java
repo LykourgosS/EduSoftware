@@ -7,8 +7,8 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.unipi.lykourgoss.edusoftware.Dialog;
-import com.unipi.lykourgoss.edusoftware.activities.createedit.CreateEditActivity;
+import com.unipi.lykourgoss.edusoftware.Constant;
+import com.unipi.lykourgoss.edusoftware.PdfViewerActivityWebView;
 import com.unipi.lykourgoss.edusoftware.activities.createedit.CreateEditSubsectionActivity;
 import com.unipi.lykourgoss.edusoftware.adapters.SubsectionAdapter;
 import com.unipi.lykourgoss.edusoftware.models.Chapter;
@@ -56,7 +56,7 @@ public class SubsectionsFragment extends MyFragment<Subsection, SubsectionsViewM
         // default value for model's index is the last available index
         int subsectionCount = viewModel.getChildCount();
 
-        if (requestCode == CREATE_NEW_REQUEST) {
+        if (requestCode == Constant.CREATE_NEW_REQUEST) {
             if (resultCode == RESULT_OK) {
 
                 /* !ATTENTION! Creating subsection object and adding section's info and childCount */
@@ -70,7 +70,7 @@ public class SubsectionsFragment extends MyFragment<Subsection, SubsectionsViewM
             } else {// something went wrong or user clicked to go back
                 Toast.makeText(getActivity(), "Subsection not created", Toast.LENGTH_SHORT).show();
             }
-        } else if (requestCode == EDIT_REQUEST) {
+        } else if (requestCode == Constant.EDIT_REQUEST) {
             if (resultCode == RESULT_OK) {
 
                 viewModel.update(Subsection.getFromIntent(data, true, subsectionCount));
@@ -86,9 +86,9 @@ public class SubsectionsFragment extends MyFragment<Subsection, SubsectionsViewM
     protected void startActivityToCreateNew() {
         Intent intent = new Intent(getActivity(), CreateEditSubsectionActivity.class);
         String sectionId = currentViewModel.getSection().getValue().getId();
-        intent.putExtra(CreateEditActivity.EXTRA_PARENT_ID, sectionId);
-        intent.putExtra(EXTRA_LAST_INDEX, viewModel.getChildCount() + 1);
-        startActivityForResult(intent, CREATE_NEW_REQUEST);
+        intent.putExtra(Constant.EXTRA_PARENT_ID, sectionId);
+        intent.putExtra(Constant.EXTRA_LAST_INDEX, viewModel.getChildCount() + 1);
+        startActivityForResult(intent, Constant.CREATE_NEW_REQUEST);
     }
 
     @Override
@@ -110,6 +110,10 @@ public class SubsectionsFragment extends MyFragment<Subsection, SubsectionsViewM
     @Override
     public void onItemClick(Subsection subsection) {
         // todo open activity with pdf file
+        Intent intent = new Intent(getActivity(), PdfViewerActivityWebView.class);
+        intent.putExtra(Constant.EXTRA_ID, subsection.getId());
+        intent.putExtra(Constant.EXTRA_PARENT_ID, subsection.getParentId());
+        startActivity(intent);
     }
 
     @Override

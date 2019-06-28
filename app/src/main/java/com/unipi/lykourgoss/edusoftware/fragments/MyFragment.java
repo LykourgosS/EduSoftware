@@ -16,7 +16,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -24,6 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.unipi.lykourgoss.edusoftware.Constant;
 import com.unipi.lykourgoss.edusoftware.Dialog;
 import com.unipi.lykourgoss.edusoftware.R;
 import com.unipi.lykourgoss.edusoftware.adapters.MyAdapter;
@@ -37,8 +37,6 @@ import java.util.List;
 
 import pl.droidsonroids.gif.GifDrawable;
 
-import static android.app.Activity.RESULT_OK;
-
 /**
  * Created by LykourgosS <lpsarantidis@gmail.com>
  * on 25,June,2019.
@@ -46,12 +44,6 @@ import static android.app.Activity.RESULT_OK;
 
 public abstract class MyFragment<Model extends EduEntity, VM extends MyViewModel> extends Fragment
         implements View.OnClickListener, OnItemClickListener<Model>, Dialog.OnEditClickListener<Model> {
-
-    public static final int CREATE_NEW_REQUEST = 1;
-
-    public static final int EDIT_REQUEST = 2;
-
-    public static final String EXTRA_LAST_INDEX = "com.unipi.lykourgoss.edusoftware.fragments.MyFragment.EXTRA_LAST_INDEX";
 
     protected LinearLayout linearLayoutNoItems;
     protected FloatingActionButton fabCreateNew;
@@ -161,9 +153,8 @@ public abstract class MyFragment<Model extends EduEntity, VM extends MyViewModel
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        if (isEditEnabled){
-            inflater.inflate(R.menu.fragment_menu, menu);
-        }
+        menu.getItem(0).setVisible(false);
+        menu.getItem(1).setVisible(isEditEnabled);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -218,8 +209,8 @@ public abstract class MyFragment<Model extends EduEntity, VM extends MyViewModel
      * */
     protected void startActivityToEdit(Model model){
         Intent intent = model.putToIntent(getActivity());
-        intent.putExtra(EXTRA_LAST_INDEX, viewModel.getChildCount());
-        startActivityForResult(intent, EDIT_REQUEST);
+        intent.putExtra(Constant.EXTRA_LAST_INDEX, viewModel.getChildCount());
+        startActivityForResult(intent, Constant.EDIT_REQUEST);
     }
 
     protected abstract void delete(Model model);

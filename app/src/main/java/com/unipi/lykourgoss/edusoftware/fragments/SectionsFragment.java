@@ -5,13 +5,12 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.unipi.lykourgoss.edusoftware.Constant;
 import com.unipi.lykourgoss.edusoftware.Dialog;
 import com.unipi.lykourgoss.edusoftware.R;
 import com.unipi.lykourgoss.edusoftware.activities.createedit.CreateEditSectionActivity;
-import com.unipi.lykourgoss.edusoftware.adapters.MyAdapter;
 import com.unipi.lykourgoss.edusoftware.adapters.SectionAdapter;
 import com.unipi.lykourgoss.edusoftware.models.Chapter;
 import com.unipi.lykourgoss.edusoftware.models.Lesson;
@@ -56,7 +55,7 @@ public class SectionsFragment extends MyFragment<Section, SectionsViewModel> {
         // default value for model's index is the last available index
         int sectionCount = viewModel.getChildCount();
 
-        if (requestCode == CREATE_NEW_REQUEST) {
+        if (requestCode == Constant.CREATE_NEW_REQUEST) {
             if (resultCode == RESULT_OK) {
 
                 /* !ATTENTION! Creating section object and adding chapter's info and childCount */
@@ -69,7 +68,7 @@ public class SectionsFragment extends MyFragment<Section, SectionsViewModel> {
             } else {// something went wrong or user clicked to go back
                 Toast.makeText(getActivity(), "Section not created", Toast.LENGTH_SHORT).show();
             }
-        } else if (requestCode == EDIT_REQUEST) {
+        } else if (requestCode == Constant.EDIT_REQUEST) {
             if (resultCode == RESULT_OK) {
 
                 viewModel.update(Section.getFromIntent(data, true, sectionCount));
@@ -84,8 +83,8 @@ public class SectionsFragment extends MyFragment<Section, SectionsViewModel> {
     @Override
     protected void startActivityToCreateNew() {
         Intent intent = new Intent(getActivity(), CreateEditSectionActivity.class);
-        intent.putExtra(EXTRA_LAST_INDEX, viewModel.getChildCount() + 1);
-        startActivityForResult(intent, CREATE_NEW_REQUEST);
+        intent.putExtra(Constant.EXTRA_LAST_INDEX, viewModel.getChildCount() + 1);
+        startActivityForResult(intent, Constant.CREATE_NEW_REQUEST);
     }
 
     @Override

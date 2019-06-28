@@ -1,30 +1,15 @@
 package com.unipi.lykourgoss.edusoftware.activities.createedit;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProviders;
-
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.unipi.lykourgoss.edusoftware.R;
-import com.unipi.lykourgoss.edusoftware.viewmodels.CurrentViewModel;
 
 public abstract class CreateEditActivity extends AppCompatActivity {
-
-    public static final String EXTRA_ID =
-            "com.unipi.lykourgoss.edusoftware.activities.createedit.EXTRA_ID";
-    public static final String EXTRA_TITLE =
-            "com.unipi.lykourgoss.edusoftware.activities.createedit.EXTRA_TITLE";
-    public static final String EXTRA_INDEX =
-            "com.unipi.lykourgoss.edusoftware.activities.createedit.EXTRA_INDEX";
-    public static final String EXTRA_DESCRIPTION =
-            "com.unipi.lykourgoss.edusoftware.activities.createedit.EXTRA_DESCRIPTION";
-    public static final String EXTRA_CHILD_COUNT =
-            "com.unipi.lykourgoss.edusoftware.activities.createedit.EXTRA_CHILD_COUNT";
-    public static final String EXTRA_PARENT_ID =
-            "com.unipi.lykourgoss.edusoftware.activities.createedit.EXTRA_PARENT_ID";
 
     // todo remove -> protected CurrentViewModel currentViewModel;
 

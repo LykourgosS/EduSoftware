@@ -2,11 +2,15 @@ package com.unipi.lykourgoss.edusoftware.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.unipi.lykourgoss.edusoftware.Constant;
 import com.unipi.lykourgoss.edusoftware.Dialog;
 import com.unipi.lykourgoss.edusoftware.R;
 import com.unipi.lykourgoss.edusoftware.activities.createedit.CreateEditChapterActivity;
@@ -37,7 +41,7 @@ public class ChaptersFragment extends MyFragment<Chapter, ChaptersViewModel> {
         getActivity().setTitle("Chapters");
 
         Lesson lesson = currentViewModel.getLesson().getValue();
-        String subtitle =  "/" + lesson.getTitle();
+        String subtitle = "/" + lesson.getTitle();
         ((AppCompatActivity) getActivity()).getSupportActionBar().setSubtitle(subtitle);
 
         /* Set up viewModel */
@@ -53,7 +57,7 @@ public class ChaptersFragment extends MyFragment<Chapter, ChaptersViewModel> {
         // default value for model's index is the last available index
         int chapterCount = viewModel.getChildCount();
 
-        if (requestCode == CREATE_NEW_REQUEST) {
+        if (requestCode == Constant.CREATE_NEW_REQUEST) {
             if (resultCode == RESULT_OK) {
 
                 /* !ATTENTION! Creating chapter object and adding lessons's info and childCount */
@@ -67,7 +71,7 @@ public class ChaptersFragment extends MyFragment<Chapter, ChaptersViewModel> {
             } else {// something went wrong or user clicked to go back
                 Toast.makeText(getActivity(), "Chapter not created", Toast.LENGTH_SHORT).show();
             }
-        } else if (requestCode == EDIT_REQUEST) {
+        } else if (requestCode == Constant.EDIT_REQUEST) {
             if (resultCode == RESULT_OK) {
 
                 viewModel.update(Chapter.getFromIntent(data, true, chapterCount));
@@ -77,27 +81,41 @@ public class ChaptersFragment extends MyFragment<Chapter, ChaptersViewModel> {
                 Toast.makeText(getActivity(), "Chapter not updated", Toast.LENGTH_SHORT).show();
             }
         }
-        
+
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.getItem(0).setVisible(true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_item_exam_questions) {
+            // todo open exams activity with id in extras
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
     protected void startActivityToCreateNew() {
         Intent intent = new Intent(getActivity(), CreateEditChapterActivity.class);
-        intent.putExtra(EXTRA_LAST_INDEX, viewModel.getChildCount() + 1);
-        startActivityForResult(intent, CREATE_NEW_REQUEST);
+        intent.putExtra(Constant.EXTRA_LAST_INDEX, viewModel.getChildCount() + 1);
+        startActivityForResult(intent, Constant.CREATE_NEW_REQUEST);
     }
 
     @Override
     protected void startActivityToEdit(Chapter chapter) {
         Intent intent = chapter.putToIntent(getActivity());
-        intent.putExtra(EXTRA_LAST_INDEX, viewModel.getChildCount());
-        startActivityForResult(intent, EDIT_REQUEST);
+        intent.putExtra(Constant.EXTRA_LAST_INDEX, viewModel.getChildCount());
+        startActivityForResult(intent, Constant.EDIT_REQUEST);
     }
 
     @Override
     protected void delete(Chapter chapter) {
         String deleteMsg = "Chapter deleted";
-        if (!viewModel.delete(chapter, viewModel.getChildCount())){
+        if (!viewModel.delete(chapter, viewModel.getChildCount())) {
             deleteMsg = "Chapter cannot be deleted, because it is not empty";
             adapter.notifyDataSetChanged();
         }
