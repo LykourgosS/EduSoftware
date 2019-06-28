@@ -83,7 +83,7 @@ public class Lesson extends EduEntity<Lesson>{
         return intent;
     }
 
-    public static Lesson getFromIntent(Intent intent, boolean toUpdate, int defaultIndex) {
+    public static Lesson getFromIntent(Intent intent, boolean hasId, int defaultIndex) {
         String title = intent.getStringExtra(Constant.EXTRA_TITLE);
         int index = intent.getIntExtra(Constant.EXTRA_INDEX, defaultIndex);
         String description = intent.getStringExtra(Constant.EXTRA_DESCRIPTION);
@@ -93,7 +93,7 @@ public class Lesson extends EduEntity<Lesson>{
 
         Lesson lesson = new Lesson(title, index, description, childCount, authorId, authorEmail);
 
-        if (toUpdate){
+        if (hasId){
             String id = intent.getStringExtra(Constant.EXTRA_ID);
             lesson.setId(id);
         }

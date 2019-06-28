@@ -36,6 +36,9 @@ public class Constant {
             "com.unipi.lykourgoss.edusoftware.constants.EXTRA_PDF_FILENAME";
     public static final String EXTRA_TEST_QUESTION_COUNT =
             "com.unipi.lykourgoss.edusoftware.constants.EXTRA_TEST_QUESTION_COUNT";
+    // (used for creating new subsection)
+    public static final String EXTRA_NEW_ID =
+            "com.unipi.lykourgoss.edusoftware.constants.EXTRA_NEW_ID";
 
     // for CreateEdit requests
     public static final int CREATE_NEW_REQUEST = 1;

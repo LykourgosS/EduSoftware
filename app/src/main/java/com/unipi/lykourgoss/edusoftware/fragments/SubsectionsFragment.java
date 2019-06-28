@@ -8,7 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.unipi.lykourgoss.edusoftware.Constant;
-import com.unipi.lykourgoss.edusoftware.PdfViewerActivityWebView;
+import com.unipi.lykourgoss.edusoftware.PdfViewerActivity;
 import com.unipi.lykourgoss.edusoftware.activities.createedit.CreateEditSubsectionActivity;
 import com.unipi.lykourgoss.edusoftware.adapters.SubsectionAdapter;
 import com.unipi.lykourgoss.edusoftware.models.Chapter;
@@ -16,6 +16,8 @@ import com.unipi.lykourgoss.edusoftware.models.Lesson;
 import com.unipi.lykourgoss.edusoftware.models.Section;
 import com.unipi.lykourgoss.edusoftware.models.Subsection;
 import com.unipi.lykourgoss.edusoftware.viewmodels.SubsectionsViewModel;
+
+import java.io.IOException;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -40,7 +42,7 @@ public class SubsectionsFragment extends MyFragment<Subsection, SubsectionsViewM
         Lesson lesson = currentViewModel.getLesson().getValue();
         Chapter chapter = currentViewModel.getChapter().getValue();
         Section section = currentViewModel.getSection().getValue();
-        String subtitle =  "/" + lesson.getTitle() + "/" + chapter.getTitle() + "/" + section.getTitle();
+        String subtitle = "/" + lesson.getTitle() + "/" + chapter.getTitle() + "/" + section.getTitle();
         ((AppCompatActivity) getActivity()).getSupportActionBar().setSubtitle(subtitle);
 
         /* Set up viewModel */
@@ -60,7 +62,11 @@ public class SubsectionsFragment extends MyFragment<Subsection, SubsectionsViewM
             if (resultCode == RESULT_OK) {
 
                 /* !ATTENTION! Creating subsection object and adding section's info and childCount */
-                Subsection subsection = Subsection.getFromIntent(data, false, subsectionCount + 1);
+
+                // ! -> hasId = true (because subsection is the only entity that its id is created
+                // at the time user clicked to add one, and it is passed to CreateEditSubsection
+                // activity in Extras)
+                Subsection subsection = Subsection.getFromIntent(data, true, subsectionCount + 1);
                 subsection.setParentId(currentViewModel.getSection().getValue().getId());
                 subsection.setTestQuestionCount(0);
                 subsection.setChildCount(0);
@@ -85,6 +91,8 @@ public class SubsectionsFragment extends MyFragment<Subsection, SubsectionsViewM
     @Override
     protected void startActivityToCreateNew() {
         Intent intent = new Intent(getActivity(), CreateEditSubsectionActivity.class);
+        String newId = viewModel.getNewId();
+        intent.putExtra(Constant.EXTRA_NEW_ID, newId);
         String sectionId = currentViewModel.getSection().getValue().getId();
         intent.putExtra(Constant.EXTRA_PARENT_ID, sectionId);
         intent.putExtra(Constant.EXTRA_LAST_INDEX, viewModel.getChildCount() + 1);
@@ -94,7 +102,7 @@ public class SubsectionsFragment extends MyFragment<Subsection, SubsectionsViewM
     @Override
     protected void delete(Subsection subsection) {
         String deleteMsg = "Subsection deleted";
-        if (!viewModel.delete(subsection, viewModel.getChildCount())){
+        if (!viewModel.delete(subsection, viewModel.getChildCount())) {
             deleteMsg = "Subsection cannot be deleted, because it is not empty";
             adapter.notifyDataSetChanged();
         }
@@ -109,19 +117,35 @@ public class SubsectionsFragment extends MyFragment<Subsection, SubsectionsViewM
 
     @Override
     public void onItemClick(Subsection subsection) {
-        // todo open activity with pdf file
-        Intent intent = new Intent(getActivity(), PdfViewerActivityWebView.class);
-        intent.putExtra(Constant.EXTRA_ID, subsection.getId());
-        intent.putExtra(Constant.EXTRA_PARENT_ID, subsection.getParentId());
-        startActivity(intent);
+        if (fileInAssets(subsection)){ // todo not in Assets.. if is downloaded!
+            Intent intent = new Intent(getActivity(), PdfViewerActivity.class);
+            intent.putExtra(Constant.EXTRA_ID, subsection.getId());
+            intent.putExtra(Constant.EXTRA_PARENT_ID, subsection.getParentId());
+            startActivity(intent);
+        } else {
+            // todo dialogDownload pdf (if ok execute downloadPdf)
+            // todo make downloadPdf() method!
+        }
     }
 
     @Override
     public void onItemLongClick(Subsection subsection) {
-        if (isEditEnabled){
+        if (isEditEnabled) {
             startActivityToEdit(subsection);
-            // Dialog.showSubsectionDetails(getActivity(), isEditEnabled, subsection, this);
-            // todo edit subsection
         }
+    }
+
+    private boolean fileInAssets(Subsection subsection) {
+        String path = "subsections/" + subsection.getParentId();
+        try {
+            for (String filename : getActivity().getAssets().list(path)){
+                if (filename.equals(subsection.getPdfFilename())){
+                    return true;
+                }
+            }
+        } catch (final IOException e) {
+            return false;
+        }
+        return false;
     }
 }

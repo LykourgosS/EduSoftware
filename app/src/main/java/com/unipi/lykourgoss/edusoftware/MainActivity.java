@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 // todo add help case: dialog for how to edit, create, delete, delete all, long click for details
                 return true;
             case R.id.menu_item_about:
-                // about dialog
+                // todo about dialog
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

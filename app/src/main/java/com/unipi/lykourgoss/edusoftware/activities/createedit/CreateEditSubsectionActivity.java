@@ -42,6 +42,8 @@ public class CreateEditSubsectionActivity extends CreateEditActivity implements 
 
     private Subsection subsection;
 
+    private String subsectionId;
+
     private String pdfUrl;
 
     @Override
@@ -63,6 +65,10 @@ public class CreateEditSubsectionActivity extends CreateEditActivity implements 
 
         Intent intent = getIntent();
 
+        // !ATTENTION! if subsectionId won't change means we are going to create a new subsection
+        // (EXTRA_NEW_ID), however if we are editing an existing one it will take the old id (EXTRA_ID)
+        subsectionId = intent.getStringExtra(Constant.EXTRA_NEW_ID);
+
         int lastIndex = intent.getIntExtra(Constant.EXTRA_LAST_INDEX, 1);
 
         numberPickerIndex.setMinValue(1);
@@ -72,6 +78,9 @@ public class CreateEditSubsectionActivity extends CreateEditActivity implements 
         if (intent.hasExtra(Constant.EXTRA_ID)) { // update situation
 
             subsection = Subsection.getFromIntent(intent, true, 0);
+
+            // it will take the old id (EXTRA_ID)
+            subsectionId = subsection.getId();
 
             setTitle("Edit Subsection");
             // fill editTexts with subsection values for editing
@@ -153,6 +162,10 @@ public class CreateEditSubsectionActivity extends CreateEditActivity implements 
 
         Intent data;
 
+        // pdfFilename property has the name of the pdf file, which is id.pdf
+        // (i.e. -LiOKxqYE0A6jDHgd9yT.pdf)
+        pdfFilename = subsectionId + ".pdf";
+
         if (subsection != null) {
             // set every field that might have change to update
             subsection.setTitle(title);
@@ -166,6 +179,7 @@ public class CreateEditSubsectionActivity extends CreateEditActivity implements 
         } else {
             // put extras for creating new
             data = new Intent();
+            data.putExtra(Constant.EXTRA_ID, subsectionId);
             data.putExtra(Constant.EXTRA_TITLE, title);
             data.putExtra(Constant.EXTRA_DESCRIPTION, description);
             data.putExtra(Constant.EXTRA_INDEX, index);
@@ -181,7 +195,7 @@ public class CreateEditSubsectionActivity extends CreateEditActivity implements 
     // upload file to firebase storage
     private void uploadPdf() {
         if (pdfFilepath != null){
-            String filename = editTextPdfFilename.getText().toString().trim();
+            String filename = subsectionId + ".pdf";
             String chapterId = getIntent().getStringExtra(Constant.EXTRA_PARENT_ID);
             final StorageReference subsectionsRef = mStorageRef.child("subsections/").child(chapterId).child(filename);
             final AlertDialog uploadingDialog = Dialog.progressbarAction(this, Dialog.UPLOADING);

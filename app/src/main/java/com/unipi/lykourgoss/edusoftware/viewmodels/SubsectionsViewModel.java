@@ -3,6 +3,7 @@ package com.unipi.lykourgoss.edusoftware.viewmodels;
 import com.unipi.lykourgoss.edusoftware.models.Section;
 import com.unipi.lykourgoss.edusoftware.models.Subsection;
 import com.unipi.lykourgoss.edusoftware.repositories.FirebaseRepository;
+import com.unipi.lykourgoss.edusoftware.repositories.SubsectionsRepository;
 
 /**
  * Created by LykourgosS <lpsarantidis@gmail.com>
@@ -19,7 +20,11 @@ public class SubsectionsViewModel extends MyViewModel<Subsection> {
     @Override
     public void setParentId(String parentId) {
         this.parentId = parentId;
-        repository = new FirebaseRepository<>(_MODEL_REF, Section._SECTIONS_REF, parentId, Subsection.class);
+        repository = new SubsectionsRepository(_MODEL_REF, Section._SECTIONS_REF, parentId, Subsection.class);
         listLiveData = repository.getAll();
+    }
+
+    public String getNewId() {
+        return repository.getNewId();
     }
 }

@@ -111,7 +111,7 @@ public abstract class EduEntity<Model extends EduEntity> {
 
     /* method hiding: derived classes will overload getFromIntent(...) and will have
     as return type their own type */
-    static public EduEntity getFromIntent(Intent intent, boolean toUpdate, int defaultIndex){
+    static public EduEntity getFromIntent(Intent intent, boolean hasId, int defaultIndex){
         return null;
     }
 }

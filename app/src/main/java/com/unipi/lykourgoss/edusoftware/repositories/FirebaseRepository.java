@@ -29,9 +29,9 @@ public class FirebaseRepository<Model extends EduEntity> {
 
     protected static DatabaseReference MODEL_REF;
 
-    private String parentId;
+    protected String parentId;
 
-    private String parentIdName;
+    protected String parentIdName;
 
     protected FirebaseRepository(String modelRef, String parentId) {
 
@@ -69,6 +69,11 @@ public class FirebaseRepository<Model extends EduEntity> {
                 }
             }
         });
+    }
+
+    // only SubsectionRepository use getNewId()
+    public String getNewId() {
+        return MODEL_REF.push().getKey();
     }
 
     public void create(Model model, int parentChildCount) {
@@ -129,7 +134,7 @@ public class FirebaseRepository<Model extends EduEntity> {
         }
     }
 
-    private List<Model> sortByIndex(List<Model> models){
+    private List<Model> sortByIndex(List<Model> models) {
         Collections.sort(models, new Comparator<Model>() {
             @Override
             public int compare(Model o1, Model o2) {
@@ -139,7 +144,7 @@ public class FirebaseRepository<Model extends EduEntity> {
         return models;
     }
 
-    protected List<Model> sortByTitle(List<Model> models){
+    protected List<Model> sortByTitle(List<Model> models) {
         Collections.sort(models, new Comparator<Model>() {
             @Override
             public int compare(Model o1, Model o2) {

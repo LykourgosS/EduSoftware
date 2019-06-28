@@ -110,7 +110,7 @@ public class Subsection extends EduEntity<Subsection> {
         return intent;
     }
 
-    public static Subsection getFromIntent(Intent intent, boolean toUpdate, int defaultIndex) {
+    public static Subsection getFromIntent(Intent intent, boolean hasId, int defaultIndex) {
         String title = intent.getStringExtra(Constant.EXTRA_TITLE);
         int index = intent.getIntExtra(Constant.EXTRA_INDEX, defaultIndex);
         String description = intent.getStringExtra(Constant.EXTRA_DESCRIPTION);
@@ -122,7 +122,7 @@ public class Subsection extends EduEntity<Subsection> {
 
         Subsection subsection = new Subsection(title, index, description, childCount, parentId, pdfUrl, pdfFilename, testQuestionCount);
 
-        if (toUpdate) {
+        if (hasId) {
             String id = intent.getStringExtra(Constant.EXTRA_ID);
             subsection.setId(id);
         }

@@ -52,7 +52,7 @@ public class Section extends EduEntity<Section> {
         return intent;
     }
 
-    public static Section getFromIntent(Intent intent, boolean toUpdate, int defaultIndex) {
+    public static Section getFromIntent(Intent intent, boolean hasId, int defaultIndex) {
         String title = intent.getStringExtra(Constant.EXTRA_TITLE);
         int index = intent.getIntExtra(Constant.EXTRA_INDEX, defaultIndex);
         String description = intent.getStringExtra(Constant.EXTRA_DESCRIPTION);
@@ -61,7 +61,7 @@ public class Section extends EduEntity<Section> {
 
         Section section = new Section(title, index, description, childCount, parentId);
 
-        if (toUpdate) {
+        if (hasId) {
             String id = intent.getStringExtra(Constant.EXTRA_ID);
             section.setId(id);
         }

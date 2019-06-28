@@ -77,7 +77,7 @@ public class Chapter extends EduEntity<Chapter> {
         return intent;
     }
 
-    public static Chapter getFromIntent(Intent intent, boolean toUpdate, int defaultIndex) {
+    public static Chapter getFromIntent(Intent intent, boolean hasId, int defaultIndex) {
         String title = intent.getStringExtra(Constant.EXTRA_TITLE);
         int index = intent.getIntExtra(Constant.EXTRA_INDEX, defaultIndex);
         String description = intent.getStringExtra(Constant.EXTRA_DESCRIPTION);
@@ -87,7 +87,7 @@ public class Chapter extends EduEntity<Chapter> {
 
         Chapter chapter = new Chapter(title, index, description, childCount, parentId, examQuestionCount);
 
-        if (toUpdate) {
+        if (hasId) {
             String id = intent.getStringExtra(Constant.EXTRA_ID);
             chapter.setId(id);
         }
