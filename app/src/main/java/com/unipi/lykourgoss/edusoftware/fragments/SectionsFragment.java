@@ -11,10 +11,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.unipi.lykourgoss.edusoftware.ChapterExamActivity;
 import com.unipi.lykourgoss.edusoftware.Constant;
 import com.unipi.lykourgoss.edusoftware.Dialog;
 import com.unipi.lykourgoss.edusoftware.R;
-import com.unipi.lykourgoss.edusoftware.activities.createedit.CreateEditQuestionActivity;
 import com.unipi.lykourgoss.edusoftware.activities.createedit.CreateEditSectionActivity;
 import com.unipi.lykourgoss.edusoftware.adapters.SectionAdapter;
 import com.unipi.lykourgoss.edusoftware.models.Chapter;
@@ -44,7 +44,7 @@ public class SectionsFragment extends MyFragment<Section, SectionsViewModel> imp
 
         Lesson lesson = currentViewModel.getLesson().getValue();
         Chapter chapter = currentViewModel.getChapter().getValue();
-        String subtitle =  "/" + lesson.getTitle() + "/" + chapter.getTitle();
+        String subtitle = "/" + lesson.getTitle() + "/" + chapter.getTitle();
         ((AppCompatActivity) getActivity()).getSupportActionBar().setSubtitle(subtitle);
 
         /* Set up viewModel */
@@ -95,12 +95,22 @@ public class SectionsFragment extends MyFragment<Section, SectionsViewModel> imp
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_item_exam_questions) {
             // todo open exams activity with id in extras
-            if (isEditEnabled){
+            if (isEditEnabled) {
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, new QuestionsFragment()).commit();
+            } else {
+                startExamActivity();
             }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void startExamActivity() {
+        Intent intent = new Intent(getActivity(), ChapterExamActivity.class);
+        Chapter chapter = currentViewModel.getChapter().getValue();
+        intent.putExtra(Constant.EXTRA_PARENT_ID, chapter.getId());
+        intent.putExtra(Constant.EXTRA_PARENT_TITLE, chapter.getTitle());
+        startActivity(intent);
     }
 
     @Override
@@ -120,7 +130,7 @@ public class SectionsFragment extends MyFragment<Section, SectionsViewModel> imp
     @Override
     protected void delete(Section section) {
         String deleteMsg = "Section deleted";
-        if (!viewModel.delete(section, viewModel.getChildCount())){
+        if (!viewModel.delete(section, viewModel.getChildCount())) {
             deleteMsg = "Section cannot be deleted, because it is not empty";
             adapter.notifyDataSetChanged();
         }

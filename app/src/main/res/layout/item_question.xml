@@ -13,93 +13,27 @@
     app:cardElevation="5sp">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/create_edit_question"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Question"
-                tools:text="Question example text. Question example text. Question example text. Question example text. Question example text. Question "
-                android:maxLines="7"
-                android:inputType="textMultiLine|textAutoComplete|textAutoCorrect" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!--<TextView
+        <!--Label for question-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginTop="8sp"
-            android:text="Answers"
-            style="@style/TextAppearance.AppCompat.Body1"
+            android:text="Question"
+            android:textColor="@android:color/black" />
+
+        <!--Description-->
+        <TextView
+            android:id="@+id/item_question_text"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />-->
-
-        <!-- Correct answer -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/create_edit_correct_answer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Correct answer"
-                android:inputType="textMultiLine|textAutoComplete|textAutoCorrect"
-                android:maxLines="3" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!--<View style="@style/Divider"/>-->
-
-        <!-- Wrong answer 1 -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/create_edit_wrong_answer_1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Wrong answer (1)"
-                android:inputType="textMultiLine|textAutoComplete|textAutoCorrect"
-                android:maxLines="3" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Wrong answer 2 -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/create_edit_wrong_answer_2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Wrong answer (2)"
-                android:inputType="textMultiLine|textAutoComplete|textAutoCorrect"
-                android:maxLines="3" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Wrong answer 3 -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/create_edit_wrong_answer_3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Wrong answer (3)"
-                android:inputType="textMultiLine|textAutoComplete|textAutoCorrect"
-                android:maxLines="3" />
-
-        </com.google.android.material.textfield.TextInputLayout>
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="3"
+            android:text="No description"
+            tools:text="This is an example question. This is an example question. This is an example question. This is an example question. This is an example question. This is an example question. This is an example question. This is an example question. "/>
 
     </LinearLayout>
 

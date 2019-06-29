@@ -78,7 +78,7 @@ public class QuestionsFragment extends MyFragment<Question, QuestionViewModel> {
 
     @Override
     public void onItemClick(Question question) {
-
+        // todo showDialog question details
     }
 
     @Override
