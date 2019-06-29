@@ -22,26 +22,26 @@ public class Chapter extends EduEntity<Chapter> {
 
     /*Unique properties*/
 
-    private int examQuestionCount;
+    private int questionCount;
 
     /*Constructors (default & all properties except id)*/
 
     public Chapter() {
     }
 
-    public Chapter(String title, int index, String description, int childCount, String parentId, int examQuestionCount) {
+    public Chapter(String title, int index, String description, int childCount, String parentId, int questionCount) {
         super(title, index, description, childCount, parentId);
-        this.examQuestionCount = examQuestionCount;
+        this.questionCount = questionCount;
     }
 
     /*Getters for this*/
 
-    public void setExamQuestionCount(int examQuestionCount) {
-        this.examQuestionCount = examQuestionCount;
+    public void setQuestionCount(int questionCount) {
+        this.questionCount = questionCount;
     }
 
-    public int getExamQuestionCount() {
-        return examQuestionCount;
+    public int getQuestionCount() {
+        return questionCount;
     }
 
     /* Override methods */
@@ -54,13 +54,13 @@ public class Chapter extends EduEntity<Chapter> {
                 getDescription().equals(chapter.getDescription()) &&
                 getChildCount() == chapter.getChildCount() &&
                 getParentId().equals(chapter.getParentId()) &&
-                getExamQuestionCount() == chapter.getExamQuestionCount();
+                getQuestionCount() == chapter.getQuestionCount();
     }
 
     @Override
     public Intent putToIntent() {
         Intent intent = super.putToIntent();
-        intent.putExtra(Constant.EXTRA_EXAM_QUESTION_COUNT, getExamQuestionCount());
+        intent.putExtra(Constant.EXTRA_QUESTION_COUNT, getQuestionCount());
         return intent;
     }
 
@@ -73,7 +73,7 @@ public class Chapter extends EduEntity<Chapter> {
         intent.putExtra(Constant.EXTRA_DESCRIPTION, getDescription());
         intent.putExtra(Constant.EXTRA_CHILD_COUNT, getChildCount());
         intent.putExtra(Constant.EXTRA_PARENT_ID, getParentId());
-        intent.putExtra(Constant.EXTRA_EXAM_QUESTION_COUNT, getExamQuestionCount());
+        intent.putExtra(Constant.EXTRA_QUESTION_COUNT, getQuestionCount());
         return intent;
     }
 
@@ -83,9 +83,9 @@ public class Chapter extends EduEntity<Chapter> {
         String description = intent.getStringExtra(Constant.EXTRA_DESCRIPTION);
         int childCount = intent.getIntExtra(Constant.EXTRA_CHILD_COUNT, 0);
         String parentId = intent.getStringExtra(Constant.EXTRA_PARENT_ID);
-        int examQuestionCount = intent.getIntExtra(Constant.EXTRA_EXAM_QUESTION_COUNT, 0);
+        int questionCount = intent.getIntExtra(Constant.EXTRA_QUESTION_COUNT, 0);
 
-        Chapter chapter = new Chapter(title, index, description, childCount, parentId, examQuestionCount);
+        Chapter chapter = new Chapter(title, index, description, childCount, parentId, questionCount);
 
         if (hasId) {
             String id = intent.getStringExtra(Constant.EXTRA_ID);

@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.unipi.lykourgoss.edusoftware.Constant;
@@ -26,7 +27,7 @@ import static android.app.Activity.RESULT_OK;
  * on 26,June,2019.
  */
 
-public class ChaptersFragment extends MyFragment<Chapter, ChaptersViewModel> {
+public class ChaptersFragment extends MyFragment<Chapter, ChaptersViewModel> implements Dialog.OnEditClickListener<Chapter> {
 
 
     public ChaptersFragment() {
@@ -63,7 +64,7 @@ public class ChaptersFragment extends MyFragment<Chapter, ChaptersViewModel> {
                 /* !ATTENTION! Creating chapter object and adding lessons's info and childCount */
                 Chapter chapter = Chapter.getFromIntent(data, false, chapterCount + 1);
                 chapter.setParentId(currentViewModel.getLesson().getValue().getId());
-                chapter.setExamQuestionCount(0);
+                chapter.setQuestionCount(0);
                 chapter.setChildCount(0);
                 viewModel.create(chapter, chapterCount);
 
@@ -82,20 +83,6 @@ public class ChaptersFragment extends MyFragment<Chapter, ChaptersViewModel> {
             }
         }
 
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        menu.getItem(0).setVisible(true);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.menu_item_exam_questions) {
-            // todo open exams activity with id in extras
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -138,5 +125,11 @@ public class ChaptersFragment extends MyFragment<Chapter, ChaptersViewModel> {
     @Override
     public void onItemLongClick(Chapter chapter) {
         Dialog.showChapterDetails(getActivity(), isEditEnabled, chapter, this);
+    }
+
+    @Override
+    public void onEditClick(AlertDialog dialog, Chapter chapter) {
+        startActivityToEdit(chapter);
+        dialog.cancel();
     }
 }

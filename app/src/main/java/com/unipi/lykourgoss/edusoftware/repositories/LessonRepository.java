@@ -17,10 +17,10 @@ import java.util.List;
  * on 26,June,2019.
  */
 
-public class LessonsRepository extends FirebaseRepository<Lesson> {
+public class LessonRepository extends FirebaseRepository<Lesson> {
 
-    public LessonsRepository(String modelRef, String parentId) {
-        super(modelRef, parentId);
+    public LessonRepository(String modelRef, String parentId) {
+        super();
 
         MODEL_REF = FirebaseDatabase.getInstance().getReference().child(modelRef);
 

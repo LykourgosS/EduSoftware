@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.DiffUtil;
 
 import com.unipi.lykourgoss.edusoftware.R;
 import com.unipi.lykourgoss.edusoftware.models.Lesson;
+import com.unipi.lykourgoss.edusoftware.viewholders.EduEntityViewHolder;
+import com.unipi.lykourgoss.edusoftware.viewholders.MyViewHolder;
 
 /**
  * Created by LykourgosS <lpsarantidis@gmail.com>
@@ -33,5 +35,13 @@ public class LessonAdapter extends MyAdapter<Lesson> {
 
     public LessonAdapter() {
         super(DIFF_CALLBACK);
+    }
+
+    @NonNull
+    @Override
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_edu_entity, parent, false);
+        return new EduEntityViewHolder(itemView);
     }
 }

@@ -11,15 +11,15 @@ import com.unipi.lykourgoss.edusoftware.repositories.FirebaseRepository;
 
 public class SectionsViewModel extends MyViewModel<Section> {
 
-    {
+    /*todo remove{
         _MODEL_REF = Section._SECTIONS_REF;
         _PARENT_ID_NAME = Section._PARENT_ID;
-    }
+    }*/
 
     @Override
     public void setParentId(String parentId) {
         this.parentId = parentId;
-        repository = new FirebaseRepository<>(_MODEL_REF, Chapter._CHAPTERS_REF, parentId, Section.class);
+        repository = new FirebaseRepository<>(Section._SECTIONS_REF, Chapter._CHAPTERS_REF, parentId, Section.class);
         listLiveData = repository.getAll();
     }
 }

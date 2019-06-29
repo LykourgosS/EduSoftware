@@ -23,7 +23,7 @@ import java.util.Map;
  * on 21,June,2019.
  */
 
-public class FirebaseRepository<Model extends EduEntity> {
+public class FirebaseRepository<Model extends EduEntity> implements MyRepository<Model>{
 
     protected MediatorLiveData<List<Model>> listMediatorLiveData;
 
@@ -33,7 +33,7 @@ public class FirebaseRepository<Model extends EduEntity> {
 
     protected String parentIdName;
 
-    protected FirebaseRepository(String modelRef, String parentId) {
+    protected FirebaseRepository() {
 
     }
 
@@ -42,10 +42,6 @@ public class FirebaseRepository<Model extends EduEntity> {
         this.parentIdName = parentIdName;
 
         MODEL_REF = FirebaseDatabase.getInstance().getReference().child(modelRef);
-        /*Query query = MODEL_REF.orderByChild(Model._INDEX);
-        if (parentId != null) { // display only EduEntities that belong to specific parent
-            query = MODEL_REF.orderByChild(Model._PARENT_ID).equalTo(parentId);
-        }*/
         Query query = MODEL_REF.orderByChild(Model._PARENT_ID).equalTo(parentId);
 
         // listMediatorLiveData is used to store either all or my
@@ -72,19 +68,20 @@ public class FirebaseRepository<Model extends EduEntity> {
     }
 
     // only SubsectionRepository use getNewId()
+    @Override
     public String getNewId() {
-        return MODEL_REF.push().getKey();
+        return null;
     }
 
+    @Override
     public void create(Model model, int parentChildCount) {
-        String key = MODEL_REF.push().getKey();
-        model.setId(key);
-        //MODEL_REF.child(key).setValue(model);
-        //MODEL_REF.child(parentIdName).child(EduEntity._CHILD_COUNT).setValue(parentChildCount + 1);
-
+        if (model.getId() == null){
+            String key = MODEL_REF.push().getKey();
+            model.setId(key);
+        }
         Map<String, Object> childUpdates = new HashMap<>();
         // ex. of newModelPath: /chapters/-LiJUUfXtIJqlGv6a2RE
-        String newModelPath = MODEL_REF.getKey() + "/" + key;
+        String newModelPath = MODEL_REF.getKey() + "/" + model.getId();
         // ex. of parentChildCountPath /lessons/-LiJUUfXtIJqlGv6a2RE/childCount
         String parentChildCountPath = parentIdName + "/" + parentId + "/" + EduEntity._CHILD_COUNT;
 
@@ -92,24 +89,24 @@ public class FirebaseRepository<Model extends EduEntity> {
         childUpdates.put(parentChildCountPath, parentChildCount + 1);
 
         MODEL_REF.getRoot().updateChildren(childUpdates);
-
     }
 
+    @Override
     public LiveData<List<Model>> getAll() {
         return listMediatorLiveData;
     }
 
+    @Override
     public void update(Model model) {
         String key = model.getId();
         MODEL_REF.child(key).setValue(model);
     }
 
     /* model cannot be deleted, unless it has no children */
+    @Override
     public boolean delete(Model model, int parentChildCount) {
         if (model.getChildCount() == 0) {
             String key = model.getId();
-            // todo the same as create
-            //MODEL_REF.child(key).setValue(null);
 
             Map<String, Object> childUpdates = new HashMap<>();
             // ex. of newModelPath: /chapters/-LiJUUfXtIJqlGv6a2RE
@@ -128,6 +125,7 @@ public class FirebaseRepository<Model extends EduEntity> {
         }
     }
 
+    @Override
     public void deleteAll(int parentChildCount) {
         for (Model model : getAll().getValue()) {
             delete(model, parentChildCount);

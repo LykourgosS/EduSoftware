@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.unipi.lykourgoss.edusoftware.Constant;
@@ -22,7 +23,7 @@ import static android.app.Activity.RESULT_OK;
  * on 24,June,2019.
  */
 
-public class LessonsFragment extends MyFragment<Lesson, LessonsViewModel> {
+public class LessonsFragment extends MyFragment<Lesson, LessonsViewModel> implements Dialog.OnEditClickListener<Lesson> {
 
     public LessonsFragment() {
         super(new LessonAdapter());
@@ -122,5 +123,11 @@ public class LessonsFragment extends MyFragment<Lesson, LessonsViewModel> {
     @Override
     public void onItemLongClick(final Lesson lesson) {
         Dialog.showLessonDetails(getActivity(), isEditEnabled, lesson, this);
+    }
+
+    @Override
+    public void onEditClick(AlertDialog dialog, Lesson lesson) {
+        startActivityToEdit(lesson);
+        dialog.cancel();
     }
 }

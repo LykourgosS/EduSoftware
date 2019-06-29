@@ -1,8 +1,7 @@
 package com.unipi.lykourgoss.edusoftware.viewmodels;
 
 import com.unipi.lykourgoss.edusoftware.models.Lesson;
-import com.unipi.lykourgoss.edusoftware.repositories.FirebaseRepository;
-import com.unipi.lykourgoss.edusoftware.repositories.LessonsRepository;
+import com.unipi.lykourgoss.edusoftware.repositories.LessonRepository;
 
 /**
  * Created by LykourgosS <lpsarantidis@gmail.com>
@@ -11,15 +10,15 @@ import com.unipi.lykourgoss.edusoftware.repositories.LessonsRepository;
 
 public class LessonsViewModel extends MyViewModel<Lesson> {
 
-    {
+    /*todo remove{
         _MODEL_REF = Lesson._LESSONS_REF;
         _PARENT_ID_NAME = Lesson._PARENT_ID;
-    }
+    }*/
 
     @Override
     public void setParentId(String parentId) {
         this.parentId = parentId;
-        repository = new LessonsRepository(_MODEL_REF, parentId);
+        repository = new LessonRepository(Lesson._LESSONS_REF, parentId);
         listLiveData = repository.getAll();
     }
 }

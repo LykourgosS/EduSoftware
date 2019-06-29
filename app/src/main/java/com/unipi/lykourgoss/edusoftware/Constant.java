@@ -25,20 +25,22 @@ public class Constant {
     public static final String EXTRA_AUTHOR_EMAIL =
             "com.unipi.lykourgoss.edusoftware.constants.EXTRA_AUTHOR_EMAIL";
 
-    // for Chapter
-    public static final String EXTRA_EXAM_QUESTION_COUNT =
-            "com.unipi.lykourgoss.edusoftware.constants.EXTRA_EXAM_QUESTION_COUNT";
+    // for Chapters, and Subsection
+    public static final String EXTRA_QUESTION_COUNT =
+            "com.unipi.lykourgoss.edusoftware.constants.EXTRA_QUESTION_COUNT";
 
     // for Subsection
     public static final String EXTRA_PDF_URL =
             "com.unipi.lykourgoss.edusoftware.constants.EXTRA_PDF_URL";
     public static final String EXTRA_PDF_FILENAME =
             "com.unipi.lykourgoss.edusoftware.constants.EXTRA_PDF_FILENAME";
-    public static final String EXTRA_TEST_QUESTION_COUNT =
-            "com.unipi.lykourgoss.edusoftware.constants.EXTRA_TEST_QUESTION_COUNT";
     // (used for creating new subsection)
     public static final String EXTRA_NEW_ID =
             "com.unipi.lykourgoss.edusoftware.constants.EXTRA_NEW_ID";
+
+    // used for creating new exam questions
+    public static final String EXTRA_PARENT_TITLE =
+            "com.unipi.lykourgoss.edusoftware.constants.EXTRA_PARENT_TITLE";
 
     // for CreateEdit requests
     public static final int CREATE_NEW_REQUEST = 1;

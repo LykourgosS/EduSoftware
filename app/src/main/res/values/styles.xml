@@ -14,4 +14,12 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
+    <!-- Divider, used in createEdit exam questions separate correct from wrong wrongAnswers -->
+    <style name="Divider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_margin">4sp</item>
+        <item name="android:layout_height">2sp</item>
+        <item name="android:background">@color/colorAccent</item>
+    </style>
+
 </resources>

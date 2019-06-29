@@ -11,6 +11,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".ChapterExamActivity"></activity>
+        <activity
+            android:name=".activities.createedit.CreateEditQuestionActivity"
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".filestoremove.PdfViewerActivityWebView"
             android:parentActivityName=".MainActivity" />

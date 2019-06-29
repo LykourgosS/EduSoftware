@@ -23,7 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.unipi.lykourgoss.edusoftware.R;
 import com.unipi.lykourgoss.edusoftware.filestoremove.codingflowexample.SwipeToDeleteCallback;
 import com.unipi.lykourgoss.edusoftware.adapters.LessonAdapter;
-import com.unipi.lykourgoss.edusoftware.adapters.OnItemClickListener;
+import com.unipi.lykourgoss.edusoftware.viewholders.OnItemClickListener;
 import com.unipi.lykourgoss.edusoftware.activities.createedit.CreateEditLessonActivity;
 import com.unipi.lykourgoss.edusoftware.models.Lesson;
 import com.unipi.lykourgoss.edusoftware.viewmodels.LessonsViewModel;

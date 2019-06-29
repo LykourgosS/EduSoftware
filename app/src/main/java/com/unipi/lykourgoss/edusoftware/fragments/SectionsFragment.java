@@ -2,14 +2,19 @@ package com.unipi.lykourgoss.edusoftware.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.unipi.lykourgoss.edusoftware.Constant;
 import com.unipi.lykourgoss.edusoftware.Dialog;
 import com.unipi.lykourgoss.edusoftware.R;
+import com.unipi.lykourgoss.edusoftware.activities.createedit.CreateEditQuestionActivity;
 import com.unipi.lykourgoss.edusoftware.activities.createedit.CreateEditSectionActivity;
 import com.unipi.lykourgoss.edusoftware.adapters.SectionAdapter;
 import com.unipi.lykourgoss.edusoftware.models.Chapter;
@@ -24,7 +29,7 @@ import static android.app.Activity.RESULT_OK;
  * on 26,June,2019.
  */
 
-public class SectionsFragment extends MyFragment<Section, SectionsViewModel> {
+public class SectionsFragment extends MyFragment<Section, SectionsViewModel> implements Dialog.OnEditClickListener<Section> {
 
     public SectionsFragment() {
         super(new SectionAdapter());
@@ -81,10 +86,35 @@ public class SectionsFragment extends MyFragment<Section, SectionsViewModel> {
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.getItem(0).setVisible(true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_item_exam_questions) {
+            // todo open exams activity with id in extras
+            if (isEditEnabled){
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new QuestionsFragment()).commit();
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     protected void startActivityToCreateNew() {
         Intent intent = new Intent(getActivity(), CreateEditSectionActivity.class);
         intent.putExtra(Constant.EXTRA_LAST_INDEX, viewModel.getChildCount() + 1);
         startActivityForResult(intent, Constant.CREATE_NEW_REQUEST);
+    }
+
+    @Override
+    protected void startActivityToEdit(Section section) {
+        Intent intent = section.putToIntent(getActivity());
+        intent.putExtra(Constant.EXTRA_LAST_INDEX, viewModel.getChildCount());
+        startActivityForResult(intent, Constant.EDIT_REQUEST);
     }
 
     @Override
@@ -113,5 +143,11 @@ public class SectionsFragment extends MyFragment<Section, SectionsViewModel> {
     @Override
     public void onItemLongClick(Section section) {
         Dialog.showSectionDetails(getActivity(), isEditEnabled, section, this);
+    }
+
+    @Override
+    public void onEditClick(AlertDialog dialog, Section section) {
+        startActivityToEdit(section);
+        dialog.cancel();
     }
 }

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activities.createedit.CreateEditQuestionActivity"
+    android:padding="16sp">
+
+    <!--<TextView
+        android:id="@+id/create_edit_chapter_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Chapter Title"
+        android:textAppearance="@android:style/TextAppearance.Large" />-->
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/create_edit_question"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Question"
+            tools:text="Question example text. Question example text. Question example text. Question example text. Question example text. Question "
+            android:maxLines="7"
+            android:inputType="textMultiLine|textAutoComplete|textAutoCorrect" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!--<TextView
+        android:layout_marginTop="8sp"
+        android:text="Answers"
+        style="@style/TextAppearance.AppCompat.Body1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />-->
+
+    <!-- Correct answer -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/create_edit_correct_answer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Correct answer"
+            android:inputType="textMultiLine|textAutoComplete|textAutoCorrect"
+            android:maxLines="3" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!--<View style="@style/Divider"/>-->
+
+    <!-- Wrong answer 1 -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/create_edit_wrong_answer_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Wrong answer (1)"
+            android:inputType="textMultiLine|textAutoComplete|textAutoCorrect"
+            android:maxLines="3" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Wrong answer 2 -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/create_edit_wrong_answer_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Wrong answer (2)"
+            android:inputType="textMultiLine|textAutoComplete|textAutoCorrect"
+            android:maxLines="3" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Wrong answer 3 -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/create_edit_wrong_answer_3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Wrong answer (3)"
+            android:inputType="textMultiLine|textAutoComplete|textAutoCorrect"
+            android:maxLines="3" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+</LinearLayout>

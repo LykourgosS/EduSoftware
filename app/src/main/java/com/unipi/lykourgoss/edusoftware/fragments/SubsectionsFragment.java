@@ -5,9 +5,11 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.unipi.lykourgoss.edusoftware.Constant;
+import com.unipi.lykourgoss.edusoftware.Dialog;
 import com.unipi.lykourgoss.edusoftware.PdfViewerActivity;
 import com.unipi.lykourgoss.edusoftware.activities.createedit.CreateEditSubsectionActivity;
 import com.unipi.lykourgoss.edusoftware.adapters.SubsectionAdapter;
@@ -68,7 +70,7 @@ public class SubsectionsFragment extends MyFragment<Subsection, SubsectionsViewM
                 // activity in Extras)
                 Subsection subsection = Subsection.getFromIntent(data, true, subsectionCount + 1);
                 subsection.setParentId(currentViewModel.getSection().getValue().getId());
-                subsection.setTestQuestionCount(0);
+                subsection.setQuestionCount(0);
                 subsection.setChildCount(0);
                 viewModel.create(subsection, subsectionCount);
 
@@ -97,6 +99,13 @@ public class SubsectionsFragment extends MyFragment<Subsection, SubsectionsViewM
         intent.putExtra(Constant.EXTRA_PARENT_ID, sectionId);
         intent.putExtra(Constant.EXTRA_LAST_INDEX, viewModel.getChildCount() + 1);
         startActivityForResult(intent, Constant.CREATE_NEW_REQUEST);
+    }
+
+    @Override
+    protected void startActivityToEdit(Subsection subsection) {
+        Intent intent = subsection.putToIntent(getActivity());
+        intent.putExtra(Constant.EXTRA_LAST_INDEX, viewModel.getChildCount());
+        startActivityForResult(intent, Constant.EDIT_REQUEST);
     }
 
     @Override

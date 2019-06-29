@@ -18,8 +18,6 @@ public abstract class CreateEditActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_white_24dp);
-
-        /*viewModel = ViewModelProviders.of(this).get(CurrentViewModel.class);*/
     }
 
     @Override

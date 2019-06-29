@@ -23,12 +23,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.unipi.lykourgoss.edusoftware.Constant;
 import com.unipi.lykourgoss.edusoftware.Dialog;
 import com.unipi.lykourgoss.edusoftware.R;
 import com.unipi.lykourgoss.edusoftware.adapters.MyAdapter;
-import com.unipi.lykourgoss.edusoftware.adapters.OnItemClickListener;
 import com.unipi.lykourgoss.edusoftware.models.EduEntity;
+import com.unipi.lykourgoss.edusoftware.viewholders.OnItemClickListener;
 import com.unipi.lykourgoss.edusoftware.viewmodels.CurrentViewModel;
 import com.unipi.lykourgoss.edusoftware.viewmodels.MyViewModel;
 
@@ -42,8 +41,8 @@ import pl.droidsonroids.gif.GifDrawable;
  * on 25,June,2019.
  */
 
-public abstract class MyFragment<Model extends EduEntity, VM extends MyViewModel> extends Fragment
-        implements View.OnClickListener, OnItemClickListener<Model>, Dialog.OnEditClickListener<Model> {
+public abstract class MyFragment<Model, VM extends MyViewModel> extends Fragment
+        implements View.OnClickListener, OnItemClickListener<Model> {
 
     protected LinearLayout linearLayoutNoItems;
     protected FloatingActionButton fabCreateNew;
@@ -207,11 +206,7 @@ public abstract class MyFragment<Model extends EduEntity, VM extends MyViewModel
      *     added at the end of the sections -> used to select index and
      * (3) start activity for result
      * */
-    protected void startActivityToEdit(Model model){
-        Intent intent = model.putToIntent(getActivity());
-        intent.putExtra(Constant.EXTRA_LAST_INDEX, viewModel.getChildCount());
-        startActivityForResult(intent, Constant.EDIT_REQUEST);
-    }
+    protected abstract void startActivityToEdit(Model model);
 
     protected abstract void delete(Model model);
 
@@ -228,14 +223,4 @@ public abstract class MyFragment<Model extends EduEntity, VM extends MyViewModel
      * */
     @Override
     public abstract void onItemLongClick(Model model);
-
-
-    /**
-     * Start activity to edit model (startActivityToEdit(...) is called)
-     * */
-    @Override
-    public void onEditClick(AlertDialog dialog, Model model) {
-        startActivityToEdit(model);
-        dialog.cancel();
-    }
 }

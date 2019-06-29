@@ -1,11 +1,9 @@
 package com.unipi.lykourgoss.edusoftware.viewmodels;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.unipi.lykourgoss.edusoftware.models.EduEntity;
-import com.unipi.lykourgoss.edusoftware.repositories.FirebaseRepository;
+import com.unipi.lykourgoss.edusoftware.repositories.MyRepository;
 
 import java.util.List;
 
@@ -14,31 +12,39 @@ import java.util.List;
  * on 22,June,2019.
  */
 
-public abstract class MyViewModel<Model extends EduEntity> extends ViewModel {
+public abstract class MyViewModel<T> extends ViewModel {
 
-    protected String _MODEL_REF;
+    protected MyRepository<T> repository;
 
-    protected String _PARENT_ID_NAME;
-
-    protected FirebaseRepository<Model> repository;
-
-    protected LiveData<List<Model>> listLiveData;
+    protected LiveData<List<T>> listLiveData;
 
     protected String parentId;
 
-    public void create(Model model, int parentChildCount) {
+    public void create(T model, int parentChildCount) {
         repository.create(model, parentChildCount);
     }
 
-    public LiveData<List<Model>> getAll() {
+    // cannot be implemented because T has not any method getId (can be fixed if T extends
+    // superclass which will contain getId() method)
+    public T getById(String id) {
+        List<T> list = listLiveData.getValue();
+        for (T t : list) {
+            if (t./*getId().*/equals(id)) {
+                return t;
+            }
+        }
+        return null;
+    }
+
+    public LiveData<List<T>> getAll() {
         return listLiveData;
     }
 
-    public void update(Model model) {
+    public void update(T model) {
         repository.update(model);
     }
 
-    public boolean delete(Model model, int parentChildCount) {
+    public boolean delete(T model, int parentChildCount) {
         return repository.delete(model, parentChildCount);
     }
 
@@ -49,18 +55,6 @@ public abstract class MyViewModel<Model extends EduEntity> extends ViewModel {
     /* don't need that use childCount property*/
     public int getChildCount() {
         return listLiveData.getValue().size();
-    }
-
-    public LiveData<Model> getModel(String id){
-        List<Model> models = listLiveData.getValue();
-        for (Model model : models){
-            if (model.getId() == id){
-                MutableLiveData<Model> modelLiveData = new MutableLiveData<Model>();
-                modelLiveData.setValue(model);
-                return modelLiveData;
-            }
-        }
-        return null;
     }
 
     /* used to load entities that belong to an entity (i.e lessons belong to users (authors),

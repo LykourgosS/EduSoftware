@@ -169,6 +169,9 @@ public class Dialog<Model extends EduEntity<Model>> {
     }
 
     public interface OnEditClickListener<Model extends EduEntity>{
+        /**
+         * Start activity to edit model (startActivityToEdit(...) is called)
+         * */
         void onEditClick(AlertDialog dialog, Model model);
     }
 }

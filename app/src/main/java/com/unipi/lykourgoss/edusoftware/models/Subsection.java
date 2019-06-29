@@ -12,7 +12,7 @@ public class Subsection extends EduEntity<Subsection> {
 
     public static final String _PDF_FILENAME = "pdfFilename";
 
-    public static final String _TEST_QUESTION_COUNT = "testQuestionCount";
+    public static final String _QUESTION_COUNT = "questionCount";
 
     /* Initialization of Subsection Firebase Reference */
 
@@ -31,18 +31,18 @@ public class Subsection extends EduEntity<Subsection> {
 
     private String pdfFilename;
 
-    private int testQuestionCount;
+    private int questionCount;
 
     /* Constructors (default & all properties except id) */
 
     public Subsection() {
     }
 
-    public Subsection(String title, int index, String description, int childCount, String parentId, String pdfUrl, String pdfFilename, int testQuestionCount) {
+    public Subsection(String title, int index, String description, int childCount, String parentId, String pdfUrl, String pdfFilename, int questionCount) {
         super(title, index, description, childCount, parentId);
         this.pdfUrl = pdfUrl;
         this.pdfFilename = pdfFilename;
-        this.testQuestionCount = testQuestionCount;
+        this.questionCount = questionCount;
     }
 
     /* Getters for this */
@@ -63,12 +63,12 @@ public class Subsection extends EduEntity<Subsection> {
         return pdfFilename;
     }
 
-    public void setTestQuestionCount(int testQuestionCount) {
-        this.testQuestionCount = testQuestionCount;
+    public void setQuestionCount(int questionCount) {
+        this.questionCount = questionCount;
     }
 
-    public int getTestQuestionCount() {
-        return testQuestionCount;
+    public int getQuestionCount() {
+        return questionCount;
     }
 
     /* Override methods */
@@ -83,7 +83,7 @@ public class Subsection extends EduEntity<Subsection> {
                 getParentId().equals(subsection.getParentId()) &&
                 getPdfUrl().equals(subsection.getPdfUrl()) &&
                 getPdfFilename().equals(subsection.getPdfFilename()) &&
-                getTestQuestionCount() == subsection.getTestQuestionCount();
+                getQuestionCount() == subsection.getQuestionCount();
     }
 
     @Override
@@ -91,7 +91,7 @@ public class Subsection extends EduEntity<Subsection> {
         Intent intent = super.putToIntent();
         intent.putExtra(Constant.EXTRA_PDF_URL, getPdfUrl());
         intent.putExtra(Constant.EXTRA_PDF_FILENAME, getPdfFilename());
-        intent.putExtra(Constant.EXTRA_TEST_QUESTION_COUNT, getTestQuestionCount());
+        intent.putExtra(Constant.EXTRA_QUESTION_COUNT, getQuestionCount());
         return intent;
     }
 
@@ -106,7 +106,7 @@ public class Subsection extends EduEntity<Subsection> {
         intent.putExtra(Constant.EXTRA_PARENT_ID, getParentId());
         intent.putExtra(Constant.EXTRA_PDF_URL, getPdfUrl());
         intent.putExtra(Constant.EXTRA_PDF_FILENAME, getPdfFilename());
-        intent.putExtra(Constant.EXTRA_TEST_QUESTION_COUNT, getTestQuestionCount());
+        intent.putExtra(Constant.EXTRA_QUESTION_COUNT, getQuestionCount());
         return intent;
     }
 
@@ -118,9 +118,9 @@ public class Subsection extends EduEntity<Subsection> {
         String parentId = intent.getStringExtra(Constant.EXTRA_PARENT_ID);
         String pdfUrl = intent.getStringExtra(Constant.EXTRA_PDF_URL);
         String pdfFilename = intent.getStringExtra(Constant.EXTRA_PDF_FILENAME);
-        int testQuestionCount = intent.getIntExtra(Constant.EXTRA_TEST_QUESTION_COUNT, 0);
+        int questionCount = intent.getIntExtra(Constant.EXTRA_QUESTION_COUNT, 0);
 
-        Subsection subsection = new Subsection(title, index, description, childCount, parentId, pdfUrl, pdfFilename, testQuestionCount);
+        Subsection subsection = new Subsection(title, index, description, childCount, parentId, pdfUrl, pdfFilename, questionCount);
 
         if (hasId) {
             String id = intent.getStringExtra(Constant.EXTRA_ID);
