@@ -193,6 +193,10 @@ public abstract class MyFragment<Model, VM extends MyViewModel> extends Fragment
         });
     }
 
+    protected void onBackPressed(){
+        getActivity().onBackPressed();
+    }
+
     /**
      * (1) put in Extras how many models are in viewModel (hypothesis: the new section will be
      *     added at the end of the sections -> used to select index and

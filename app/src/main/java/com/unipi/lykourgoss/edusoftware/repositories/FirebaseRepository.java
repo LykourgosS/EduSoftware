@@ -70,7 +70,7 @@ public class FirebaseRepository<Model extends EduEntity> implements MyRepository
     // only SubsectionRepository use getNewId()
     @Override
     public String getNewId() {
-        return null;
+        return MODEL_REF.push().getKey();
     }
 
     @Override
@@ -132,7 +132,7 @@ public class FirebaseRepository<Model extends EduEntity> implements MyRepository
         }
     }
 
-    private List<Model> sortByIndex(List<Model> models) {
+    protected List<Model> sortByIndex(List<Model> models) {
         Collections.sort(models, new Comparator<Model>() {
             @Override
             public int compare(Model o1, Model o2) {

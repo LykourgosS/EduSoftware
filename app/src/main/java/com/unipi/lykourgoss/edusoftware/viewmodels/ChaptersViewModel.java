@@ -22,4 +22,13 @@ public class ChaptersViewModel extends MyViewModel<Chapter> {
         repository = new FirebaseRepository<>(Chapter._CHAPTERS_REF, Lesson._LESSONS_REF, parentId, Chapter.class);
         listLiveData = repository.getAll();
     }
+
+    @Override
+    public boolean delete(Chapter model, int parentChildCount) {
+        // means chapter could be deleted only if it has not any sections or questions
+        if (model.getQuestionCount() == 0){
+            return super.delete(model, parentChildCount);
+        }
+        return false;
+    }
 }

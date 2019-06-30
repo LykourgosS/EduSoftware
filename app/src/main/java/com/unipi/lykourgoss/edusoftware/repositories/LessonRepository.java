@@ -42,7 +42,7 @@ public class LessonRepository extends FirebaseRepository<Lesson> {
                             for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                 lessons.add(snapshot.getValue(Lesson.class));
                             }
-                            listMediatorLiveData.postValue(sortByTitle(lessons));
+                            listMediatorLiveData.postValue(sortByIndex(lessons));
                         }
                     }).start();
                 } else {

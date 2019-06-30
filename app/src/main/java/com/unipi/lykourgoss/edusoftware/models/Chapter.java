@@ -9,6 +9,8 @@ import com.unipi.lykourgoss.edusoftware.activities.createedit.CreateEditChapterA
 
 public class Chapter extends EduEntity<Chapter> {
 
+    public static final String _QUESTION_COUNT ="questionCount";
+
     /* Initialization of Chapter Firebase Reference */
 
     public static final String _CHAPTERS_REF = "/chapters";

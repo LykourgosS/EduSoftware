@@ -96,6 +96,7 @@ public class Dialog<Model extends EduEntity<Model>> {
         ((TextView) dialogView.findViewById(R.id.dialog_details_chapter_title)).setText(chapter.getTitle());
         ((TextView) dialogView.findViewById(R.id.dialog_details_chapter_index)).setText(String.valueOf(chapter.getIndex()));
         ((TextView) dialogView.findViewById(R.id.dialog_details_chapter_child_count)).setText(String.valueOf(chapter.getChildCount()));
+        ((TextView) dialogView.findViewById(R.id.dialog_details_chapter_question_count)).setText(String.valueOf(chapter.getQuestionCount()));
         ((TextView) dialogView.findViewById(R.id.dialog_details_chapter_description)).setText(chapter.getDescription());
 
         final AlertDialog dialog = new AlertDialog.Builder(context)

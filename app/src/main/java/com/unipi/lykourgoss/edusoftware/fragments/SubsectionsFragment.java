@@ -90,6 +90,8 @@ public class SubsectionsFragment extends MyFragment<Subsection, SubsectionsViewM
         }
     }
 
+
+
     @Override
     protected void startActivityToCreateNew() {
         Intent intent = new Intent(getActivity(), CreateEditSubsectionActivity.class);

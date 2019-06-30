@@ -88,6 +88,7 @@ public class CreateEditSubsectionActivity extends CreateEditActivity implements 
             editTextPdfFilename.setText(intent.getStringExtra(Constant.EXTRA_PDF_FILENAME));
             numberPickerIndex.setValue(intent.getIntExtra(Constant.EXTRA_INDEX, 1));
         } else { // create new situation
+
             setTitle("Create Νew Subsection");
             //default is to add it as last...
             numberPickerIndex.setValue(lastIndex);
@@ -162,9 +163,9 @@ public class CreateEditSubsectionActivity extends CreateEditActivity implements 
 
         Intent data;
 
-        // pdfFilename property has the name of the pdf file, which is id.pdf
+        /*// pdfFilename property has the name of the pdf file, which is id.pdf
         // (i.e. -LiOKxqYE0A6jDHgd9yT.pdf)
-        pdfFilename = subsectionId + ".pdf";
+        pdfFilename = subsectionId + ".pdf";*/
 
         if (subsection != null) {
             // set every field that might have change to update
@@ -194,15 +195,24 @@ public class CreateEditSubsectionActivity extends CreateEditActivity implements 
 
     // upload file to firebase storage
     private void uploadPdf() {
-        if (pdfFilepath != null){
-            String filename = subsectionId + ".pdf";
-            String chapterId = getIntent().getStringExtra(Constant.EXTRA_PARENT_ID);
-            final StorageReference subsectionsRef = mStorageRef.child("subsections/").child(chapterId).child(filename);
+        if (pdfFilepath != null) {
+
             final AlertDialog uploadingDialog = Dialog.progressbarAction(this, Dialog.UPLOADING);
+
+            String filename = editTextPdfFilename.getText().toString();
+
+            if (subsection != null){ // means editing existing one so delete previous uploaded file
+                // delete previous uploaded file (delete path: subsections/(subsectionId))
+                StorageReference subsectionsRef = mStorageRef.child("subsections").child(subsectionId).child(subsection.getPdfFilename());
+                subsectionsRef.delete();
+            }
+
+            // upload the new one (path: subsections/(subsectionId)/(filename, i.e. example.pdf))
+            final StorageReference subsectionsRef = mStorageRef.child("subsections").child(subsectionId).child(filename);
             subsectionsRef.putFile(pdfFilepath).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                    if (task.isSuccessful()){
+                    if (task.isSuccessful()) {
                         subsectionsRef.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                             @Override
                             public void onComplete(@NonNull Task<Uri> task) {

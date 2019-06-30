@@ -8,6 +8,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.unipi.lykourgoss.edusoftware.models.Chapter;
 import com.unipi.lykourgoss.edusoftware.models.EduEntity;
 import com.unipi.lykourgoss.edusoftware.models.Question;
 import com.unipi.lykourgoss.edusoftware.viewmodels.FirebaseQueryLiveData;
@@ -69,7 +70,7 @@ public class QuestionRepository implements MyRepository<Question> {
     }
 
     @Override
-    public void create(Question question, int parentChildCount) {
+    public void create(Question question, int parentQuestionCount) {
         if (question.getId() == null){
             String key = MODEL_REF.push().getKey();
             question.setId(key);
@@ -77,11 +78,11 @@ public class QuestionRepository implements MyRepository<Question> {
         Map<String, Object> childUpdates = new HashMap<>();
         // ex. of newModelPath: /questions/-LiJUUfXtIJqlGv6a2RE
         String newModelPath = MODEL_REF.getKey() + "/" + question.getId();
-        // ex. of parentChildCountPath /chapters/-LiJUUfXtIJqlGv6a2RE/childCount
-        String parentChildCountPath = parentIdName + "/" + parentId + "/" + EduEntity._CHILD_COUNT;
+        // ex. of parentChildCountPath /chapters/-LiJUUfXtIJqlGv6a2RE/questionCount
+        String parentChildCountPath = parentIdName + "/" + parentId + "/" + Chapter._QUESTION_COUNT;
 
         childUpdates.put(newModelPath, question);
-        childUpdates.put(parentChildCountPath, parentChildCount + 1);
+        childUpdates.put(parentChildCountPath, parentQuestionCount + 1);
 
         MODEL_REF.getRoot().updateChildren(childUpdates);
     }
@@ -98,17 +99,17 @@ public class QuestionRepository implements MyRepository<Question> {
     }
 
     @Override
-    public boolean delete(Question question, int parentChildCount) {
+    public boolean delete(Question question, int parentQuestionCount) {
         String key = question.getId();
 
         Map<String, Object> childUpdates = new HashMap<>();
         // ex. of newModelPath: /question/-LiJUUfXtIJqlGv6a2RE
         String newModelPath = MODEL_REF.getKey() + "/" + key;
-        // ex. of parentChildCountPath /chapters/-LiJUUfXtIJqlGv6a2RE/childCount
-        String parentChildCountPath = parentIdName + "/" + parentId + "/" + EduEntity._CHILD_COUNT;
+        // ex. of parentChildCountPath /chapters/-LiJUUfXtIJqlGv6a2RE/questionCount
+        String parentChildCountPath = parentIdName + "/" + parentId + "/" + Chapter._QUESTION_COUNT;
 
         childUpdates.put(newModelPath, null);
-        childUpdates.put(parentChildCountPath, parentChildCount - 1);
+        childUpdates.put(parentChildCountPath, parentQuestionCount - 1);
 
         MODEL_REF.getRoot().updateChildren(childUpdates);
         return true;
