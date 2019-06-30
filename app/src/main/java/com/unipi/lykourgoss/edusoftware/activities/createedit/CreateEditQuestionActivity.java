@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.unipi.lykourgoss.edusoftware.Constant;
 import com.unipi.lykourgoss.edusoftware.R;
 import com.unipi.lykourgoss.edusoftware.models.Question;
+import com.unipi.lykourgoss.edusoftware.models.Subsection;
 import com.unipi.lykourgoss.edusoftware.viewmodels.MyViewModel;
 import com.unipi.lykourgoss.edusoftware.viewmodels.QuestionViewModel;
 
@@ -41,10 +42,6 @@ public class CreateEditQuestionActivity extends CreateEditActivity implements Ob
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_edit_question);
 
-        viewModel = ViewModelProviders.of(this).get(QuestionViewModel.class);
-        viewModel.setParentId(getIntent().getStringExtra(Constant.EXTRA_PARENT_ID));
-        viewModel.getAll().observe(this, this);
-
         editTextQuestion = findViewById(R.id.create_edit_question);
 
         editTextCorrectAnswer = findViewById(R.id.create_edit_correct_answer);
@@ -61,6 +58,10 @@ public class CreateEditQuestionActivity extends CreateEditActivity implements Ob
         String parentTitle = intent.getStringExtra(Constant.EXTRA_PARENT_TITLE);
 
         getSupportActionBar().setSubtitle(parentTitle);
+
+        viewModel = ViewModelProviders.of(this).get(QuestionViewModel.class);
+        viewModel.setParentId(getIntent().getStringExtra(Constant.EXTRA_PARENT_ID));
+        viewModel.getAll().observe(this, this);
     }
 
     @Override
@@ -99,7 +100,8 @@ public class CreateEditQuestionActivity extends CreateEditActivity implements Ob
             return;
         }
         Set<String> uniqueList = new HashSet<>(wrongAnswerList);
-        if (uniqueList.size() != wrongAnswerList.size()){
+        uniqueList.add(correctAnswer);
+        if (uniqueList.size()  != wrongAnswerList.size() + 1){ // +1 for the correct one
             Toast.makeText(this, "Answers must be unique", Toast.LENGTH_SHORT).show();
             return;
         }

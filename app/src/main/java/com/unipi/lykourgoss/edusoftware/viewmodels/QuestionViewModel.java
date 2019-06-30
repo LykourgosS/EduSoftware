@@ -25,7 +25,7 @@ public class QuestionViewModel extends MyViewModel<Question> {
 
     public Question getQuestionById(String id, List<Question> questionList) {
         for (Question question : questionList) {
-            if (question.getId() == id) {
+            if (question.getId().equals(id)) {
                 return question;
             }
         }

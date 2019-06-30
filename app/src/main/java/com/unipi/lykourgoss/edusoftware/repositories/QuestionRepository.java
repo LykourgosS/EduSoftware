@@ -9,7 +9,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.unipi.lykourgoss.edusoftware.models.Chapter;
-import com.unipi.lykourgoss.edusoftware.models.EduEntity;
 import com.unipi.lykourgoss.edusoftware.models.Question;
 import com.unipi.lykourgoss.edusoftware.viewmodels.FirebaseQueryLiveData;
 
@@ -54,7 +53,7 @@ public class QuestionRepository implements MyRepository<Question> {
                             for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                 questions.add(snapshot.getValue(Question.class));
                             }
-                            listMediatorLiveData.postValue(shuffleList(questions));
+                            listMediatorLiveData.postValue(questions);
                         }
                     }).start();
                 } else {
@@ -66,7 +65,7 @@ public class QuestionRepository implements MyRepository<Question> {
 
     @Override
     public String getNewId() {
-        return null;
+        return MODEL_REF.push().getKey();
     }
 
     @Override

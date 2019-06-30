@@ -6,6 +6,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
@@ -15,13 +16,19 @@ import com.github.barteksc.pdfviewer.PDFView;
 import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener;
 import com.github.barteksc.pdfviewer.listener.OnPageChangeListener;
 import com.github.barteksc.pdfviewer.scroll.DefaultScrollHandle;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.unipi.lykourgoss.edusoftware.models.Subsection;
 import com.unipi.lykourgoss.edusoftware.viewmodels.SubsectionsViewModel;
 
+import java.io.File;
 import java.util.List;
 
 public class PdfViewerActivity extends AppCompatActivity
-        implements Observer<List<Subsection>>, OnLoadCompleteListener, OnPageChangeListener {
+        implements Observer<List<Subsection>>, OnLoadCompleteListener, OnPageChangeListener, OnCompleteListener<FileDownloadTask.TaskSnapshot> {
 
     private PDFView pdfView;
 
@@ -31,10 +38,16 @@ public class PdfViewerActivity extends AppCompatActivity
 
     private AlertDialog dialog;
 
+    private StorageReference subsectionsReference;
+
+    private File localFile;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pdf_viewer);
+
+        subsectionsReference = FirebaseStorage.getInstance().getReference().child("subsections");
 
         pdfView = findViewById(R.id.pdf_view);
 
@@ -46,12 +59,16 @@ public class PdfViewerActivity extends AppCompatActivity
     private void loadPdf() {
         if (subsection != null) {
             setTitle(subsection.getTitle());
-            String path = String.format("subsections/%s/%s", subsection.getParentId(), subsection.getPdfFilename());
-            pdfView.fromAsset(path)
-                    .onPageChange(this)
-                    .scrollHandle(new DefaultScrollHandle(this))
-                    .onLoad(this)
-                    .load();
+            try{
+                localFile = File.createTempFile(subsection.getPdfFilename(), null, this.getCacheDir());
+                subsectionsReference.child(subsection.getId()).child(subsection.getPdfFilename())
+                        .getFile(localFile)
+                        .addOnCompleteListener(this);
+            }catch (Exception e){
+                dialog.cancel();
+                Toast.makeText(this, "Error loading pdf", Toast.LENGTH_SHORT).show();
+                finish();
+            }
         } else {
             dialog.cancel();
             Toast.makeText(this, "Error loading pdf", Toast.LENGTH_SHORT).show();
@@ -98,5 +115,26 @@ public class PdfViewerActivity extends AppCompatActivity
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onComplete(@NonNull Task<FileDownloadTask.TaskSnapshot> task) {
+        if (task.isSuccessful()) {
+            pdfView.fromFile(localFile)
+                    .onPageChange(PdfViewerActivity.this)
+                    .scrollHandle(new DefaultScrollHandle(PdfViewerActivity.this))
+                    .onLoad(PdfViewerActivity.this)
+                    .load();
+        } else {
+            dialog.cancel();
+            Toast.makeText(PdfViewerActivity.this, "Error loading pdf", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        localFile.delete();
+        super.onDestroy();
     }
 }

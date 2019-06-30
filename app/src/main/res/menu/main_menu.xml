@@ -1,21 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
     <item
         android:id="@+id/menu_item_exam_questions"
-        android:title="Exam questions"
+        android:title="Exam"
         android:visible="false"
+        tools:visible="true"
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_format_list_bulleted_white_24dp"/>
     <item
         android:id="@+id/menu_item_delete_all"
         android:title="Delete all"
+        tools:visible="true"
         android:visible="false"
         app:showAsAction="never" />
     <item
         android:id="@+id/menu_item_help"
         android:title="Help"
-        app:showAsAction="ifRoom"
+        app:showAsAction="never"
         android:icon="@drawable/ic_help_white_24dp"/>
     <item
         android:id="@+id/menu_item_about"

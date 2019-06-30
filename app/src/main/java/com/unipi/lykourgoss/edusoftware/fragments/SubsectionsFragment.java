@@ -128,15 +128,10 @@ public class SubsectionsFragment extends MyFragment<Subsection, SubsectionsViewM
 
     @Override
     public void onItemClick(Subsection subsection) {
-        if (fileInAssets(subsection)){ // todo not in Assets.. if is downloaded!
-            Intent intent = new Intent(getActivity(), PdfViewerActivity.class);
-            intent.putExtra(Constant.EXTRA_ID, subsection.getId());
-            intent.putExtra(Constant.EXTRA_PARENT_ID, subsection.getParentId());
-            startActivity(intent);
-        } else {
-            // todo dialogDownload pdf (if ok execute downloadPdf)
-            // todo make downloadPdf() method!
-        }
+        Intent intent = new Intent(getActivity(), PdfViewerActivity.class);
+        intent.putExtra(Constant.EXTRA_ID, subsection.getId());
+        intent.putExtra(Constant.EXTRA_PARENT_ID, subsection.getParentId());
+        startActivity(intent);
     }
 
     @Override
@@ -146,7 +141,7 @@ public class SubsectionsFragment extends MyFragment<Subsection, SubsectionsViewM
         }
     }
 
-    private boolean fileInAssets(Subsection subsection) {
+    /*private boolean fileInAssets(Subsection subsection) {
         String path = "subsections/" + subsection.getParentId();
         try {
             for (String filename : getActivity().getAssets().list(path)){
@@ -158,5 +153,5 @@ public class SubsectionsFragment extends MyFragment<Subsection, SubsectionsViewM
             return false;
         }
         return false;
-    }
+    }*/
 }

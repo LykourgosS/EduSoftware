@@ -88,18 +88,26 @@ public class SectionsFragment extends MyFragment<Section, SectionsViewModel> imp
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        menu.getItem(0).setVisible(true);
+        if (isEditEnabled){
+            menu.getItem(0).setVisible(true);
+        } else if (currentViewModel.getChapter().getValue().getQuestionCount() > 0) {
+            menu.getItem(0).setVisible(true);
+        }
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_item_exam_questions) {
-            // todo open exams activity with id in extras
             if (isEditEnabled) {
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, new QuestionsFragment()).commit();
             } else {
                 startExamActivity();
+                /*if (currentViewModel.getChapter().getValue().getQuestionCount() > 0) {
+                    startExamActivity();
+                } else {
+                    Toast.makeText(getActivity(), "Chapter does not have an exam", Toast.LENGTH_SHORT).show();
+                }*/
             }
         }
         return super.onOptionsItemSelected(item);

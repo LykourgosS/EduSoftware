@@ -23,10 +23,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="@android:style/TextAppearance.Large"
-                tools:text="Question" />
+                android:text="Question" />
 
             <TextView
-                android:id="@+id/exam_question"
+                android:id="@+id/text_view_exam_question"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8sp"
@@ -50,36 +50,35 @@
                 android:text="Answers" />
 
             <RadioGroup
-                android:id="@+id/exam_answers"
+                android:id="@+id/radio_button_exam_answers"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="8sp">
 
                 <RadioButton
-                    android:id="@+id/exam_answer_1"
+                    android:id="@+id/radio_button_exam_answer_1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:checked="true"
                     android:maxLines="3"
                     tools:text="Answer one" />
 
                 <RadioButton
-                    android:id="@+id/exam_answer_2"
+                    android:id="@+id/radio_button_exam_answer_2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:maxLines="3"
                     tools:text="Answer two" />
 
                 <RadioButton
-                    android:id="@+id/exam_answer_3"
+                    android:id="@+id/radio_button_exam_answer_3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:maxLines="3"
                     tools:text="Answer three" />
 
                 <RadioButton
-                    android:id="@+id/exam_answer_4"
+                    android:id="@+id/radio_button_exam_answer_4"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:maxLines="3"
@@ -99,16 +98,17 @@
         android:layout_margin="32sp"
         android:src="@drawable/ic_navigate_next_next_24dp"
         app:elevation="4sp"
-        app:fabSize="normal" />
+        app:fabSize="normal"
+        android:visibility="gone"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_check_question"
+        android:id="@+id/fab_check_answer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center"
+        android:layout_gravity="bottom|end"
         android:layout_margin="32sp"
         android:src="@drawable/ic_check_circle_white_24dp"
         app:elevation="4sp"
-        app:fabSize="normal" />
+        app:fabSize="normal"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

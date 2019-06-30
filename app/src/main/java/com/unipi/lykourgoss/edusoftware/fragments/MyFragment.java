@@ -193,6 +193,7 @@ public abstract class MyFragment<Model, VM extends MyViewModel> extends Fragment
         });
     }
 
+    // todo fragment navigation
     protected void onBackPressed(){
         getActivity().onBackPressed();
     }

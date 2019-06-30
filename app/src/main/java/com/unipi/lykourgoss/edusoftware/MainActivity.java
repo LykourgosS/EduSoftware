@@ -79,7 +79,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (menuItem.getItemId()) {
             case R.id.nav_all_lessons:
                 currentViewModel.setEditEnabled(false);
-                // todo show all lessons (parentId = null)
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, new LessonsFragment()).commit();
                 break;
@@ -109,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START); // START means the drawer is on the left side
         } else {
+            //todo fragment navigation
             super.onBackPressed();
         }
     }
@@ -123,10 +123,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            /*case R.id.menu_item_delete_all:
-                // will be implemented by fragment that currently is displayed,
-                // delete all items that are being displayed
-                return false;*/
             case R.id.menu_item_help:
                 // help dialog
                 // todo add help case: dialog for how to edit, create, delete, delete all, long click for details
