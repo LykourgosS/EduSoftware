@@ -169,6 +169,22 @@ public class Dialog<Model extends EduEntity<Model>> {
         return null;
     }
 
+    public static AlertDialog simpleDialog(Context context, String title, String message){
+        AlertDialog dialog = new AlertDialog.Builder(context)
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                })
+                .setTitle(title)
+                .setMessage(message)
+                .create();
+        dialog.show();
+        return dialog;
+    }
+
     public interface OnEditClickListener<Model extends EduEntity>{
         /**
          * Start activity to edit model (startActivityToEdit(...) is called)

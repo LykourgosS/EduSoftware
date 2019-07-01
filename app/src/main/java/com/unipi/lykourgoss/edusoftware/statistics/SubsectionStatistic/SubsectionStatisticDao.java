@@ -1,4 +1,4 @@
-package com.unipi.lykourgoss.edusoftware.filestoremove.codingflowexample.statistics.SubsectionStatistic;
+package com.unipi.lykourgoss.edusoftware.statistics.SubsectionStatistic;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
@@ -33,4 +33,10 @@ public interface SubsectionStatisticDao {
 
     @Query("SELECT * FROM subsection_statistic_table ORDER BY dateTime ASC")
     LiveData<List<SubsectionStatistic>> getAll();
+
+    @Query("SELECT COUNT(subsectionPdfFilename) FROM subsection_statistic_table WHERE subsectionPdfFilename = :pdfFilename")
+    int getTotalTimesOpen(String pdfFilename);
+
+    @Query("SELECT SUM(millisLeftOpen) / 60000 FROM subsection_statistic_table WHERE subsectionPdfFilename = :pdfFilename")
+    long getTotalTimeInMin(String pdfFilename);
 }

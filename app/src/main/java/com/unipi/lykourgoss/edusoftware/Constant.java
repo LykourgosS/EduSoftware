@@ -1,5 +1,8 @@
 package com.unipi.lykourgoss.edusoftware;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by LykourgosS <lpsarantidis@gmail.com>
  * on 28,June,2019.
@@ -50,4 +53,23 @@ public class Constant {
     // for passing last available index to CreateEditActivity
     // (i.e. EXTRA_LAST_INDEX = how many chapters there are in a lesson)
     public static final String EXTRA_LAST_INDEX = "com.unipi.lykourgoss.edusoftware.constants.EXTRA_LAST_INDEX";
+
+    // used for the statistics
+    /**
+     *
+     * @return yyyy-MM-dd HH:mm:ss format date as string
+     */
+    public static String getCurrentTimeStamp(){
+        try {
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String currentDateTime = dateFormat.format(new Date()); // Find today's date
+
+            return currentDateTime;
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            return null;
+        }
+    }
 }

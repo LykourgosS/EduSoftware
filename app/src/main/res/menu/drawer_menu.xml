@@ -13,9 +13,9 @@
             android:icon="@drawable/ic_mode_edit_black_24dp"
             android:title="My Lessons" />
         <item
-            android:id="@+id/nav_user_settings"
-            android:icon="@drawable/ic_person_outline_black_24dp"
-            android:title="User settings" />
+            android:id="@+id/nav_sign_out"
+            android:icon="@drawable/ic_exit_to_app_black_24dp"
+            android:title="Sign out" />
     </group>
 
     <item android:title="Communicate">

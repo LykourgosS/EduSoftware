@@ -1,6 +1,7 @@
 package com.unipi.lykourgoss.edusoftware;
 
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -22,6 +23,8 @@ import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.unipi.lykourgoss.edusoftware.models.Subsection;
+import com.unipi.lykourgoss.edusoftware.statistics.SubsectionStatistic.SubsectionStatistic;
+import com.unipi.lykourgoss.edusoftware.statistics.SubsectionStatistic.SubsectionStatisticViewModel;
 import com.unipi.lykourgoss.edusoftware.viewmodels.SubsectionsViewModel;
 
 import java.io.File;
@@ -42,10 +45,16 @@ public class PdfViewerActivity extends AppCompatActivity
 
     private File localFile;
 
+    private SubsectionStatisticViewModel statisticViewModel;
+
+    private long startTime; // used for counting time user has pdf open
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pdf_viewer);
+
+        statisticViewModel = ViewModelProviders.of(this).get(SubsectionStatisticViewModel.class);
 
         subsectionsReference = FirebaseStorage.getInstance().getReference().child("subsections");
 
@@ -102,13 +111,16 @@ public class PdfViewerActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.subsection_menu, menu);
+        menuInflater.inflate(R.menu.statistics_menu, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.menu_item_statistics:
+                // todo statistics dialog
+                return true;
             case R.id.menu_item_subsection_details:
                 // todo Dialog.showSubsectionDetails(getActivity(), isEditEnabled, subsection, this);
                 return true;
@@ -120,6 +132,9 @@ public class PdfViewerActivity extends AppCompatActivity
     @Override
     public void onComplete(@NonNull Task<FileDownloadTask.TaskSnapshot> task) {
         if (task.isSuccessful()) {
+
+            startTime = SystemClock.elapsedRealtime();
+
             pdfView.fromFile(localFile)
                     .onPageChange(PdfViewerActivity.this)
                     .scrollHandle(new DefaultScrollHandle(PdfViewerActivity.this))
@@ -133,8 +148,10 @@ public class PdfViewerActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onDestroy() {
-        localFile.delete();
-        super.onDestroy();
+    protected void onPause() {
+        long leftOpen = SystemClock.elapsedRealtime() - startTime;
+        SubsectionStatistic statistic = new SubsectionStatistic(subsection.getId(), subsection.getTitle(), subsection.getPdfFilename(), leftOpen);
+        statisticViewModel.insert(statistic);
+        super.onPause();
     }
 }

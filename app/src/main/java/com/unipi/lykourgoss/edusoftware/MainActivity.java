@@ -9,18 +9,23 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
-import com.squareup.picasso.Picasso;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.unipi.lykourgoss.edusoftware.fragments.LessonsFragment;
 import com.unipi.lykourgoss.edusoftware.models.User;
 import com.unipi.lykourgoss.edusoftware.viewmodels.CurrentViewModel;
@@ -29,10 +34,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private DrawerLayout drawer;
 
+    private NavigationView navigationView;
+
     private CurrentViewModel currentViewModel;
 
-    // Choose an arbitrary request code value
-    private static final int RC_SIGN_IN = 123;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,29 +48,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // get user info
-        currentViewModel = ViewModelProviders.of(this).get(CurrentViewModel.class);
-        // todo after SignInActivity (in which we set the User of our currentViewModel)
-        currentViewModel.setUser(new User("asdfg", "a@t.ler", "Anna",
-                "https://www.greeka.com/photos/dodecanese/leros/hero/leros-island-1920.jpg"));
-        User user = currentViewModel.getUser();
-
         drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-        // set user info on navigation header of drawer
-        View headerView = navigationView.getHeaderView(0);
-        ((TextView) headerView.findViewById(R.id.nav_header_user_name)).setText(user.getName());
-        ((TextView) headerView.findViewById(R.id.nav_header_user_email)).setText(user.getEmail());
-        Picasso.get().load(user.getPhotoUri()).into((ImageView) headerView.findViewById(R.id.nav_header_user_photo));
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState(); // takes care of rotating the hamburger icon
 
-        //checkIfSignedIn();
+        mAuth = FirebaseAuth.getInstance();
+        if (mAuth.getCurrentUser() == null) {
+            finish();
+            startActivity(new Intent(this, SignInActivity.class));
+        }
+
+        currentViewModel = ViewModelProviders.of(this).get(CurrentViewModel.class);
+
+        String uid = mAuth.getCurrentUser().getUid();
+        String userEmail = mAuth.getCurrentUser().getEmail();
+
+        currentViewModel.setUser(new User(uid, userEmail));
+
+        // set user info on navigation header of drawer
+        View headerView = navigationView.getHeaderView(0);
+        /*((TextView) headerView.findViewById(R.id.nav_header_user_name)).setText(currentViewModel.getUser().getValue().getName());*/
+        ((TextView) headerView.findViewById(R.id.nav_header_user_email)).setText(currentViewModel.getUser().getValue().getEmail());
+        /*Picasso.get().load(user.getPhotoUri()).into((ImageView) headerView.findViewById(R.id.nav_header_user_photo));*/
 
         if (savedInstanceState == null) {
             currentViewModel.setEditEnabled(false);
@@ -87,8 +97,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, new LessonsFragment()).commit();
                 break;
-            case R.id.nav_user_settings:
-                // todo user setting fragment
+            case R.id.nav_sign_out:
+                mAuth.signOut();
+                finish();
+                startActivity(new Intent(this, SignInActivity.class));
                 break;
             case R.id.nav_share:
                 // todo copy to clipboard Google Drive link of the apk

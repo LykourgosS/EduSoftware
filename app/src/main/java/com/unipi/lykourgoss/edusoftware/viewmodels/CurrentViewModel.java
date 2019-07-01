@@ -45,8 +45,8 @@ public class CurrentViewModel extends ViewModel {
         this.user.setValue(user);
     }
 
-    public User getUser(){
-        return user.getValue();
+    public LiveData<User> getUser(){
+        return user;
     }
 
     /* Current Lesson */

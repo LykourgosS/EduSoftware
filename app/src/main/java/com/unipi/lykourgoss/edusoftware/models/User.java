@@ -18,6 +18,11 @@ public class User {
     public User() {
     }
 
+    public User(String id, String email) {
+        this.id = id;
+        this.email = email;
+    }
+
     public User(String id, String email, String name, String photoUri) {
         this.id = id;
         this.email = email;

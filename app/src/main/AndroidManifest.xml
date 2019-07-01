@@ -15,16 +15,13 @@
             android:name=".ChapterExamActivity"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".activities.createedit.CreateEditQuestionActivity"
-            android:parentActivityName=".MainActivity" />
-        <activity
-            android:name=".filestoremove.PdfViewerActivityWebView"
-            android:parentActivityName=".MainActivity" />
-        <activity
             android:name=".PdfViewerActivity"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".activities.createedit.CreateEditSubsectionActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".activities.createedit.CreateEditQuestionActivity"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".activities.createedit.CreateEditSectionActivity"
@@ -36,12 +33,10 @@
             android:name=".activities.createedit.CreateEditLessonActivity"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".filestoremove.LessonsActivity"
-            android:launchMode="singleTop"
-            android:parentActivityName=".MainActivity" /> <!-- TODO see for proper launch mode -->
-        <activity
             android:name=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".CreateAccountActivity" />
+        <activity android:name=".SignInActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />

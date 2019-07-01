@@ -1,4 +1,4 @@
-package com.unipi.lykourgoss.edusoftware.filestoremove.codingflowexample.statistics.ExamStatistic;
+package com.unipi.lykourgoss.edusoftware.statistics.ExamStatistic;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
@@ -33,4 +33,13 @@ public interface ExamStatisticDao {
 
     @Query("SELECT * FROM exam_statistic_table ORDER BY dateTime ASC")
     LiveData<List<ExamStatistic>> getAll();
+
+    @Query("SELECT COUNT(id) FROM exam_statistic_table WHERE chapterId = :chapterId GROUP BY id")
+    int getTotalTries(String chapterId);
+
+    @Query("SELECT COUNT(id) FROM exam_statistic_table WHERE chapterId = :chapterId AND passTest = :pass GROUP BY id")
+    int getTotalFailOrPass(String chapterId, boolean pass);
+
+    @Query("SELECT SUM(millisDuration) / 60000 FROM exam_statistic_table WHERE chapterId = :chapterId")
+    long getTotalTimeInMin(String chapterId);
 }

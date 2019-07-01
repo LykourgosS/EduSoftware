@@ -36,7 +36,7 @@ public class LessonsFragment extends MyFragment<Lesson, LessonsViewModel> implem
         /* Set title and subtitle */
 
         String title = "My Lessons";
-        String userId = currentViewModel.getUser().getId();
+        String userId = currentViewModel.getUser().getValue().getId();
         if (!isEditEnabled) {
             userId = null;
             title = "All Lessons";
@@ -61,8 +61,8 @@ public class LessonsFragment extends MyFragment<Lesson, LessonsViewModel> implem
 
                 /* !ATTENTION! Creating lesson object and adding user's info and childCount */
                 Lesson lesson = Lesson.getFromIntent(data, false, lessonCount + 1);
-                lesson.setParentId(currentViewModel.getUser().getId());
-                lesson.setAuthorEmail(currentViewModel.getUser().getEmail());
+                lesson.setParentId(currentViewModel.getUser().getValue().getId());
+                lesson.setAuthorEmail(currentViewModel.getUser().getValue().getEmail());
                 lesson.setChildCount(0);
                 viewModel.create(lesson, lessonCount);
 
