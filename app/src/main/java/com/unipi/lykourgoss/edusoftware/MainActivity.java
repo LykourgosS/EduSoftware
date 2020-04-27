@@ -136,11 +136,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_item_help:
-                // help dialog
-                // todo add help case: dialog for how to edit, create, delete, delete all, long click for details
+                // help activity
+                startActivity(new Intent(this, HelpActivity.class));
                 return true;
             case R.id.menu_item_about:
-                // todo about dialog
+                String message = "@Filothei\n@Konstantinos\n@LykourgosS.";
+                Dialog.simpleDialog(this, "About", message);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

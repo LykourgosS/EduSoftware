@@ -6,7 +6,11 @@
         app:showAsAction="never"
         android:title="Statistics" />
     <item
-        android:id="@+id/menu_item_subsection_details"
+        android:id="@+id/menu_item_clear_statistics"
+        app:showAsAction="never"
+        android:title="Clear statistics" />
+    <item
+        android:id="@+id/menu_item_help"
         app:showAsAction="never"
         android:icon="@drawable/ic_info_white_24dp"
         android:title="Help" />

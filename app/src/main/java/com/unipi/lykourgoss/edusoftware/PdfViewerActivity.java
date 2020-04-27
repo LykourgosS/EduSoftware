@@ -1,5 +1,6 @@
 package com.unipi.lykourgoss.edusoftware;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.Menu;
@@ -49,12 +50,12 @@ public class PdfViewerActivity extends AppCompatActivity
 
     private long startTime; // used for counting time user has pdf open
 
+    private List<SubsectionStatistic> statistics;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pdf_viewer);
-
-        statisticViewModel = ViewModelProviders.of(this).get(SubsectionStatisticViewModel.class);
 
         subsectionsReference = FirebaseStorage.getInstance().getReference().child("subsections");
 
@@ -63,6 +64,19 @@ public class PdfViewerActivity extends AppCompatActivity
         viewModel = ViewModelProviders.of(this).get(SubsectionsViewModel.class);
         viewModel.setParentId(getIntent().getStringExtra(Constant.EXTRA_PARENT_ID));
         viewModel.getAll().observe(this, this);
+
+        setUpStatisticsViewModel();
+    }
+
+    private void setUpStatisticsViewModel() {
+        statisticViewModel = ViewModelProviders.of(this).get(SubsectionStatisticViewModel.class);
+        statisticViewModel.getAll().observe(this, new Observer<List<SubsectionStatistic>>() {
+            @Override
+            public void onChanged(List<SubsectionStatistic> subsectionStatistics) {
+                statistics = subsectionStatistics;
+            }
+        });
+//        long b = statisticViewModel.getTotalTimeInMin(parentId);
     }
 
     private void loadPdf() {
@@ -119,10 +133,18 @@ public class PdfViewerActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_item_statistics:
-                // todo statistics dialog
+                String message = "";
+                for (SubsectionStatistic statistic : statistics) {
+                    message += statistic.toString() + "\n\n";
+                }
+                Dialog.simpleDialog(this, "Subsection statistics", message);
                 return true;
-            case R.id.menu_item_subsection_details:
-                // todo Dialog.showSubsectionDetails(getActivity(), isEditEnabled, subsection, this);
+            case R.id.menu_item_clear_statistics:
+                statisticViewModel.deleteAll();
+                return true;
+            case R.id.menu_item_help:
+                // help activity
+                startActivity(new Intent(this, HelpActivity.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

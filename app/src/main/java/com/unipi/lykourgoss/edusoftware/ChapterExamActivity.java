@@ -74,8 +74,6 @@ public class ChapterExamActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chapter_exam);
 
-        statisticViewModel = ViewModelProviders.of(this).get(ExamStatisticViewModel.class);
-
         dialog = Dialog.progressbarAction(this, Dialog.LOADING);
 
         progressBar = findViewById(R.id.exam_progress_bar);
@@ -111,10 +109,11 @@ public class ChapterExamActivity extends AppCompatActivity
         setTitle("Chapter Exam");
         getSupportActionBar().setSubtitle(parentTitle);
 
-        setUpViewModel();
+        setUpStatisticsViewModel();
     }
 
-    private void setUpViewModel() {
+    private void setUpStatisticsViewModel() {
+        statisticViewModel = ViewModelProviders.of(this).get(ExamStatisticViewModel.class);
         statisticViewModel.getAll().observe(this, new Observer<List<ExamStatistic>>() {
             @Override
             public void onChanged(List<ExamStatistic> examStatistics) {
@@ -169,8 +168,12 @@ public class ChapterExamActivity extends AppCompatActivity
                 }
                 Dialog.simpleDialog(this, "Exam statistics", /*statisticsMessage()*/message);
                 return true;
-            case R.id.menu_item_subsection_details:
-                // todo Dialog.showSubsectionDetails(getActivity(), isEditEnabled, subsection, this);
+            case R.id.menu_item_clear_statistics:
+                statisticViewModel.deleteAll();
+                return true;
+            case R.id.menu_item_help:
+                // help activity
+                startActivity(new Intent(this, HelpActivity.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -181,6 +184,7 @@ public class ChapterExamActivity extends AppCompatActivity
     public void onChanged(List<Question> questions) {
         this.totalQuestionCount = questions.size();
         progressBar.setMax(totalQuestionCount);
+        progressBar.setProgress(0);
 
         this.tempQuestionList = questions;
         Collections.shuffle(this.tempQuestionList);

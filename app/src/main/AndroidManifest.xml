@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".HelpActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
             android:name=".ChapterExamActivity"
             android:parentActivityName=".MainActivity" />
         <activity
