@@ -1,6 +1,8 @@
 # EduSoftware
 An educational application for Android™.
 
+(For full documentation see [here](./app/src/main/assets).)
+
 Users, after creating an account, can:
 * make their own lessons,
 * edit their lessons or anything inside them,
