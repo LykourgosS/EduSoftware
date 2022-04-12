@@ -1,5 +1,5 @@
 # EduSoftware
-An educational application for Android™.
+An eClass-like Android app.
 
 For full documentation see [here](./app/src/main/assets/help.pdf).
 
